@@ -10,5 +10,3 @@ Autoloader::register();
 
 $router = new Router();
 $router->dispatch();
-
-?>

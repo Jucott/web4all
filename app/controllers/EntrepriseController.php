@@ -33,9 +33,8 @@ class EntrepriseController extends Controller
             }
 
             // TODO : insertion DB plus tard
-	    $entreprise = new Entreprise();
+            $entreprise = new Entreprise();
             $res = $entreprise->create($filters);
-            print_r($res);
 
             $this->redirect('/entreprise/recherche');
         }
@@ -56,22 +55,22 @@ class EntrepriseController extends Controller
             ];
             // Validation
             $validator = new Validator();
-	    $valid=true;
-            // Verifier que soit "nom" est setté, 
-	    //      soit "description", "telephone", "email" sont settés
-            if (!empty($_POST['nom'])){
-		$valid = $validator->validate($_POST, [
-                    'nom' => ['required', 'alpha'],
-                ]);
-	    }
+            $valid = true;
+            // Verifier que soit "nom" est setté,
+            //      soit "description", "telephone", "email" sont settés
+            if (!empty($_POST['nom'])) {
+                $valid = $validator->validate($_POST, [
+                            'nom' => ['required', 'alpha'],
+                        ]);
+            }
 
-	    if (!empty($_POST['description'])) {
+            if (!empty($_POST['description'])) {
                 $valid = $validator->validate($_POST, [
                     'description' => ['required'],
                     'telephone' => ['required'],
                     'email' => ['required', 'email']
                 ]);
-	    }
+            }
             if (!$valid) {
                 return $this->render('entreprise/recherche', [
                     'errors' => $validator->errors(),
@@ -80,16 +79,15 @@ class EntrepriseController extends Controller
                 ]);
             }
 
-	    $entreprise = new Entreprise();
-	    $results = $entreprise->search($filters);
-	    print_r($results);
+            $entreprise = new Entreprise();
+            $results = $entreprise->search($filters);
 
             // TODO : appel modèle avec filtre
             //$results=[];
-	    // remplit $results avec le résultat de la sgbd
+            // remplit $results avec le résultat de la sgbd
             return $this->render('entreprise/recherche', [
-		'errors' => null,
-		'filters' => $filters,
+                'errors' => null,
+                'filters' => $filters,
                 'results' => $results,
             ]);
         }
@@ -97,19 +95,62 @@ class EntrepriseController extends Controller
         $this->render('entreprise/recherche');
     }
 
-    public function show($id)
+    public function modify($id)
     {
-    	$entrepriseModel = new Entreprise();
-    	$entreprise = $entrepriseModel->findById($id);
+        $entrepriseModel = new Entreprise();
+        $entreprise = $entrepriseModel->findById($id);
 
-    	if (!$entreprise) {
+        if (!$entreprise) {
             http_response_code(404);
-            die("Entreprise not found");
-    	}
+            die("Entreprise introuvable");
+        }
 
-    	$this->render('entreprise/show', [
-            'entreprise' => $entreprise
-    	]);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Filtres
+            $entreprise = [
+                'nom' => $_POST['nom'] ?? null,
+                'description' => $_POST['description'] ?? null,
+                'telephone' => $_POST['telephone'] ?? null,
+                'email' => $_POST['email'] ?? null,
+            ];
+            // Validation
+            $validator = new Validator();
+            $valid = $validator->validate($_POST, [
+                'nom' => ['required', 'alpha'],
+                'description' => ['required'],
+                'telephone' => ['required'],
+                'email' => ['required', 'email']
+            ]);
+
+            if (!$valid) {
+                return $this->render('entreprise/modify', [
+                    'errors' => $validator->errors(),
+                    'entreprise' => $entreprise,
+                ]);
+            }
+            $entrepriseModel->update($id, [
+                'nom' => $_POST['nom'],
+                'description' => $_POST['description'],
+                'email' => $_POST['email'],
+                'telephone' => $_POST['telephone'],
+            ]);
+
+            header('Location: /entreprise/recherche');
+            exit;
+        }
+
+        $this->render('entreprise/modify', [
+            'entreprise' => $entreprise,
+            'errors' => [],
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $entrepriseModel = new Entreprise();
+        $entrepriseModel->delete($id);
+
+        header('Location: /entreprise/recherche');
+        exit;
     }
 }
-?>

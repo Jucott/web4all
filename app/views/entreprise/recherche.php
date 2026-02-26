@@ -39,13 +39,31 @@
 <?php if (!empty($results)) : ?>
 
     <?php foreach ($results as $entreprise) : ?>
-	<a href="/entreprise/show/<?= $entreprise['id_entreprise'] ?>">
-            <div class="card">
-                <h3><?= htmlspecialchars($entreprise['nom']) ?></h3>
+	
+        <div class="card">
+
+            <div class="card-left">
+                <h3>
+                    <?= htmlspecialchars($entreprise['nom']) ?>
+                </h3>
                 <p><?= htmlspecialchars($entreprise['description']) ?></p>
                 <div class="stars">★★★★★</div>
             </div>
-	</a>
+
+            <div class="card-right">
+                <a class="btn-icon edit"
+                    href="/entreprise/modify/<?= $entreprise['id_entreprise'] ?>">
+                    ✏
+                </a>
+                <a class="btn-icon delete"
+                    href="/entreprise/delete/<?= $entreprise['id_entreprise'] ?>"
+                    onclick="return confirm('Confirmer la suppression ?');">
+                    🗑
+                </a>
+            </div>
+
+        </div>
+
     <?php endforeach; ?>
 
 <?php else : ?>

@@ -103,10 +103,57 @@ button {
 }
 
 .card {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+
     border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 6px;
+    background: #fff;
+}
+
+/* Partie gauche */
+.card-left {
+    flex: 1;            /* prend toute la place restante */
+    min-width: 0;       /* évite débordement */
+}
+
+/* Partie droite */
+.card-right {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;     /* empêche réduction */
+    margin-top: 10px;
+}
+
+.btn-icon {
+    text-decoration: none;
+    font-size: 18px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: 0.2s ease;
+}
+
+.btn-icon.edit {
+    background-color: #f1f1f1;
+}
+
+.btn-icon.edit:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-icon.delete {
+    background-color: #f1f1f1;
+}
+
+.btn-icon.delete:hover {
+    background-color: #e74c3c;
+    color: white;
 }
 
 .stars {
@@ -220,6 +267,16 @@ input, textarea {
         width: 50%;
     }
 
+    .card {
+        flex-direction: row;              /* 👈 on passe en ligne */
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .card-right {
+        margin-top: 0;                    /* on enlève l'espace */
+    }
+
     .btn-add {
         width: auto;
     }
@@ -268,6 +325,16 @@ input, textarea {
 
     .nav li:hover ul {
         display: block;
+    }
+
+    .card {
+        flex-direction: row;              /* 👈 on passe en ligne */
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .card-right {
+        margin-top: 0;                    /* on enlève l'espace */
     }
 
 }
