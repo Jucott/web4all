@@ -1,15 +1,38 @@
-# 🚀 Glossaire
+# Projet web4all
 
-⬜ À faire
+## Livrable
 
-🟡 En cours
+Le bloc termine sans surprise par une soutenance. Durant cette dernière, vous allez vous positionner comme le prestataire (Web4All) qui vient montrer à son client CESI (le jury) le résultat de sa commande.
 
-✅ Terminé
+La soutenance peut être composée d'une petite présentation de 5 minutes et surtout d'une démonstration technique. Le temps étant compté, le jury pourra vous guider par ses questions pour vérifier telle ou telle spécificité (fonctionnelle comme technique). La séquence se terminera hors contexte par des questions/réponses individuelles permettant d'évaluer votre implication personnelle dans le projet.
 
-❌ Bloqué
+## Cahier des charges du projet
 
+La réalisation d'une application web pour les stages se trouve être un projet plein d'ambitions. Le site va permettre d'informatiser l'aide à la recherche de stages en regroupant toutes les offres de stage. Il permettra entre autres d'enregistrer les données des entreprises ayant déjà pris un stagiaire, ou qui en recherchent un.
 
-# 📊 Tableau de suivi des spécifications fonctionnelles
+Ceci facilitera l'orientation des nouveaux étudiants dans leurs recherches de stages.
+
+Les offres de stage seront notamment enregistrées par compétences, ce qui permettra à l'étudiant de trouver un stage en rapport avec son profil. L'application doit fournir différentes interfaces à destination des différents profils d'utilisateurs.
+
+Les profils d'utilisateurs sont l'administrateur, le pilote de promotion et l'étudiant. Parmi les fonctionnalités attendues figurent la gestion des rôles, la gestion des entreprises, la gestion des offres de stage et la gestion des candidatures. Selon le profil d'utilisateur, ce dernier pourra accéder à certains services et pas à d'autres. Seuls les administrateurs ont accès à l'ensemble des fonctionnalités proposées par la plateforme (ou presque).
+
+Ce cahier des charges laisse place à des interprétations, différentes options possibles et des champs de liberté. Vous devez analyser, faire ressortir les zones d'ombre, les options et autres incertitudes de manière à réfléchir à la meilleure ligne de conduite pour votre groupe et ainsi le proposer à votre client.
+
+Outre les fonctionnalités techniques, votre site devra s'adapter au mieux en fonction de l'équipement de l'utilisateur (responsive) et respecter les bonnes pratiques de codage côté back-end comme front-end.
+
+Le site web doit être conçu pour répondre aux critères d’optimisation SEO de base (structure HTML, mots-clés, performance, sécurité) et chaque section importante du site doit inclure des balises meta adéquates.
+
+Par ailleurs il va sans dire que vous veillerez à la conformité légale de votre site, notamment à ce que les mentions légales obligatoires soient présentes.
+
+À noter qu'utiliser un serveur de base de données commun au groupe (dans la mesure du possible) simplifiera grandement le travail de l'équipe.
+
+# Etat d'avancement du projet
+
+## 🚀 Glossaire
+
+⬜ À faire - 🟡 En cours - ✅ Terminé - ❌ Bloqué
+
+## 📊 Tableau de suivi des spécifications fonctionnelles
 
 | ID     | Catégorie | Fonctionnalité | Description courte | Données principales | Statut |
 |--------|------------|---------------|--------------------|---------------------|--------|
@@ -44,7 +67,7 @@
 
 
 
-# 🛠️ Tableau de suivi des spécifications techniques
+## 🛠️ Tableau de suivi des spécifications techniques
 
 | ID | Exigence | Description | Statut |
 |----|----------|------------|--------|
@@ -63,7 +86,7 @@
 | STx13 | Routage | Système de routing backend | ✅ |
 | STx14 | Tests unitaires | Tests PHPUnit sur au moins 1 contrôleur | ⬜ |
 
-# 🔥 Stack technique
+## 🔥 Stack technique
 
 - ✅ : Apache2
 - ✅ : Postgresql
