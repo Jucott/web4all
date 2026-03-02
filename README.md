@@ -223,6 +223,49 @@ ff02::2 ip6-allrouters
 
 ```
 
+### Le projet web4all
+
+Se placer dans le répertoire /var/www/html et lancer ces commandes
+
+```bash
+cd /var/www/html
+mkdir web4all
+git clone 'https://github.com/Jucott/web4all.git'
+
+
+
+```
+
+
+### Postgresql
+
+A partie de {votre_user} lancer ces commandes afin de créer le user "web4all" dans la database ainsi que la database "web4all" du projet elle-même:
+
+```bash
+sudo su - postgres
+psql
+create user web4all with password 'web4all' createdb;
+create database web4all;
+alter database web4all owner to web4all;
+\q
+exit
+```
+
+Puis, en se plaçant dans le répetoire /var/www/html/web4all, installer la base de donnée ainsi :
+
+```bash
+cat sgbd.sql | psql -h 127.0.0.1 -U web4all web4all
+Password for user web4all: web4all
+CREATE....
+CREATE....
+ALTER....
+
+```
+
+
+
+
+
 ### Git
 
 ```bash
