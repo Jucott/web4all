@@ -102,7 +102,7 @@ Etapes préliminaires :
 
 ### Télécharger l'image ISO de Ubuntu
 
-L'image se situe à cette adresse :
+L'image ISO permettant l'installation se situe à cette adresse :
 
 [Download](https://ubuntu.com/download/desktop)
 
@@ -116,9 +116,9 @@ S'assurer que VirtualBox 7.2.6 ([Download](https://www.virtualbox.org/wiki/Downl
 
 Un fois VirtualBox installé, installer l'extension pack.
 
-Dans VirtualBox, Fichier - Outils - Extensions -
+Dans VirtualBox, Fichier - Outils - Extensions
 
-Puis "Install" (-> pointer sur le fichier `Oracle_VirtualBox_Extension_Pack-7.2.6.vbox-extpack` fraichement téléchargé)
+Puis "Install" (-> pointer sur le fichier `Oracle_VirtualBox_Extension_Pack-7.2.6.vbox-extpack` fraîchement téléchargé)
 
 #### Paramétrage de la nouvelle VM
 
@@ -141,15 +141,15 @@ Une fois la VM définie, rajouter quelques paramètres :
 - Affichage : Video Memory => 128 Mo
 - Stockage : Cliquer sur "Controleur : IDE" puis sur le CDRom avec la croix verte (Add optical Drive)
     - Cliquer sur le bouton Ajouter
-    - Sélectionner l'image ISO d'Ubuntu 24.04 LTS précédemment téléchargée (ubuntu-24.04.4-desktop-amd64.iso)
+    - Sélectionner l'image ISO d'Ubuntu 24.04 LTS précédemment téléchargée (`ubuntu-24.04.4-desktop-amd64.iso`)
     - Cliquer sur "Ouvrir"
-    - une fois la fenetre fermée, Sélectionner-la puis cliquer sur Choose
+    - une fois la fenêtre fermée, Sélectionner-la puis cliquer sur "Choose"
 
 Laisser tout le reste par défaut.
 
-Démarrer la VM fraichement paramétrée se laisser guider pour l'installation jusqu'au bout.
+Démarrer la VM fraîchement paramétrée se laisser-vous guider pour l'installation jusqu'au bout.
 
-Une fois fini on se retrouve avec une VM avec Ubuntu Desktop 24.04 LTS, de base, installé avec un user ({votre_user}) qui bénéficie des droits sudo.
+Une fois fini on se retrouve avec une VM avec Ubuntu Desktop 24.04 LTS, de base, installée avec un user ({votre_user}) qui bénéficie des droits `sudo`.
 
 ## Les installations à faire
 
@@ -161,7 +161,7 @@ sudo apt install bzip2 tar gcc make perl terminator php apache2 PostgreSQL net-t
 sudo a2enmod php8.3
 ```
 
-Puis, il vaut mieux installer les extensions VirtualBox afin (notamment) de bénéficier du "full screen".
+Il vaut mieux installer les extensions VirtualBox afin (notamment) de bénéficier du "full screen" dans la VM.
 
 Pour cela, Cliquer sur "Périphériques" - "Insérer l'image CD des additions invitées"
 
@@ -207,7 +207,7 @@ sudo a2enmod rewrite
 sudo systemctl reload apache2
 ```
 
-Puis editer le fichier `/etc/hosts`
+Puis éditer le fichier `/etc/hosts`
 
 ```
 27.0.0.1 localhost web4all.local web4all.static
@@ -256,7 +256,7 @@ cd /var/www/html/web4all
 php-cs-fixer fix --dry-run --diff
 ```
 
-Cela va afficher les différence entre ce qui est et ce qui est proposé.
+Cela va afficher les différences entre ce qui est et ce qui est proposé.
 
 En cas d'accord avec les modifications suggérées :
 
@@ -264,6 +264,6 @@ En cas d'accord avec les modifications suggérées :
 php-cs-fixer fix
 ```
 
-Pour qu'à chaque sauvegarde dans Vscode, les modification respectant la conformité PSR-12 soit respectée, il daut installer l'extension : "php cs fixer"
+Pour qu'à chaque sauvegarde dans Vscode, les modifications respectant la conformité PSR-12 soit respectées, il faut installer l'extension : "php cs fixer"
 
 
