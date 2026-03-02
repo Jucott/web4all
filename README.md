@@ -34,57 +34,57 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 
 ## 📊 Tableau de suivi des spécifications fonctionnelles
 
-| ID     | Catégorie | Fonctionnalité | Description courte | Données principales | Statut |
-|--------|------------|---------------|--------------------|---------------------|--------|
-| SFx1 | Gestion d'accès | Authentification & gestion des accès | Connexion / Déconnexion + gestion des rôles | email, mot de passe, rôle | ⬜ |
-| SFx2 | Entreprises | Rechercher & afficher entreprise | Recherche multicritères + avis + offres liées | nom, description, contact, nb candidatures, moyenne évaluations | 🟡 |
-| SFx3 | Entreprises | Créer entreprise | Création fiche entreprise | nom, description, contact | ✅ |
-| SFx4 | Entreprises | Modifier entreprise | Modification fiche entreprise | nom, description, contact | ✅ |
-| SFx5 | Entreprises | Évaluer entreprise | Notation entreprise | évaluation | ⬜ |
-| SFx6 | Entreprises | Supprimer entreprise | Suppression entreprise | - | ✅ |
-| SFx7 | Offres | Rechercher & afficher offre | Recherche multicritères offre | entreprise, titre, description, compétences, rémunération, date, nb candidatures | ⬜ |
-| SFx8 | Offres | Créer offre | Création offre | compétences, titre, description, entreprise, rémunération, date | ⬜ |
-| SFx9 | Offres | Modifier offre | Modification offre | compétences, titre, description, entreprise, rémunération, date | ⬜ |
-| SFx10 | Offres | Supprimer offre | Suppression offre | - | ⬜ |
-| SFx11 | Offres | Statistiques offres | Carrousel indicateurs clés | répartition durée, top wishlist, total offres, moyenne candidatures | ⬜ |
-| SFx12 | Pilotes | Rechercher & afficher pilote | Recherche compte pilote | nom, prénom | ⬜ |
-| SFx13 | Pilotes | Créer pilote | Création compte pilote | nom, prénom | ⬜ |
-| SFx14 | Pilotes | Modifier pilote | Modification compte pilote | nom, prénom | ⬜ |
-| SFx15 | Pilotes | Supprimer pilote | Suppression compte pilote | - | ⬜ |
-| SFx16 | Étudiants | Rechercher & afficher étudiant | Recherche + état recherche stage | nom, prénom, email | ⬜ |
-| SFx17 | Étudiants | Créer étudiant | Création compte étudiant | nom, prénom, email | ⬜ |
-| SFx18 | Étudiants | Modifier étudiant | Modification compte étudiant | nom, prénom, email | ⬜ |
-| SFx19 | Étudiants | Supprimer étudiant | Suppression compte étudiant | - | ⬜ |
-| SFx20 | Candidatures | Postuler à une offre | Envoi CV + LM | offre, CV, LM | ⬜ |
-| SFx21 | Candidatures | Voir candidatures étudiant | Liste des offres postulées | offre, CV, LM | ⬜ |
-| SFx22 | Candidatures | Voir candidatures des élèves (pilote) | Liste des candidatures des étudiants du pilote | offre, CV, LM | ⬜ |
-| SFx23 | Wish-list | Afficher wish-list | Voir offres ajoutées | - | ⬜ |
-| SFx24 | Wish-list | Ajouter à wish-list | Ajouter offre | offre | ⬜ |
-| SFx25 | Wish-list | Retirer de wish-list | Supprimer offre de la liste | offre | ⬜ |
-| SFx27 | Transversal | Pagination | Pagination sur listes | - | ⬜ |
-| SFx28 | Transversal | Mentions légales | Conformité légale | - | ⬜ |
-| BONUS | Bonus | PWA (Accès mobile) | Installation comme app mobile | - | ⬜ |
+| ID    | Catégorie       | Fonctionnalité                        | Description courte                             | Données principales                                                              | Statut |
+| ----- | --------------- | ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
+| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | ⬜      |
+| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + offres liées  | nom, description, contact, nb candidatures, moyenne évaluations                  | 🟡      |
+| SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                      | nom, description, contact                                                        | ✅      |
+| SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                  | nom, description, contact                                                        | ✅      |
+| SFx5  | Entreprises     | Évaluer entreprise                    | Notation entreprise                            | évaluation                                                                       | ⬜      |
+| SFx6  | Entreprises     | Supprimer entreprise                  | Suppression entreprise                         | -                                                                                | ✅      |
+| SFx7  | Offres          | Rechercher & afficher offre           | Recherche multicritères offre                  | entreprise, titre, description, compétences, rémunération, date, nb candidatures | ⬜      |
+| SFx8  | Offres          | Créer offre                           | Création offre                                 | compétences, titre, description, entreprise, rémunération, date                  | ⬜      |
+| SFx9  | Offres          | Modifier offre                        | Modification offre                             | compétences, titre, description, entreprise, rémunération, date                  | ⬜      |
+| SFx10 | Offres          | Supprimer offre                       | Suppression offre                              | -                                                                                | ⬜      |
+| SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                     | répartition durée, top wishlist, total offres, moyenne candidatures              | ⬜      |
+| SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                        | nom, prénom                                                                      | ⬜      |
+| SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                         | nom, prénom                                                                      | ⬜      |
+| SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                     | nom, prénom                                                                      | ⬜      |
+| SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                      | -                                                                                | ⬜      |
+| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + état recherche stage               | nom, prénom, email                                                               | ⬜      |
+| SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                       | nom, prénom, email                                                               | ⬜      |
+| SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                   | nom, prénom, email                                                               | ⬜      |
+| SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                    | -                                                                                | ⬜      |
+| SFx20 | Candidatures    | Postuler à une offre                  | Envoi CV + LM                                  | offre, CV, LM                                                                    | ⬜      |
+| SFx21 | Candidatures    | Voir candidatures étudiant            | Liste des offres postulées                     | offre, CV, LM                                                                    | ⬜      |
+| SFx22 | Candidatures    | Voir candidatures des élèves (pilote) | Liste des candidatures des étudiants du pilote | offre, CV, LM                                                                    | ⬜      |
+| SFx23 | Wish-list       | Afficher wish-list                    | Voir offres ajoutées                           | -                                                                                | ⬜      |
+| SFx24 | Wish-list       | Ajouter à wish-list                   | Ajouter offre                                  | offre                                                                            | ⬜      |
+| SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                    | offre                                                                            | ⬜      |
+| SFx27 | Transversal     | Pagination                            | Pagination sur listes                          | -                                                                                | ⬜      |
+| SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | ⬜      |
+| BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                  | -                                                                                | ⬜      |
 
 
 
 ## 🛠️ Tableau de suivi des spécifications techniques
 
-| ID | Exigence | Description | Statut |
-|----|----------|------------|--------|
-| STx1 | Architecture MVC | MVC obligatoire | ✅ |
-| STx2 | Qualité code | HTML5 sémantique, validation W3C, CSS structuré, POO PHP, PSR-12 | ✅ |
-| STx3 | Validation formulaires | Validation Front (HTML/JS) + Back (PHP) | ✅ |
-| STx4 | Pas de CMS | Aucun CMS autorisé | ✅ |
-| STx5 | Frameworks | Pas de React/Vue/Laravel/Symfony | ✅ |
-| STx6 | Stack technique | Apache, HTML/CSS/JS, PHP, SGBD SQL | ✅ |
-| STx7 | Template engine | Moteur de template backend obligatoire | ✅ |
-| STx8 | Clés étrangères | Utilisation FK en base | ✅ |
-| STx9 | Vhost statique | Vhost pour ressources statiques | 🟡 |
-| STx10 | Responsive | Responsive + menu burger | ✅ |
-| STx11 | Sécurité | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, HTTPS | 🟡 |
-| STx12 | SEO | Meta, Hn, alt, <3s chargement, sitemap, robots.txt | ⬜ |
-| STx13 | Routage | Système de routing backend | ✅ |
-| STx14 | Tests unitaires | Tests PHPUnit sur au moins 1 contrôleur | ⬜ |
+| ID    | Exigence               | Description                                                      | Statut |
+| ----- | ---------------------- | ---------------------------------------------------------------- | ------ |
+| STx1  | Architecture MVC       | MVC obligatoire                                                  | ✅      |
+| STx2  | Qualité code           | HTML5 sémantique, validation W3C, CSS structuré, POO PHP, PSR-12 | ✅      |
+| STx3  | Validation formulaires | Validation Front (HTML/JS) + Back (PHP)                          | ✅      |
+| STx4  | Pas de CMS             | Aucun CMS autorisé                                               | ✅      |
+| STx5  | Frameworks             | Pas de React/Vue/Laravel/Symfony                                 | ✅      |
+| STx6  | Stack technique        | Apache, HTML/CSS/JS, PHP, SGBD SQL                               | ✅      |
+| STx7  | Template engine        | Moteur de template backend obligatoire                           | ✅      |
+| STx8  | Clés étrangères        | Utilisation FK en base                                           | ✅      |
+| STx9  | Vhost statique         | Vhost pour ressources statiques                                  | 🟡      |
+| STx10 | Responsive             | Responsive + menu burger                                         | ✅      |
+| STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, HTTPS           | 🟡      |
+| STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ⬜      |
+| STx13 | Routage                | Système de routing backend                                       | ✅      |
+| STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ⬜      |
 
 ## 🔥 Stack technique
 
@@ -92,3 +92,139 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 - ✅ : Postgresql
     - : ✅ Base de données
 - ✅ : PHP
+
+
+# VM Ubuntu 24.04 LTS virtualisée dans Oracle VirtualBox
+
+Etapes préliminaires :
+
+## Création de la VM Ubuntu 24.04 LTS
+
+### Télécharger l'image ISO de Ubuntu
+
+L'image se situe à cette adresse :
+
+[Download](https://ubuntu.com/download/desktop)
+
+récupérer le fichier `ubuntu-24.04.4-desktop-amd64.iso`
+
+### Créer une nouvelle VM VirtualBox
+
+#### Prérequis
+
+S'assurer que VirtualBox 7.2.6 ([Download](https://www.virtualbox.org/wiki/Downloads)) soit bien installé sur le PC ainsi que "Oracle VirtualBox Extension Pack" ("VirtualBox 7.2.6 Extension Pack" -> Accept and download)
+
+Un fois VirtualBox installé, installer l'extension pack.
+
+Dans VirtualBox, Fichier - Outils - Extensions -
+
+Puis "Install" (-> pointer sur le fichier `Oracle_VirtualBox_Extension_Pack-7.2.6.vbox-extpack` fraichement téléchargé)
+
+#### Paramétrage de la nouvelle VM
+
+Dans VirtualBox, faire : Machine - Nouvelle
+
+- VM Name : le_nom_de_la_VM
+- VM Folder : par défaut
+- ISO Image : <non sélectionné>
+- OS : Linux
+- OS Distribution : Other Linux
+- OS Version : Other Linux (64 bits)
+- Specify virtual hardware
+    - Base Memory : 4086 Mo
+    - Number of CPU : 2
+- Specify virtual hard disk
+    - Disk Size : 20 Go
+
+
+Une fois la VM définie, rajouter quelques paramètres :
+- Affichage : Video Memory => 128 Mo
+- Stockage : Cliquer sur "Controleur : IDE" puis sur le CDRom avec la croix verte (Add optical Drive)
+    - Cliquer sur le bouton Ajouter
+    - Sélectionner l'image ISO d'Ubuntu 24.04 LTS précédemment téléchargée (ubuntu-24.04.4-desktop-amd64.iso)
+    - Cliquer sur "Ouvrir"
+    - une fois la fenetre fermée, Sélectionner-la puis cliquer sur Choose
+
+Laisser tout le reste par défaut.
+
+Démarrer la VM fraichement paramétrée se laisser guider pour l'installation jusqu'au bout.
+
+Une fois fini on se retrouve avec une VM avec Ubuntu Desktop 24.04 LTS, de base, installé avec un user ({votre_user}) qui bénéficie des droits sudo.
+
+## Les installations à faire
+
+Dès que la VM a démarré, lancer un terminal et taper les commandes suivantes pour installer tous les paquest nécessaires au projet :
+
+```bash
+sudo apt update && sudo apt dist-upgrade -y
+sudo apt install bzip2 tar gcc make perl terminator php apache2 PostgreSQL net-tools libapache2-mod-php8.3 libapache2-mod-php php-pgsql git
+sudo a2enmod php8.3
+```
+
+Puis, il vaut mieux installer les extensions VirtualBox afin (notamment) de bénéficier du "full screen".
+
+Pour cela, Cliquer sur "Périphériques" - "Insérer l'image CD des additions invitées"
+
+Puis dans la VM Ubuntu, dans un terminal :
+
+```bash
+cd /media/{votre_user}/VBox_GAs_7.2.6/
+sudo ./VBoxLinuxAdditions.run 
+reboot
+```
+
+On peut à présent passer en full screen.
+
+## Les paramétrages à faire
+
+### Apache 2
+
+A mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` qu'il faut créer pour le projet
+
+```
+VirtualHost *:80>
+    ServerName web4all.local
+    DocumentRoot /var/www/html/web4all/public
+
+    <Directory /var/www/html/web4all/public>
+#        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/web4all_error.log
+    CustomLog ${APACHE_LOG_DIR}/web4all_access.log combined
+</VirtualHost>
+
+```
+
+Puis taper :
+
+```bash
+sudo a2ensite web4all.conf
+sudo a2dissite 000-default.conf
+sudo a2enmod rewrite
+sudo systemctl reload apache2
+```
+
+Puis editer le fichier `/etc/hosts`
+
+```
+27.0.0.1 localhost web4all.local web4all.static
+127.0.1.1 {votre_user}-VirtualBox
+
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+```
+
+### Git
+
+
+
+
