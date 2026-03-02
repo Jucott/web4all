@@ -5,6 +5,7 @@ class Entreprise extends Model
     protected string $table = 'entreprise';
     protected string $primaryKey = 'id_entreprise';
 
+    
     public function search(array $filters): array
     {
         $conditions = [];
