@@ -225,6 +225,45 @@ ff02::2 ip6-allrouters
 
 ### Git
 
+```bash
+git init
+git add .
+git config --global user.email "l_email_du_compte_GitHub"
+git config --global user.name "Le_Nom_de_votre_compte_sur_GitHub"
+git remote add origin https://github.com/Jucott/web4all.git
+git commit -m "Initial commit"
+git status
+git branch -M main
+git push -u origin main
+```
 
+## Conformité PSR-12
+
+Installer VsCode + composer + php-cs-fixer
+
+```bash
+sudo snap install code --classic
+sudo apt install composer
+composer global require friendsofphp/php-cs-fixer
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
+echo 'export PATH="$PATH:$HOME/.config/composer/vendor/bin"' >> ~/.bashrc
+```
+
+Pour voir si cela marche :
+
+```bash
+cd /var/www/html/web4all
+php-cs-fixer fix --dry-run --diff
+```
+
+Cela va afficher les différence entre ce qui est et ce qui est proposé.
+
+En cas d'accord avec les modifications suggérées :
+
+```bash
+php-cs-fixer fix
+```
+
+Pour qu'à chaque sauvegarde dans Vscode, les modification respectant la conformité PSR-12 soit respectée, il daut installer l'extension : "php cs fixer"
 
 
