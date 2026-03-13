@@ -63,7 +63,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                    | offre                                                                            | ⬜      |
 | SFx27 | Transversal     | Pagination                            | Pagination sur listes                          | -                                                                                | ⬜      |
 | SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | ⬜      |
-| BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                  | -                                                                                | ⬜      |
+| BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                  | -                                                                                | ✅      |
 
 
 
@@ -84,7 +84,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, HTTPS           | 🟡      |
 | STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ⬜      |
 | STx13 | Routage                | Système de routing backend                                       | ✅      |
-| STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ⬜      |
+| STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ✅      |
 
 ## 🔥 Stack technique
 
@@ -157,7 +157,7 @@ Dès que la VM a démarré, lancer un terminal et taper les commandes suivantes 
 
 ```bash
 sudo apt update && sudo apt dist-upgrade -y
-sudo apt install bzip2 tar gcc make perl terminator php apache2 PostgreSQL net-tools libapache2-mod-php8.3 libapache2-mod-php php-pgsql git
+sudo apt install bzip2 tar gcc make perl terminator php apache2 postgresql tree net-tools libapache2-mod-php8.3 libapache2-mod-php php-pgsql git
 sudo a2enmod php8.3
 ```
 
@@ -182,7 +182,7 @@ On peut à présent passer en full screen.
 A mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` qu'il faut créer pour le projet
 
 ```
-VirtualHost *:80>
+<VirtualHost *:80>
     ServerName web4all.local
     DocumentRoot /var/www/html/web4all/public
 
@@ -210,7 +210,7 @@ sudo systemctl reload apache2
 Puis éditer le fichier `/etc/hosts`
 
 ```
-27.0.0.1 localhost web4all.local web4all.static
+127.0.0.1 localhost web4all.local web4all.static
 127.0.1.1 {votre_user}-VirtualBox
 
 
@@ -231,8 +231,9 @@ Se placer dans le répertoire /var/www/html et lancer ces commandes
 cd /var/www/html
 mkdir web4all
 git clone 'https://github.com/Jucott/web4all.git'
-
-
+cd web4all
+sudo chown -R {votre_user}:{votre_user} *
+sudo chmod -R 755 *
 
 ```
 
@@ -258,12 +259,10 @@ cat sgbd.sql | psql -h 127.0.0.1 -U web4all web4all
 Password for user web4all: web4all
 CREATE....
 CREATE....
+__[snip]__
 ALTER....
 
 ```
-
-
-
 
 
 ### Git

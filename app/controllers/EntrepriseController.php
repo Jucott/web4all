@@ -8,14 +8,13 @@ class EntrepriseController extends Controller
     public function create()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Filtres
             $filters = [
                 'nom' => $_POST['nom'] ?? null,
                 'description' => $_POST['description'] ?? null,
                 'telephone' => $_POST['telephone'] ?? null,
                 'email' => $_POST['email'] ?? null,
             ];
-            // Validation
+
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
                 'nom' => ['required', 'alpha'],
@@ -32,9 +31,8 @@ class EntrepriseController extends Controller
                 ]);
             }
 
-            // TODO : insertion DB plus tard
-            $entreprise = new Entreprise();
-            $res = $entreprise->create($filters);
+            $entreprise = $this->getEntrepriseModel();
+            $entreprise->create($filters);
 
             $this->redirect('/entreprise/recherche');
         }
@@ -42,26 +40,21 @@ class EntrepriseController extends Controller
         $this->render('entreprise/create');
     }
 
-
     public function recherche()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Filters
             $filters = [
                 'nom' => $_POST['nom'] ?? null,
                 'description' => $_POST['description'] ?? null,
                 'telephone' => $_POST['telephone'] ?? null,
                 'email' => $_POST['email'] ?? null,
             ];
-            // Validation
+
             $validator = new Validator();
             $valid = true;
-            // Verifier que soit "nom" est setté,
-            //      soit "description", "telephone", "email" sont settés
+
             if (!empty($_POST['nom'])) {
-                $valid = $validator->validate($_POST, [
-                            'nom' => ['required', 'alpha'],
-                        ]);
+                $valid = $validator->validate($_POST, ['nom' => ['required', 'alpha']]);
             }
 
             if (!empty($_POST['description'])) {
@@ -71,6 +64,7 @@ class EntrepriseController extends Controller
                     'email' => ['required', 'email']
                 ]);
             }
+
             if (!$valid) {
                 return $this->render('entreprise/recherche', [
                     'errors' => $validator->errors(),
@@ -79,12 +73,9 @@ class EntrepriseController extends Controller
                 ]);
             }
 
-            $entreprise = new Entreprise();
+            $entreprise = $this->getEntrepriseModel();
             $results = $entreprise->search($filters);
 
-            // TODO : appel modèle avec filtre
-            //$results=[];
-            // remplit $results avec le résultat de la sgbd
             return $this->render('entreprise/recherche', [
                 'errors' => null,
                 'filters' => $filters,
@@ -97,23 +88,25 @@ class EntrepriseController extends Controller
 
     public function modify($id)
     {
-        $entrepriseModel = new Entreprise();
+        $entrepriseModel = $this->getEntrepriseModel();
         $entreprise = $entrepriseModel->findById($id);
 
         if (!$entreprise) {
+            if (defined('PHPUNIT_RUNNING')) {
+                throw new \Exception("Entreprise introuvable");
+            }
             http_response_code(404);
             die("Entreprise introuvable");
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Filtres
             $entreprise = [
                 'nom' => $_POST['nom'] ?? null,
                 'description' => $_POST['description'] ?? null,
                 'telephone' => $_POST['telephone'] ?? null,
                 'email' => $_POST['email'] ?? null,
             ];
-            // Validation
+
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
                 'nom' => ['required', 'alpha'],
@@ -128,15 +121,11 @@ class EntrepriseController extends Controller
                     'entreprise' => $entreprise,
                 ]);
             }
-            $entrepriseModel->update($id, [
-                'nom' => $_POST['nom'],
-                'description' => $_POST['description'],
-                'email' => $_POST['email'],
-                'telephone' => $_POST['telephone'],
-            ]);
 
-            header('Location: /entreprise/recherche');
-            exit;
+            $entrepriseModel->update($id, $entreprise);
+
+            // Toujours passer par redirect, mockable en test
+            $this->redirect('/entreprise/recherche');
         }
 
         $this->render('entreprise/modify', [
@@ -147,10 +136,23 @@ class EntrepriseController extends Controller
 
     public function delete($id)
     {
-        $entrepriseModel = new Entreprise();
+        $entrepriseModel = $this->getEntrepriseModel();
         $entrepriseModel->delete($id);
 
-        header('Location: /entreprise/recherche');
+        $this->redirect('/entreprise/recherche');
+    }
+
+    protected function redirect($url)
+    {
+        if (defined('PHPUNIT_RUNNING')) {
+            return; // mockable en test
+        }
+        header("Location: $url");
         exit;
+    }
+
+    protected function getEntrepriseModel()
+    {
+        return new Entreprise();
     }
 }

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title><?= $title ?? 'Web4All' ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#2c3e50">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/modules/menu.js"></script>
