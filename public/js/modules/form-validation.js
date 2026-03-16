@@ -2,6 +2,10 @@ var FormValidation = (function($){
 
     const rules = {
 
+        optional: function(value){
+            return true;
+        },
+
         required: function(value){
             return value.trim() !== "";
         },
@@ -33,6 +37,11 @@ var FormValidation = (function($){
         if(!ruleString) return true;
 
         const ruleList = ruleString.split("|");
+
+        // Si optional et champ vide -> on ignore les autres règles
+        if(ruleList.includes("optional") && value.trim() === ""){
+            return true;
+        }
 
         for(let rule of ruleList){
 

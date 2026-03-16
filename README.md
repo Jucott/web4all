@@ -36,7 +36,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 
 | ID    | Catégorie       | Fonctionnalité                        | Description courte                             | Données principales                                                              | Statut |
 | ----- | --------------- | ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
-| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | ⬜      |
+| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | 🟡      |
 | SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + offres liées  | nom, description, contact, nb candidatures, moyenne évaluations                  | 🟡      |
 | SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                      | nom, description, contact                                                        | ✅      |
 | SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                  | nom, description, contact                                                        | ✅      |
@@ -61,8 +61,8 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | SFx23 | Wish-list       | Afficher wish-list                    | Voir offres ajoutées                           | -                                                                                | ⬜      |
 | SFx24 | Wish-list       | Ajouter à wish-list                   | Ajouter offre                                  | offre                                                                            | ⬜      |
 | SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                    | offre                                                                            | ⬜      |
-| SFx27 | Transversal     | Pagination                            | Pagination sur listes                          | -                                                                                | ⬜      |
-| SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | ⬜      |
+| SFx27 | Transversal     | Pagination                            | Pagination sur listes                          | -                                                                                | ✅      |
+| SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | 🟡      |
 | BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                  | -                                                                                | ✅      |
 
 

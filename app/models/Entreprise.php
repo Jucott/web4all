@@ -6,7 +6,7 @@ class Entreprise extends Model
     protected string $primaryKey = 'id_entreprise';
 
     
-    public function search(array $filters): array
+    public function search(array $filters, int $page = 1, int $perPage = 3): array
     {
         $conditions = [];
         $params = [];
@@ -31,15 +31,39 @@ class Entreprise extends Model
             $params['email'] = "%".$filters['email']."%";
         }
 
-        $sql = "SELECT * FROM {$this->table}";
+        $where = '';
 
         if ($conditions) {
-            $sql .= " WHERE " . implode(" AND ", $conditions);
+            $where = " WHERE " . implode(" AND ", $conditions);
         }
 
-        $stmt = $this->db->prepare($sql);
+        // COUNT total
+        $sqlCount = "SELECT COUNT(*) FROM {$this->table} $where";
+        $stmt = $this->db->prepare($sqlCount);
         $stmt->execute($params);
+        $total = (int) $stmt->fetchColumn();
 
-        return $stmt->fetchAll();
+        // pagination
+        $offset = ($page - 1) * $perPage;
+
+        $sql = "SELECT * FROM {$this->table} $where
+                ORDER BY nom
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->db->prepare($sql);
+
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        return [
+            'results' => $stmt->fetchAll(),
+            'total' => $total
+        ];
     }
 }

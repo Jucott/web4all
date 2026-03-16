@@ -14,7 +14,7 @@
 
 <!-- FORMULAIRE RECHERCHE SIMPLE -->
 <form id="formEntreprise" data-validate="true" method="POST" enctype="multipart/form-data">
-
+    <input type="hidden" name="page" value="<?= $page ?? 1 ?>">
     <div class="search-box">
         <input type="text"
                name="nom"
@@ -68,11 +68,52 @@
 
 <?php else : ?>
     <div class="card">
-        <h3>Entreprise Exemple</h3>
-        <p>Description exemple</p>
-        <div class="stars">★★★★★</div>
+        <h3>Aucun résultat</h3>
     </div>
 <?php endif; ?>
+
+
+<?php if (!empty($totalPages) && $totalPages > 1): ?>
+
+    <div class="pagination">
+
+    <?php foreach ($pagination as $p): ?>
+
+        <?php if ($p === '...'): ?>
+
+            <span class="pagination-dots">...</span>
+
+        <?php else: ?>
+
+            <form method="POST" style="display:inline;">
+
+                <input type="hidden" name="page" value="<?= $p ?>">
+
+                <input type="hidden" name="nom" value="<?= htmlspecialchars($filters['nom'] ?? '') ?>">
+                <input type="hidden" name="description" value="<?= htmlspecialchars($filters['description'] ?? '') ?>">
+                <input type="hidden" name="telephone" value="<?= htmlspecialchars($filters['telephone'] ?? '') ?>">
+                <input type="hidden" name="email" value="<?= htmlspecialchars($filters['email'] ?? '') ?>">
+
+                <button type="submit"
+                        class="page-btn <?= $p == $page ? 'active' : '' ?>">
+                    <?= $p ?>
+                </button>
+
+            </form>
+
+        <?php endif; ?>
+
+    <?php endforeach; ?>
+
+    </div>
+
+<?php endif; ?>
+
+
+
+
+
+
 
 </div>
 
@@ -90,23 +131,27 @@
         <h3>Recherche avancée</h3>
 
         <form id="formEntreprise" data-validate="true" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="page" value="<?= $page ?? 1 ?>">
+            <label for="description">Description</label>
+            <input  type="text"
+                    name="description"
+                    id="description"
+		            data-validate="optional|alpha"
+                    value="<?= $filters['description'] ?? '' ?>">
 
-            <label>Description</label>
-            <input type="text"
-                   name="description"
-		   data-validate="required|min:10"
-                   value="<?= $filters['description'] ?? '' ?>">
+            <label for="telephone">Téléphone</label>
+            <input  type="text"
+                    name="telephone"
+                    id="telephone"
+		            data-validate="optional|phone"
+                    value="<?= $filters['telephone'] ?? '' ?>">
 
-            <label>Téléphone</label>
-            <input type="text"
-                   name="telephone"
-		   data-validate="required|phone"
-                   value="<?= $filters['telephone'] ?? '' ?>">
-
-            <label>Email</label>
+            <label for="email">Email</label>
             <input type="email"
                    name="email"
-                   data-validate="required|email"
+                   id="email"
+                   autocomplete="on"
+                   data-validate="optional|email"
                    value="<?= $filters['email'] ?? '' ?>">
 
             <button type="submit">Rechercher</button>

@@ -193,6 +193,25 @@ input, textarea {
     margin-top: 15px;
 }
 
+
+/* Pagination */
+.pagination{
+    margin-top:20px;
+    text-align:center;
+}
+
+.page-btn{
+    padding:8px 12px;
+    margin:2px;
+    border:1px solid #ccc;
+    text-decoration:none;
+}
+
+.page-btn.active{
+    background:#333;
+    color:white;
+}
+
 /* ERROR BOX */
 
 .error-box {

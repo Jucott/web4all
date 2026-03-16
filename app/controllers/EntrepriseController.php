@@ -42,7 +42,12 @@ class EntrepriseController extends Controller
 
     public function recherche()
     {
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $page = $_POST['page'] ?? 1;
+            $page = max(1, (int)$page);
+
+            $perPage = 3;
             $filters = [
                 'nom' => $_POST['nom'] ?? null,
                 'description' => $_POST['description'] ?? null,
@@ -70,16 +75,36 @@ class EntrepriseController extends Controller
                     'errors' => $validator->errors(),
                     'filters' => $filters,
                     'results' => [],
+                    'page' => 1,
+                    'totalPages' => 0,
+                    'pagination' => [],
                 ]);
             }
+            if (empty($retour['errors'])){
+                $entreprise = $this->getEntrepriseModel();
+                $data = $entreprise->search($filters, $page, $perPage);
 
-            $entreprise = $this->getEntrepriseModel();
-            $results = $entreprise->search($filters);
+                $results = $data['results'];
+                $total = $data['total'];
 
+                $totalPages = ceil($total / $perPage);
+
+                $retour = [
+                    'errors' => null,
+                    'filters' => $filters,
+                    'results' => $results,
+                    'page' => $page,
+                    'totalPages' => $totalPages,
+                    'pagination' => View::buildPagination($page, $totalPages),
+                ];
+            }
             return $this->render('entreprise/recherche', [
                 'errors' => null,
                 'filters' => $filters,
                 'results' => $results,
+                'page' => $page,
+                'totalPages' => $totalPages,
+                'pagination' => View::buildPagination($page, $totalPages),
             ]);
         }
 
