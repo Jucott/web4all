@@ -36,7 +36,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 
 | ID    | Catégorie       | Fonctionnalité                        | Description courte                             | Données principales                                                              | Statut |
 | ----- | --------------- | ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
-| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | 🟡      |
+| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | ✅      |
 | SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + offres liées  | nom, description, contact, nb candidatures, moyenne évaluations                  | 🟡      |
 | SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                      | nom, description, contact                                                        | ✅      |
 | SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                  | nom, description, contact                                                        | ✅      |
@@ -81,8 +81,8 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | STx8  | Clés étrangères        | Utilisation FK en base                                           | ✅      |
 | STx9  | Vhost statique         | Vhost pour ressources statiques                                  | 🟡      |
 | STx10 | Responsive             | Responsive + menu burger                                         | ✅      |
-| STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, HTTPS           | 🟡      |
-| STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ⬜      |
+| STx11 | Sécurité               | Cookies sécurisés, **hash mdp**, anti SQLi/XSS/CSRF, **HTTPS**           | 🟡      |
+| STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ✅      |
 | STx13 | Routage                | Système de routing backend                                       | ✅      |
 | STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ✅      |
 
@@ -267,17 +267,105 @@ ALTER....
 
 ### Git
 
+Procédure développeur (du clone au merge request)
+#### Cloner le projet
+
 ```bash
-git init
-git add .
-git config --global user.email "l_email_du_compte_GitHub"
-git config --global user.name "Le_Nom_de_votre_compte_sur_GitHub"
-git remote add origin https://github.com/Jucott/web4all.git
-git commit -m "Initial commit"
-git status
-git branch -M main
-git push -u origin main
+git clone https://github.com/Jucott/web4all.git
+cd web4all
 ```
+
+#### Vérifier la branche principale
+
+Selon ton repo :
+
+```bash
+git branch
+```
+
+Se placer sur main (ou master) :
+
+```bash
+git checkout main
+git pull origin main
+```
+
+#### Créer une branche de travail
+
+👉 Règle : jamais travailler directement sur main
+
+Convention recommandée :
+
+feature/nom-feature
+
+fix/nom-bug
+
+hotfix/...
+
+```bash
+git checkout -b feature/ma-fonctionnalite
+```
+
+#### Développer + commits propres
+
+Faire des commits réguliers :
+
+```bash
+git add .
+git commit -m "feat: ajout de la gestion des utilisateurs"
+```
+
+👉 Bonnes pratiques :
+
+petits commits
+
+messages clairs (type conventionnel : feat, fix, refactor, etc.)
+
+#### Mettre à jour sa branche avec main
+
+Avant de pousser :
+
+```bash
+git checkout main
+git pull origin main
+git checkout feature/ma-fonctionnalite
+git merge main
+```
+
+👉 (ou rebase si vous êtes à l’aise)
+
+#### Pousser la branche sur GitHub
+
+```bash
+git push origin feature/ma-fonctionnalite
+```
+
+#### Créer une Pull Request (merge request)
+
+Sur GitHub :
+
+Aller sur le repo
+
+Cliquer sur "Compare & pull request"
+
+Configurer :
+
+base: main
+
+compare: feature/...
+
+Ajouter :
+
+description claire
+
+screenshots si besoin
+
+Assigner le reviewer (toi)
+
+#### Attendre validation
+
+👉 Le développeur ne merge jamais lui-même
+
 
 ## Conformité PSR-12
 
