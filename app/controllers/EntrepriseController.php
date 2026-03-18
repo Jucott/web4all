@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../core/Validator.php';
+require_once __DIR__ . '/../core/Datanormalizer.php';
 
 /**
  * Contrôleur de gestion des entreprises.
@@ -44,8 +45,8 @@ class EntrepriseController extends Controller
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
                 'nom' => ['required', 'alpha'],
-                'description' => ['required'],
-                'telephone' => ['required'],
+                'description' => ['required', 'txt'],
+                'telephone' => ['required', 'phone'],
                 'email' => ['required', 'email']
             ]);
 
@@ -89,7 +90,8 @@ class EntrepriseController extends Controller
             // Gestion de la pagination
             $page = $_POST['page'] ?? 1;
             $page = max(1, (int)$page);
-            $perPage = 3;
+
+            $perPage = ITEM_PER_PAGES;
 
             // Filtres de recherche
             $filters = [
@@ -107,10 +109,10 @@ class EntrepriseController extends Controller
                 $valid = $validator->validate($_POST, ['nom' => ['required', 'alpha']]);
             }
 
-            if (!empty($_POST['description'])) {
+            if ($valid && !empty($_POST['description'])) {
                 $valid = $validator->validate($_POST, [
-                    'description' => ['required'],
-                    'telephone' => ['required'],
+                    'description' => ['required', 'txt'],
+                    'telephone' => ['required', 'phone'],
                     'email' => ['required', 'email']
                 ]);
             }
@@ -167,10 +169,10 @@ class EntrepriseController extends Controller
     public function modify($id)
     {
         $entrepriseModel = $this->getEntrepriseModel();
-        $entreprise = $entrepriseModel->findById($id);
+        $old_entreprise = $entrepriseModel->findById($id);
 
         // Vérification existence
-        if (!$entreprise) {
+        if (!$old_entreprise) {
             if (defined('PHPUNIT_RUNNING')) {
                 throw new \Exception("Entreprise introuvable");
             }
@@ -196,8 +198,8 @@ class EntrepriseController extends Controller
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
                 'nom' => ['required', 'alpha'],
-                'description' => ['required'],
-                'telephone' => ['required'],
+                'description' => ['required', 'txt'],
+                'telephone' => ['required', 'phone'],
                 'email' => ['required', 'email']
             ]);
 
@@ -208,6 +210,23 @@ class EntrepriseController extends Controller
                     'entreprise' => $entreprise,
                 ]);
             }
+
+            // Verification s'il y a eu une modif ou pas
+            $schema = [
+                'nom'           => 'string',
+                'description'   => 'string',
+                'telephone'     => 'string',
+                'email'         => 'string',
+                'valide'        => 'bool',
+            ];
+            $cleanPost  = Datanormalizer::normalizeWithSchema($_POST, $schema);
+            $cleanDb    = Datanormalizer::normalizeWithSchema($old_entreprise, $schema);
+            if ($cleanPost !== $cleanDb) {
+                // il y a une différence entre la data en sgbd et la data du formulaire
+                $entreprise['valide_id_ident'] = $_SESSION['user']['id'];
+                $entreprise['valide_lastupdate'] = (new DateTime())->format('Y-m-d H:i:s');
+            }
+            
             // Nettoyage des données avec update
             foreach ($entreprise as $key => $value) {
                 if ($value === '') {
@@ -223,7 +242,7 @@ class EntrepriseController extends Controller
 
         // Affichage formulaire (GET)
         $this->render('entreprise/modify', [
-            'entreprise' => $entreprise,
+            'entreprise' => $old_entreprise,
             'errors' => [],
         ]);
     }
@@ -240,7 +259,16 @@ class EntrepriseController extends Controller
     public function delete($id)
     {
         $entrepriseModel = $this->getEntrepriseModel();
-        $entrepriseModel->delete($id);
+
+        $entreprise = [
+            'valide_id_ident'   => $_SESSION['user']['id'],
+            'valide'            => false,
+            'valide_lastupdate' => (new DateTime())->format('Y-m-d H:i:s'),
+        ];
+        // Mise à jour
+        $entrepriseModel->update($id, $entreprise);
+
+        //$entrepriseModel->delete($id);
 
         $this->redirect('/entreprise/recherche');
     }

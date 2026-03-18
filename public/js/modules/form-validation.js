@@ -11,11 +11,15 @@ var FormValidation = (function($){
         },
 
         alpha: function(value){
-            return /^[a-zA-ZÀ-ÿ\s-]+$/.test(value);
+            return /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\-.'&]{2,100}$/.test(value);
+        },
+
+        txt: function(value){
+            return /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;:!?()'"\-]{10,1000}$/.test(value);
         },
 
         phone: function(value){
-            return /^[0-9+\s.-]{6,20}$/.test(value);
+            return /^\+?[0-9\s\-]{10,20}$/.test(value);
         },
 
         email: function(value){

@@ -50,38 +50,17 @@ class Entreprise extends Model
             $params['valide'] = $filters['valide'];
         }
         $where = $conditions ? " WHERE " . implode(" AND ", $conditions) : "";
-
+        // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
-
+        
         // Pagination
         $offset = ($page - 1) * $perPage;
-
-        $sql = "SELECT * FROM {$this->table} $where
-                ORDER BY nom
-                LIMIT :limit OFFSET :offset";
-
-        $stmt = $this->db->prepare($sql);
-        // Liaison des paramètres pour recherche ILIKE
-        foreach ($params as $key => $value) {
-            if (is_bool($value)) {
-                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
-            } elseif (is_int($value)) {
-                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
-            } elseif (is_null($value)) {
-                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
-            } else {
-                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
-            }
-        }
-
-        // Liaison des paramètres de pagination
-        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-
-        $stmt->execute();
-
+        $limit_offset['limit']    = (int)($perPage);
+        $limit_offset['offset']   = (int)($offset);
+        
+        // Requete de recherche
         return [
-            'results' => $stmt->fetchAll(PDO::FETCH_ASSOC),
+            'results' => $this->findBy($params, 'nom ASC', $limit_offset),
             'total' => $total
         ];
     }

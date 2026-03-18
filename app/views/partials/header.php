@@ -28,3 +28,8 @@
         </ul>
     </nav>
 </header>
+<?php if (Auth::check()): ?>
+    <div class="thincard">
+        <p class="role">User: <?= htmlspecialchars(Auth::user()['prenom'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars(Auth::user()['role'], ENT_QUOTES, 'UTF-8') ?>)</p>
+    </div>
+<?php endif ?>

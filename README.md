@@ -62,7 +62,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | SFx24 | Wish-list       | Ajouter à wish-list                   | Ajouter offre                                  | offre                                                                            | ⬜      |
 | SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                    | offre                                                                            | ⬜      |
 | SFx27 | Transversal     | Pagination                            | Pagination sur listes                          | -                                                                                | ✅      |
-| SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | 🟡      |
+| SFx28 | Transversal     | Mentions légales                      | Conformité légale                              | -                                                                                | ✅      |
 | BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                  | -                                                                                | ✅      |
 
 
@@ -255,7 +255,7 @@ exit
 Puis, en se plaçant dans le répetoire /var/www/html/web4all, installer la base de donnée ainsi :
 
 ```bash
-cat sgbd.sql | psql -h 127.0.0.1 -U web4all web4all
+cat web4all.sql | psql -h 127.0.0.1 -U web4all web4all
 Password for user web4all: web4all
 CREATE....
 CREATE....
@@ -265,106 +265,112 @@ ALTER....
 ```
 
 
-### Git
+### 📘 Procédure Git – Projet Web4All
 
-Procédure développeur (du clone au merge request)
-#### Cloner le projet
+#### 👨‍💻 Côté développeur
 
-```bash
-git clone https://github.com/Jucott/web4all.git
-cd web4all
-```
+##### Accéder au projet
 
-#### Vérifier la branche principale
+Rendez-vous sur le dépôt GitHub du projet :
 
-Selon ton repo :
+👉 GitHub : https://github.com/Jucott/web4all
 
-```bash
-git branch
-```
+Assurez-vous d’être connecté à votre compte.
 
-Se placer sur main (ou master) :
+##### Créer un fork du projet
 
-```bash
-git checkout main
-git pull origin main
-```
+- Cliquez sur le bouton “**Fork**” en haut à droite de la page
+- Sélectionnez “**Create a new fork**”
+- Donnez un nom explicite à votre dépôt (idéalement lié à votre développement)
+- Cliquez sur “**Create fork**”
 
-#### Créer une branche de travail
+✅ Vous disposez maintenant d’une copie du projet sur votre propre compte.
 
-👉 Règle : jamais travailler directement sur main
+##### Développer sur votre fork
 
-Convention recommandée :
+Travaillez sur votre fork :
 
-feature/nom-feature
+- Créez une branche (recommandé)
+- Effectuez vos modifications
+- Réalisez des commits propres et explicites
+- Poussez vos changements sur votre fork
 
-fix/nom-bug
+Exemple de bonnes pratiques :
 
-hotfix/...
+- Commits courts et clairs (feat, fix, refactor, etc.)
+- Une fonctionnalité = une branche
 
-```bash
-git checkout -b feature/ma-fonctionnalite
-```
+##### Proposer vos modifications (Pull Request)
 
-#### Développer + commits propres
+Une fois votre développement terminé :
 
-Faire des commits réguliers :
+- Allez sur votre fork
+- Ouvrez l’onglet “**Pull requests**”
+- Cliquez sur “**New pull request**”
+- Vérifiez :
+    - base repository : projet principal (`web4all`)
+    - base branch : `main`
+    - compare : votre branche
 
-```bash
-git add .
-git commit -m "feat: ajout de la gestion des utilisateurs"
-```
+GitHub affiche automatiquement les différences.
 
-👉 Bonnes pratiques :
+##### Créer la Pull Request
 
-petits commits
+- Cliquez sur “**Create pull request**”
+- Rédigez une description claire :
+    - objectif de la modification
+    - changements réalisés
+    - éventuels impacts
 
-messages clairs (type conventionnel : feat, fix, refactor, etc.)
+👉 Cette étape est essentielle pour faciliter la relecture.
 
-#### Mettre à jour sa branche avec main
+- Cliquez sur “**Create pull request**” pour valider
 
-Avant de pousser :
+⏳ Votre demande est maintenant en attente de validation.
 
-```bash
-git checkout main
-git pull origin main
-git checkout feature/ma-fonctionnalite
-git merge main
-```
 
-👉 (ou rebase si vous êtes à l’aise)
+#### 🔐 Côté responsable du projet (branche `main`)
 
-#### Pousser la branche sur GitHub
+##### Accéder aux demandes
 
-```bash
-git push origin feature/ma-fonctionnalite
-```
+Dans le dépôt principal :
 
-#### Créer une Pull Request (merge request)
+- Aller dans l’onglet “**Pull requests**”
+- Sélectionner la demande à examiner
 
-Sur GitHub :
+##### Analyser les modifications
 
-Aller sur le repo
+Plusieurs onglets sont disponibles :
 
-Cliquer sur "Compare & pull request"
+- **Conversation** : échanges et description
+- **Commits** : historique des modifications
+- **Checks** : tests automatisés (si présents)
+- **Files changed** : 📌 vue détaillée des modifications
 
-Configurer :
+👉 L’onglet “**Files changed**” est le plus important pour la revue de code.
 
-base: main
+##### Valider et fusionner
 
-compare: feature/...
+Si les modifications sont correctes :
 
-Ajouter :
+- Aller dans l’onglet “**Conversation**”
+- Cliquer sur “**Merge pull request**”
+- Adapter le message de commit si nécessaire
+- Cliquer sur “**Confirm merge**”
 
-description claire
+✅ Les modifications sont maintenant intégrées dans la branche `main`.
 
-screenshots si besoin
+#### ✅ Bonnes pratiques générales
 
-Assigner le reviewer (toi)
+❌ Ne jamais travailler directement sur `main`
 
-#### Attendre validation
+❌ Ne jamais pousser directement sur le dépôt principal
 
-👉 Le développeur ne merge jamais lui-même
+✅ Toujours passer par une Pull Request
+
+✅ Documenter clairement ses modifications
+
+✅ Mettre à jour régulièrement son fork
 
 
 ## Conformité PSR-12

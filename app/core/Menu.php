@@ -61,6 +61,7 @@ class Menu
 
             $menu[$menuName][] = [
                 'label' => $row['label'],
+                'menu' => $row['menu'],
                 'url' => '/' . ltrim($row['url'], '/'), // garantit /url absolue
             ];
         }

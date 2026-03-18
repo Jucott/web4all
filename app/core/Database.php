@@ -33,11 +33,11 @@ class Database
     public static function getInstance(): PDO
     {
         if (self::$instance === null) {
-            $user = $_ENV['DB_USER'] ?? 'web4all';
-            $pass = $_ENV['DB_PASS'] ?? 'web4all';
-            $host = $_ENV['DB_HOST'] ?? 'localhost';
-            $port = $_ENV['DB_PORT'] ?? '5432';
-            $db   = $_ENV['DB_NAME'] ?? 'web4all';
+            $user = $_ENV['DB_USER'] ?? DB_USER;
+            $pass = $_ENV['DB_PASS'] ?? DB_PASS;
+            $host = $_ENV['DB_HOST'] ?? DB_HOST;
+            $port = $_ENV['DB_PORT'] ?? DB_PORT;
+            $db   = $_ENV['DB_NAME'] ?? DB_NAME;
 
             $dsn = "pgsql:host=$host;port=$port;dbname=$db";
             

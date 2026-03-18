@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
+\restrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
 
 -- Dumped from database version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 
--- Started on 2026-03-17 17:48:04 CET
+-- Started on 2026-03-18 18:17:23 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,9 +28,9 @@ SET row_security = off;
 CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
 
 
-\unrestrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
+\unrestrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
 \connect web4all
-\restrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
+\restrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -301,7 +301,7 @@ COPY public.entreprise (id_entreprise, nom, description, email, telephone, valid
 21	Education Nationale	This is the education nationale	k@k.com	+33 607080923	t	\N	\N
 22	Monaco Digital	This is Monaco digital	l@l.com	+33 607080924	t	\N	\N
 10	Telis	this is Telis	a@a.com	+33 607080910	t	\N	\N
-23	AMSN	This is l AMSN	l@l.com	+33 607080925	t	\N	\N
+23	AMSN	This is l AMSN	l@l.fr	+33 607080925	t	1	2026-03-18 17:59:36
 \.
 
 
@@ -364,6 +364,9 @@ auth_login	Auth	Login	auth/login	99	0
 auth_logout	Auth	Logout	auth/logout	99	1
 entreprise_delete	\N	\N	\N	0	0
 sitemap_index	\N	\N	\N	0	0
+static_contact	Static	Contact	contact	97	0
+static_mentions_legales	Static	Mentions Legales	mentions_legales	97	1
+static_plan_site	Static	Plan	plan_site	97	2
 \.
 
 
@@ -383,6 +386,9 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 1	entreprise_recherche	t
 1	home_index	t
 1	sitemap_index	t
+1	static_contact	t
+1	static_mentions_legales	t
+1	static_plan_site	t
 2	admin_permissions	f
 2	auth_login	t
 2	auth_logout	t
@@ -392,6 +398,9 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 2	entreprise_recherche	t
 2	home_index	t
 2	sitemap_index	t
+2	static_contact	t
+2	static_mentions_legales	t
+2	static_plan_site	t
 3	admin_permissions	f
 3	auth_login	t
 3	auth_logout	t
@@ -401,6 +410,9 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 3	entreprise_recherche	t
 3	home_index	t
 3	sitemap_index	t
+3	static_contact	t
+3	static_mentions_legales	t
+3	static_plan_site	t
 4	admin_permissions	f
 4	auth_login	t
 4	auth_logout	f
@@ -410,6 +422,9 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 4	entreprise_recherche	t
 4	home_index	t
 4	sitemap_index	t
+4	static_contact	t
+4	static_mentions_legales	t
+4	static_plan_site	t
 \.
 
 
@@ -699,11 +714,11 @@ ALTER TABLE ONLY public.wishlist
     ADD CONSTRAINT wishlist_id_offre_fkey FOREIGN KEY (id_offre) REFERENCES public.offre(id_offre) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
--- Completed on 2026-03-17 17:48:07 CET
+-- Completed on 2026-03-18 18:17:26 CET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
+\unrestrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
 

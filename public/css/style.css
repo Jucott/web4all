@@ -116,6 +116,21 @@ button {
     background: #fff;
 }
 
+.thincard {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 1px;
+    margin-bottom: 15px;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+
 /* Partie gauche */
 .card-left {
     flex: 1;            /* prend toute la place restante */

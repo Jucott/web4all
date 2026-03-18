@@ -45,16 +45,29 @@ class Validator
 
                     case 'email':
                         if ($value !== '' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                            $this->errors[$field][] = "Email invalide";
+                            $this->errors[$field][] = "email: Email invalide";
+                        }
+                        break;
+
+                    case 'phone':
+                        if ($value !== '' && !preg_match('/^\+?[0-9\s\-]{10,20}$/u', $value)) {
+                            $this->errors[$field][] = "phone: Caractères invalides";
                         }
                         break;
 
                     case 'alpha':
-                        if ($value !== '' && !preg_match('/^[a-zA-ZÀ-ÿ\s-]+$/u', $value)) {
-                            $this->errors[$field][] = "Caractères invalides";
+                        if ($value !== '' && !preg_match('/^[\p{L}0-9\s\-\.\'&]{2,100}$/u', $value)) {
+                            $this->errors[$field][] = "alpha: Caractères invalides";
                         }
                         break;
 
+                    case 'txt':
+                        if ($value !== '' && !preg_match('/^[\p{L}0-9\s\p{P}]{10,1000}$/u', $value)) {
+                            $this->errors[$field][] = "text: Caractères invalides";
+                        }
+                        break;
+
+                    
                     default:
                         // Possibilité d'ajouter d'autres règles ou lancer une exception
                         throw new InvalidArgumentException("Règle de validation inconnue : $rule");

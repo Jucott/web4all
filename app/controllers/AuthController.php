@@ -28,6 +28,24 @@ class AuthController extends Controller
                 http_response_code(403);
                 die("CSRF token invalide");
             }
+
+
+            // Validation
+            $validator = new Validator();
+            $valid = $validator->validate($_POST, [
+                'password' => ['required', 'alpha'],
+                'email' => ['required', 'email'],
+
+            ]);
+
+            // Retour avec erreurs
+            if (!$valid) {
+                return $this->render('auth/login', [
+                    'error' => $validator->errors(),
+                ]);
+            }
+
+
             // Récupération des données du formulaire
             $email = $_POST['email'] ?? null;
             $password = $_POST['password'] ?? null;
@@ -38,20 +56,19 @@ class AuthController extends Controller
 
             // Si l'authentification échoue
             if (!$user) {
-
                 return $this->render('auth/login', [
-                    'error' => 'Identifiants invalides'
+                    'errors' => 'Identifiants invalides'
                 ]);
 
             }
 
             // Stockage des informations utilisateur en session
             $_SESSION['user'] = [
-                'id' => $user['id_ident'],
-                'nom' => $user['nom'],
-                'prenom' => $user['prenom'],
-                'role_id' => $user['id_role'],
-                'role' => $user['role']
+                'id'        => $user['id_ident'],
+                'nom'       => $user['nom'],
+                'prenom'    => $user['prenom'],
+                'role_id'   => $user['id_role'],
+                'role'      => $user['role'],
             ];
             // Chargement en cache des menus
             Menu::reset();

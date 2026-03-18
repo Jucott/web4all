@@ -1,22 +1,41 @@
 <h1>Bienvenue sur Web4All</h1>
 
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Suspendisse potenti. Donec vel sem ut libero ultrices gravida.
-</p>
+<section class="home-intro">
+    <p>
+        Bienvenue sur Web4All, votre plateforme dédiée à la gestion et à la recherche d’entreprises 
+        pour vos stages et alternances.
+    </p>
+</section>
 
-<?php if (!Auth::check()): ?>
+<section class="home-description">
+    <h2>À quoi sert Web4All ?</h2>
 
-<a href="/auth/login" class="btn-login">
-    Se connecter
-</a>
+    <p>
+        Web4All vous permet de centraliser et organiser vos recherches d’entreprises, 
+        de consulter des informations utiles et de suivre vos opportunités professionnelles.
+    </p>
 
-<?php else: ?>
+    <p>
+        Grâce à une interface simple et efficace, vous pouvez :
+    </p>
 
-<p>Bienvenue <?= htmlspecialchars(Auth::user()['prenom'], ENT_QUOTES, 'UTF-8') ?> vous etes <?= htmlspecialchars(Auth::user()['role'], ENT_QUOTES, 'UTF-8') ?></p>
-<br/>
-<a href="/auth/logout" class="btn-logout">
-Se déconnecter
-</a>
+    <ul>
+        <li>Rechercher des entreprises</li>
+        <li>Gérer vos propres fiches entreprises</li>
+        <li>Mettre à jour les informations</li>
+        <li>Accéder aux données importantes</li>
+    </ul>
+</section>
 
-<?php endif ?>
+<section class="home-action">
+    <h2>Commencer</h2>
+
+    <p>
+        Utilisez le menu pour naviguer dans l’application ou commencez dès maintenant 
+        votre recherche d’entreprise.
+    </p>
+
+    <a href="/entreprise/recherche" class="btn-primary">
+        Rechercher une entreprise
+    </a>
+</section>

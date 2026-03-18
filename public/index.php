@@ -1,13 +1,17 @@
 <?php
 
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => 'web4all.local',    // ton domaine
-    'secure' => false,              // mettre true -> HTTPS obligatoire
-    'httponly' => true,             // impossible d’y accéder via JS
-    'samesite' => 'Strict'          // ou Lax selon besoin
-]);
+date_default_timezone_set('Europe/Paris');
+
+require_once __DIR__ . '/../app/config/Constants.php';
+
+// session_set_cookie_params([
+//     'lifetime' => 0,
+//     'path' => '/',
+//     'domain' => 'web4all.local',    // ton domaine
+//     'secure' => false,              // mettre true -> HTTPS obligatoire
+//     'httponly' => true,             // impossible d’y accéder via JS
+//     'samesite' => 'Strict'          // ou Lax selon besoin
+// ]);
 session_start();
 
 require_once __DIR__ . '/../app/core/Autoloader.php';

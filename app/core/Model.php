@@ -59,15 +59,28 @@ abstract class Model
      * Trouve des enregistrements selon des critères.
      *
      * @param array $criteria Tableau clé => valeur (ex: ['nom' => 'ABC'])
+     * @param string $order chaine de caractere contenant les critère d'ORDER BY (ex: 'nom ASC')
+     * @param array $limit_offset Tableau clé => valeur (ex: ['limit' => 3, 'offset' => 0]
      * @return array Liste des enregistrements correspondants
      */
-    public function findBy(array $criteria): array
+    public function findBy(array $criteria, $order = "", array $limit_offset): array
     {
         $where = implode(' AND ', array_map(fn($k) => "$k = :$k", array_keys($criteria)));
-        $stmt = $this->db->prepare("SELECT * FROM {$this->table} WHERE $where");
+        $sql = "SELECT * FROM {$this->table} WHERE $where ";
+        if (!empty($order)){
+            $sql .= "ORDER BY $order ";
+        }
+        if (!empty($limit_offset)){
+            foreach ($limit_offset as $key => $value) {
+                $sql .= " $key :$key ";
+                $criteria[$key] = $value;
+            }
+        }
+        
+        $stmt = $this->db->prepare($sql);
 
         // Liaison des paramètres pour recherche ILIKE
-        foreach (criteria as $key => $value) {
+        foreach ($criteria as $key => $value) {
             if (is_bool($value)) {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
             } elseif (is_int($value)) {
@@ -79,7 +92,7 @@ abstract class Model
             }
         }
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -98,7 +111,7 @@ abstract class Model
         $where = implode(' AND ', array_map(fn($k) => "$k = :$k", array_keys($criteria)));
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE $where");
         // Liaison des paramètres pour recherche ILIKE
-        foreach (criteria as $key => $value) {
+        foreach ($criteria as $key => $value) {
             if (is_bool($value)) {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
             } elseif (is_int($value)) {

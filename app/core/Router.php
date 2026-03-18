@@ -23,7 +23,7 @@ class Router
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = trim($uri, '/');
-
+        $param = null;
         // Gestion explicite de la racine du site
         if ($uri === '') {
             $controllerSegment = 'home';
@@ -31,8 +31,20 @@ class Router
             $param = null;
         } elseif ($uri === 'sitemap.xml') {
             // Gestion spécifique de sitemap.xml
-            $controllerSegment = 'sitemap';
-            $method = 'index';
+            $controllerSegment = 'static';
+            $method = 'sitemap';
+        } elseif ($uri === 'contact') {
+            // Gestion spécifique de contact
+            $controllerSegment = 'static';
+            $method = 'contact';
+        } elseif ($uri === 'mentions_legales') {
+            // Gestion spécifique de mentions_legales
+            $controllerSegment = 'static';
+            $method = 'mentions_legales';
+        } elseif ($uri === 'plan_site') {
+            // Gestion spécifique de plan_site
+            $controllerSegment = 'static';
+            $method = 'plan_site';
         } else {
             $segments = explode('/', $uri);
             /*
@@ -62,7 +74,13 @@ class Router
 
         if (!isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+            // print("On DOIT creer un csrf_token");
+            // var_dump($_SESSION['csrf_token']);
         }
+        // else {
+        //     print("Pas besoin de creer un csrf_token");
+        //     var_dump($_SESSION['csrf_token']);
+        // }
         // Génération automatique de la permission (ex: entreprise_create)
         $permission = strtolower($controllerSegment . '_' . $method);
         $this->registerPermission($permission);

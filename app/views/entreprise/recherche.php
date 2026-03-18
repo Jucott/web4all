@@ -20,7 +20,7 @@
     <div class="search-box">
         <input type="text"
                name="nom"
-               data-validate=""
+               data-validate="optional|alpha"
                placeholder="Nom de l'entreprise"
                value="<?= htmlspecialchars($filters['nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <button type="submit">Rechercher</button>
@@ -110,7 +110,7 @@
             <input  type="text"
                     name="description"
                     id="description"
-		            data-validate="optional|alpha"
+		            data-validate="optional|txt"
                     value="<?= htmlspecialchars($filters['description'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
             <label for="telephone">Téléphone</label>
