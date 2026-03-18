@@ -1,28 +1,65 @@
 <?php
 
+/**
+ * Gestionnaire de rendu des vues.
+ *
+ * Permet de séparer le layout principal et le contenu des vues spécifiques,
+ * et fournit un helper pour la pagination.
+ */
 class View
 {
-    public static function render($view, $data = [])
+    /**
+     * Rend une vue avec un layout.
+     *
+     * @param string $view Nom de la vue relative à /views (ex: 'home/index')
+     * @param array $data Données à passer à la vue (variables disponibles via extract)
+     * @return void
+     */
+    public static function render(string $view, array $data = []): void
     {
-        extract($data);
+        $data['title']          = 'Web4All';
+        $data['description']    = 'Site Web pour trouver des entreprises et stages';
+        $data['robots']         = 'index,follow';
+        // Extraction des variables pour la vue
+        extract($data, EXTR_SKIP);
 
         $viewPath = __DIR__ . '/../views/' . $view . '.php';
 
         if (!file_exists($viewPath)) {
-            die("Vue introuvable : " . $view);
+            die("Vue introuvable : " . htmlspecialchars($view));
         }
 
+        // Capture du contenu spécifique de la vue
         ob_start();
         require $viewPath;
         $content = ob_get_clean();
 
-        require __DIR__ . '/../views/layout.php';
+        // Chargement du layout principal
+        $layoutPath = __DIR__ . '/../views/layout.php';
+        if (!file_exists($layoutPath)) {
+            die("Layout introuvable");
+        }
+
+        require $layoutPath;
     }
 
-
-    public static function buildPagination($currentPage, $totalPages, $window = 2)
+    /**
+     * Construit un tableau de pagination pour affichage.
+     *
+     * Exemple : [1, "...", 8, 9, 10, 11, 12, "...", 50]
+     *
+     * @param int $currentPage Page courante
+     * @param int $totalPages  Nombre total de pages
+     * @param int $window      Nombre de pages visibles autour de la page courante
+     * @return array Tableau de pages / ellipses
+     */
+    public static function buildPagination(int $currentPage, int $totalPages, int $window = 2): array
     {
         $pages = [];
+
+        if ($totalPages < 1) {
+            return $pages;
+        }
 
         $pages[] = 1;
 
@@ -44,8 +81,7 @@ class View
         if ($totalPages > 1) {
             $pages[] = $totalPages;
         }
-        // Renvoi [1, "...", 8, 9, 10, 11, 12, "...", 50]
+
         return $pages;
     }
-
 }

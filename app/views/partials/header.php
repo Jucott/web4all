@@ -6,27 +6,23 @@
     <nav class="nav">
         <ul>
             <?php foreach ($menus as $menu => $items): ?>
-
+                <?php if (empty($menu)){ continue; } ?>
                 <li class="menu-group">
-
-                <span><?= htmlspecialchars($menu) ?></span>
-
-                <ul>
-
-                <?php foreach ($items as $item): ?>
-
-                    <li>
-                    <a href="<?= $item['url'] ?>">
-                    <?= htmlspecialchars($item['label']) ?>
-                    </a>
-                    </li>
-
-                <?php endforeach; ?>
-
-                </ul>
-
+                    <span><?= htmlspecialchars($menu, ENT_QUOTES, 'UTF-8') ?></span>
+                    <ul>
+                    <?php foreach ($items as $item): ?>
+                        <?php if ((string)($item['label']) === (string)('Login') && Auth::check()) { ?>
+                        <?php } elseif ((string)($item['label']) === (string)('Logout') && !Auth::check()) { ?>
+                        <?php } else { ?>
+                            <li>
+                                <a href="<?= $item['url'] ?>">
+                                <?= htmlspecialchars($item['label'], ENT_QUOTES, 'UTF-8') ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    <?php endforeach; ?>
+                    </ul>
                 </li>
-
             <?php endforeach; ?>
 
         </ul>

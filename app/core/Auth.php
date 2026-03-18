@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Classe utilitaire d'authentification et d'autorisation.
+ */
 class Auth
 {
     public static function user()
@@ -20,16 +23,29 @@ class Auth
     public static function roleId()
     {
         if (!self::check()) {
-            // id_role du guest
-            return 4;
+            return 4; // guest
         }
-        return $_SESSION['user']['id'];
+
+        return $_SESSION['user']['role_id'];
     }
 
-    public static function can($permission, $roleId)
+    /**
+     * Vérifie si une permission est accordée à un rôle.
+     *
+     * Priorité :
+     * 1. Session (si disponible)
+     * 2. Base de données (fallback, ex: guest)
+     */
+    public static function can($permission, $roleId = null)
     {
-        //$roleId = self::roleId();
+        $roleId = $roleId ?? self::roleId();
 
+        // 1. Cas utilisateur connecté → session
+        if (isset($_SESSION['permissions'])) {
+            return in_array($permission, $_SESSION['permissions']);
+        }
+
+        // 2. Fallback DB (guest ou session absente)
         $db = Database::getInstance();
 
         $stmt = $db->prepare("

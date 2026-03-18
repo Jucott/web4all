@@ -2,7 +2,9 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title><?= $title ?? 'Web4All' ?></title>
+    <title><?= htmlspecialchars($title ?? 'Web4All') ?></title>
+    <meta name="description" content="<?= htmlspecialchars($description ?? 'Site Web pour trouver des entreprises et stages') ?>">
+    <meta name="robots" content="<?= htmlspecialchars($robots ?? 'index,follow') ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2c3e50">

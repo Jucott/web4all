@@ -13,7 +13,7 @@ Suspendisse potenti. Donec vel sem ut libero ultrices gravida.
 
 <?php else: ?>
 
-<p>Bienvenue <?= htmlspecialchars(Auth::user()['prenom']) ?> vous etes <?= htmlspecialchars(Auth::user()['role']) ?></p>
+<p>Bienvenue <?= htmlspecialchars(Auth::user()['prenom'], ENT_QUOTES, 'UTF-8') ?> vous etes <?= htmlspecialchars(Auth::user()['role'], ENT_QUOTES, 'UTF-8') ?></p>
 <br/>
 <a href="/auth/logout" class="btn-logout">
 Se déconnecter

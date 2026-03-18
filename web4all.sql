@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict H1jaKFAyyR8vggSDJ3OJrWoht6KvA8miZY9SMynTgq5xyiY8HvZ5d5gUHDiXi8y
+\restrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
 
 -- Dumped from database version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 
--- Started on 2026-03-16 18:24:27 CET
+-- Started on 2026-03-17 17:48:04 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -25,12 +25,12 @@ SET row_security = off;
 -- Name: web4all; Type: DATABASE; Schema: -; Owner: -
 --
 
--- CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
+CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
 
 
-\unrestrict H1jaKFAyyR8vggSDJ3OJrWoht6KvA8miZY9SMynTgq5xyiY8HvZ5d5gUHDiXi8y
+\unrestrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
 \connect web4all
-\restrict H1jaKFAyyR8vggSDJ3OJrWoht6KvA8miZY9SMynTgq5xyiY8HvZ5d5gUHDiXi8y
+\restrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -289,7 +289,6 @@ COPY public.competence (id_competence, competence) FROM stdin;
 
 COPY public.entreprise (id_entreprise, nom, description, email, telephone, valide, valide_id_ident, valide_lastupdate) FROM stdin;
 5	Monaco Telecom	ceci est Monaco Telecom de  la mort de mort	foo@bar.baz	+33 611920698	t	\N	\N
-10	Telis	this is telis	a@a.com	+33 607080910	t	\N	\N
 11	SBM	this is sbm	b@b.com	+33 607080911	t	\N	\N
 12	Mairie	this is mairie	c@c.com	+33 607080912	t	\N	\N
 13	CHPG	this is chpg	d@d.com	+33 607080913	t	\N	\N
@@ -301,6 +300,7 @@ COPY public.entreprise (id_entreprise, nom, description, email, telephone, valid
 20	Tribunal de Monaco	This is the tribunal	j@j.com	+33 607080922	t	\N	\N
 21	Education Nationale	This is the education nationale	k@k.com	+33 607080923	t	\N	\N
 22	Monaco Digital	This is Monaco digital	l@l.com	+33 607080924	t	\N	\N
+10	Telis	this is Telis	a@a.com	+33 607080910	t	\N	\N
 23	AMSN	This is l AMSN	l@l.com	+33 607080925	t	\N	\N
 \.
 
@@ -363,6 +363,7 @@ home_index	Home	Accueil	home/index	0	0
 auth_login	Auth	Login	auth/login	99	0
 auth_logout	Auth	Logout	auth/logout	99	1
 entreprise_delete	\N	\N	\N	0	0
+sitemap_index	\N	\N	\N	0	0
 \.
 
 
@@ -381,6 +382,7 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 1	entreprise_modify	t
 1	entreprise_recherche	t
 1	home_index	t
+1	sitemap_index	t
 2	admin_permissions	f
 2	auth_login	t
 2	auth_logout	t
@@ -389,6 +391,7 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 2	entreprise_modify	t
 2	entreprise_recherche	t
 2	home_index	t
+2	sitemap_index	t
 3	admin_permissions	f
 3	auth_login	t
 3	auth_logout	t
@@ -397,6 +400,7 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 3	entreprise_modify	f
 3	entreprise_recherche	t
 3	home_index	t
+3	sitemap_index	t
 4	admin_permissions	f
 4	auth_login	t
 4	auth_logout	f
@@ -405,6 +409,7 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 4	entreprise_modify	f
 4	entreprise_recherche	t
 4	home_index	t
+4	sitemap_index	t
 \.
 
 
@@ -694,11 +699,11 @@ ALTER TABLE ONLY public.wishlist
     ADD CONSTRAINT wishlist_id_offre_fkey FOREIGN KEY (id_offre) REFERENCES public.offre(id_offre) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
--- Completed on 2026-03-16 18:24:30 CET
+-- Completed on 2026-03-17 17:48:07 CET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict H1jaKFAyyR8vggSDJ3OJrWoht6KvA8miZY9SMynTgq5xyiY8HvZ5d5gUHDiXi8y
+\unrestrict F2kr5mjr7fvspoOMKw0r0sIdHpNQXgISn4Gvw7U4uuueBVdEewqJmXlG2LXzitL
 

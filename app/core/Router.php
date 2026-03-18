@@ -1,10 +1,26 @@
 <?php
 
+/**
+ * Routeur principal de l'application.
+ *
+ * - Analyse l'URL et appelle le contrôleur et la méthode correspondante.
+ * - Vérifie automatiquement les permissions basées sur le rôle de l'utilisateur.
+ * - Enregistre les permissions dynamiquement si elles n'existent pas.
+ */
 class Router
 {
-    public function dispatch()
+    /**
+     * Traite la requête entrante.
+     *
+     * - Parse l'URI
+     * - Détermine le contrôleur, la méthode et le paramètre
+     * - Vérifie l'accès via les permissions
+     * - Appelle dynamiquement le contrôleur
+     *
+     * @return void
+     */
+    public function dispatch(): void
     {
-        
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $uri = trim($uri, '/');
 
@@ -13,17 +29,18 @@ class Router
             $controllerSegment = 'home';
             $method = 'index';
             $param = null;
+        } elseif ($uri === 'sitemap.xml') {
+            // Gestion spécifique de sitemap.xml
+            $controllerSegment = 'sitemap';
+            $method = 'index';
         } else {
-
             $segments = explode('/', $uri);
-
             /*
-            /entreprise/show/12
+            Exemple : /entreprise/show/12
             [0] => entreprise
             [1] => show
             [2] => 12
             */
-
             $controllerSegment = $segments[0] ?? 'home';
             $method = $segments[1] ?? 'index';
             $param = $segments[2] ?? null;
@@ -40,16 +57,19 @@ class Router
 
         if (!method_exists($controller, $method)) {
             http_response_code(404);
-            die("Method $method not found");
+            die("Method $method not found in $controllerName");
         }
-        /*
-        Génération de la permission automatiquement
-        exemple : entreprise_create
-        */
+
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        // Génération automatique de la permission (ex: entreprise_create)
         $permission = strtolower($controllerSegment . '_' . $method);
         $this->registerPermission($permission);
 
+        // Vérification des droits d'accès
         $this->checkAccess($permission);
+
         // Appel dynamique avec ou sans paramètre
         if ($param !== null) {
             $controller->$method($param);
@@ -58,11 +78,19 @@ class Router
         }
     }
 
-
-    private function checkAccess($permission)
+    /**
+     * Vérifie si l'utilisateur a le droit d'accéder à la permission.
+     *
+     * - Redirige vers login si non connecté
+     * - Retourne 403 si connecté mais permission refusée
+     *
+     * @param string $permission
+     * @return bool True si accès autorisé
+     */
+    private function checkAccess(string $permission): bool
     {
         $roleId = Auth::roleId();
-        
+
         if (!Auth::can($permission, $roleId)) {
 
             if (!Auth::check()) {
@@ -71,13 +99,19 @@ class Router
             }
 
             http_response_code(403);
-            die("Accès interdit");
+            die("Accès interdit : permission '$permission'");
         }
+
         return true;
     }
 
-
-    private function registerPermission($permission)
+    /**
+     * Enregistre une permission automatiquement dans la base si elle n'existe pas.
+     *
+     * @param string $permission Nom de la permission
+     * @return void
+     */
+    private function registerPermission(string $permission): void
     {
         $db = Database::getInstance();
 
@@ -89,5 +123,4 @@ class Router
 
         $stmt->execute(['perm' => $permission]);
     }
-
 }
