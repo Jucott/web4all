@@ -185,16 +185,32 @@ A mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` qu'il faut 
 <VirtualHost *:80>
     ServerName web4all.local
     DocumentRoot /var/www/html/web4all/public
-
     <Directory /var/www/html/web4all/public>
-#        Options Indexes FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
-
     ErrorLog ${APACHE_LOG_DIR}/web4all_error.log
     CustomLog ${APACHE_LOG_DIR}/web4all_access.log combined
 </VirtualHost>
+
+<VirtualHost *:80>
+    ServerName static.web4all.local
+    DocumentRoot /var/www/html/web4all/public
+    <Directory /var/www/html/web4all/public>
+        AllowOverride None
+        Require all granted
+    </Directory>
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType text/css "access + 1 month"
+        ExpiresByType application/javascript "access + 1 month"
+        ExpiresByType image/png "access + 1 month"
+        ExpiresByType image/jpeg "access + 1 month"
+    </IfModule>
+    ErrorLog ${APACHE_LOG_DIR}/web4all_static_error.log
+    CustomLog ${APACHE_LOG_DIR}/web4all_static_access.log combined
+</VirtualHost>
+
 
 ```
 
