@@ -16,7 +16,7 @@
     <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($filters['nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|alpha">
 
     <label for="description">Description</label>
-    <textarea name="description" id="description" data-validate="required|alpha|min:10"><?= htmlspecialchars($filters['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+    <textarea name="description" id="description" data-validate="required|txt|min:10"><?= htmlspecialchars($filters['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
 
     <label for="telephone">Téléphone</label>
     <input type="text" id="telephone" name="telephone" value="<?= htmlspecialchars($filters['telephone'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|phone">

@@ -67,7 +67,7 @@ class AuthController extends Controller
                 'id'        => $user['id_ident'],
                 'nom'       => $user['nom'],
                 'prenom'    => $user['prenom'],
-                'role_id'   => $user['id_role'],
+                'id_role'   => $user['id_role'],
                 'role'      => $user['role'],
             ];
             // Chargement en cache des menus

@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Modèle pour la table "entreprise".
+ * Modèle pour la table "offre".
  *
  * Fournit les opérations CRUD via Model et une méthode de recherche paginée.
  */
-class Entreprise extends Model
+class Offre extends Model
 {
     /** @var string Nom de la table */
-    protected string $table = 'entreprise';
+    protected string $table = 'offre';
 
     /** @var string Clé primaire */
-    protected string $primaryKey = 'id_entreprise';
+    protected string $primaryKey = 'id_offre';
 
     /**
-     * Recherche des entreprises selon des filtres et pagine les résultats.
+     * Recherche des offres selon des filtres et pagine les résultats.
      *
-     * @param array $filters Tableau clé => valeur pour filtrer (nom, description, telephone, email)
+     * @param array $filters Tableau clé => valeur pour filtrer 
      * @param int $page Page courante (>=1)
      * @param int $perPage Nombre d'enregistrements par page
      * @return array ['results' => array, 'total' => int]
@@ -24,25 +24,26 @@ class Entreprise extends Model
     public function search(array $filters, int $page = 1, int $perPage = 3): array
     {
         $params = [];
-        if (!empty($filters['nom'])) {
-            $params[] = ['nom', $filters['nom'], 'ILIKE'];
+        if (!empty($filters['titre'])) {
+            $params[] = ['titre', $filters['titre'], 'ILIKE'];
         }
 
         if (!empty($filters['description'])) {
             $params[] = ['description', $filters['description'], 'ILIKE'];
         }
 
-        if (!empty($filters['telephone'])) {
-            $params[] = ['telephone', $filters['telephone'], 'ILIKE'];
+        if (!empty($filters['remuneration'])) {
+            $params[] = ['remuneration', $filters['remuneration'] * 0.9, '>='];
         }
 
-        if (!empty($filters['email'])) {
-            $params[] = ['email', $filters['email'], 'ILIKE'];
+        if (empty($filters['date_offre'])){
+            $params[] = ['date_offre', $filters['date_offre'], '>='];
         }
-
+        
         if (is_bool($filters['valide'])) {
             $params[] = ['valide', $filters['valide'], '='];
         }
+        
         // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
         
@@ -53,8 +54,12 @@ class Entreprise extends Model
         
         // Requete de recherche
         return [
-            'results' => $this->findBy($params, 'nom ASC', $limit_offset),
+            'results' => $this->findBy($params, 'titre ASC', $limit_offset),
             'total' => $total
         ];
     }
+
+
+
+
 }

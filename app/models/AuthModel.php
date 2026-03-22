@@ -36,10 +36,8 @@ class AuthModel extends Model
             return false;
         }
 
-        // ⚠️ Important : comparer les mots de passe hachés
-        // Ici on suppose qu'ils sont stockés en clair, mais idéalement :
-        // if (!password_verify($password, $user['passwd'])) { return false; }
-        if ($user['passwd'] !== $password) {
+        // comparer les mots de passe hachés
+        if (! password_verify($password, $user['passwd'])) {   
             return false;
         }
 

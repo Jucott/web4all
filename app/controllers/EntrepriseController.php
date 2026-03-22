@@ -27,6 +27,13 @@ class EntrepriseController extends Controller
      */
     public function create()
     {
+        $filters = [
+            'nom'           => null,
+            'description'   => null,
+            'telephone'     => null,
+            'email'         => null,
+            'valide'        => true,
+        ];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
                 http_response_code(403);
@@ -34,20 +41,20 @@ class EntrepriseController extends Controller
             }
             // Données filtrées pour pré-remplissage en cas d'erreur
             $filters = [
-                'nom' => $_POST['nom'] ?? null,
-                'description' => $_POST['description'] ?? null,
-                'telephone' => $_POST['telephone'] ?? null,
-                'email' => $_POST['email'] ?? null,
-                'active' => isset($_POST['active']) ? true : false,
+                'nom'           => $_POST['nom'] ?? null,
+                'description'   => $_POST['description'] ?? null,
+                'telephone'     => $_POST['telephone'] ?? null,
+                'email'         => $_POST['email'] ?? null,
+                'valide'        => isset($_POST['valide']) ? true : false,
             ];
 
             // Validation des données
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
-                'nom' => ['required', 'alpha'],
-                'description' => ['required', 'txt'],
-                'telephone' => ['required', 'phone'],
-                'email' => ['required', 'email']
+                'nom'           => ['required', 'alpha'],
+                'description'   => ['required', 'txt'],
+                'telephone'     => ['required', 'phone'],
+                'email'         => ['required', 'email']
             ]);
 
             // Retour formulaire avec erreurs
@@ -68,7 +75,7 @@ class EntrepriseController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('entreprise/create');
+        $this->render('entreprise/create', [ 'filters' => $filters ]);
     }
 
     /**
@@ -81,6 +88,13 @@ class EntrepriseController extends Controller
      */
     public function recherche()
     {
+        $filters = [
+            'nom'           => null,
+            'description'   => null,
+            'telephone'     => null,
+            'email'         => null,
+            'valide'        => true,
+        ];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
@@ -95,11 +109,11 @@ class EntrepriseController extends Controller
 
             // Filtres de recherche
             $filters = [
-                'nom' => $_POST['nom'] ?? null,
-                'description' => $_POST['description'] ?? null,
-                'telephone' => $_POST['telephone'] ?? null,
-                'email' => $_POST['email'] ?? null,
-                'valide' => isset($_POST['valide']) ? true : false,
+                'nom'           => $_POST['nom'] ?? null,
+                'description'   => $_POST['description'] ?? null,
+                'telephone'     => $_POST['telephone'] ?? null,
+                'email'         => $_POST['email'] ?? null,
+                'valide'        => isset($_POST['valide']) ? true : false,
             ];
             $validator = new Validator();
             $valid = true;
@@ -111,9 +125,9 @@ class EntrepriseController extends Controller
 
             if ($valid && !empty($_POST['description'])) {
                 $valid = $validator->validate($_POST, [
-                    'description' => ['required', 'txt'],
-                    'telephone' => ['required', 'phone'],
-                    'email' => ['required', 'email']
+                    'description'   => ['required', 'txt'],
+                    'telephone'     => ['required', 'phone'],
+                    'email'         => ['required', 'email']
                 ]);
             }
 
@@ -151,7 +165,7 @@ class EntrepriseController extends Controller
         }
 
         // Affichage initial (GET)
-        $this->render('entreprise/recherche');
+        $this->render('entreprise/recherche', [ 'filters' => $filters ]);
     }
 
     /**
@@ -187,26 +201,26 @@ class EntrepriseController extends Controller
             }
             // Données modifiées
             $entreprise = [
-                'nom' => $_POST['nom'] ?? null,
-                'description' => $_POST['description'] ?? null,
-                'telephone' => $_POST['telephone'] ?? null,
-                'email' => $_POST['email'] ?? null,
-                'valide' => (bool) $_POST['valide'],
+                'nom'           => $_POST['nom'] ?? null,
+                'description'   => $_POST['description'] ?? null,
+                'telephone'     => $_POST['telephone'] ?? null,
+                'email'         => $_POST['email'] ?? null,
+                'valide'        => (bool) $_POST['valide'],
             ];
 
             // Validation
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
-                'nom' => ['required', 'alpha'],
-                'description' => ['required', 'txt'],
-                'telephone' => ['required', 'phone'],
-                'email' => ['required', 'email']
+                'nom'           => ['required', 'alpha'],
+                'description'   => ['required', 'txt'],
+                'telephone'     => ['required', 'phone'],
+                'email'         => ['required', 'email']
             ]);
 
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('entreprise/modify', [
-                    'errors' => $validator->errors(),
+                    'errors'    => $validator->errors(),
                     'entreprise' => $entreprise,
                 ]);
             }
@@ -219,7 +233,7 @@ class EntrepriseController extends Controller
                 'email'         => 'string',
                 'valide'        => 'bool',
             ];
-            $cleanPost  = Datanormalizer::normalizeWithSchema($_POST, $schema);
+            $cleanPost  = Datanormalizer::normalizeWithSchema($entreprise, $schema);
             $cleanDb    = Datanormalizer::normalizeWithSchema($old_entreprise, $schema);
             if ($cleanPost !== $cleanDb) {
                 // il y a une différence entre la data en sgbd et la data du formulaire

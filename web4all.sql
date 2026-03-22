@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
+\restrict ZhgDnFw03hI9WxBtu7dcKaD8KiYfcyCrMn3d2abYEpb0Ii9zaecNTZ2xuQu8u82
 
 -- Dumped from database version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 
--- Started on 2026-03-18 18:17:23 CET
+-- Started on 2026-03-20 16:39:10 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,9 +28,9 @@ SET row_security = off;
 CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
 
 
-\unrestrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
+\unrestrict ZhgDnFw03hI9WxBtu7dcKaD8KiYfcyCrMn3d2abYEpb0Ii9zaecNTZ2xuQu8u82
 \connect web4all
-\restrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
+\restrict ZhgDnFw03hI9WxBtu7dcKaD8KiYfcyCrMn3d2abYEpb0Ii9zaecNTZ2xuQu8u82
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -278,6 +278,11 @@ CREATE TABLE public.wishlist (
 --
 
 COPY public.competence (id_competence, competence) FROM stdin;
+1	rigueur
+2	ponctualite
+3	administration linux
+4	administration reseau
+5	developpement web
 \.
 
 
@@ -322,9 +327,9 @@ COPY public.evaluation (id_entreprise, id_ident, note) FROM stdin;
 --
 
 COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide_id_ident, valide_lastupdate) FROM stdin;
-1	ju@thegoat.com	1234	1	Thegoat	ju	t	\N	\N
-2	ju@thepilote.com	1234	2	Thepilote	ju	t	\N	\N
-3	ju@thestudent.com	1234	3	Thestudent	ju	t	\N	\N
+1	ju@thegoat.com	$2y$10$u0pw8GBrhVDZjhOG/Lh0guyxlHe5VdjUWUV6FycO0n8RSJry6POli	1	Thegoat	ju	t	\N	\N
+2	ju@thepilote.com	$2y$10$Ma0kJn9X9AjD1USWiUfWGepqYX54d.OX0C8pfaFLzUqm3BLf.vPP.	2	Thepilote	ju	t	\N	\N
+3	ju@thestudent.com	$2y$10$JCuSd9690Ucg.ITiiBrvPODIdmjQg/qeNrJGSjfiYsj6psrgitrRa	3	Thestudent	julian	t	1	2026-03-19 16:46:01
 \.
 
 
@@ -335,6 +340,7 @@ COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide
 --
 
 COPY public.offre (id_offre, id_entreprise, titre, description, base_remuneration, date_offre, valide, valide_id_ident, valide_lastupdate) FROM stdin;
+1	22	Administrateur Linux	On cherche un admin de la mort	2500.00	2026-03-20	t	1	2026-03-20 16:14:29
 \.
 
 
@@ -345,6 +351,7 @@ COPY public.offre (id_offre, id_entreprise, titre, description, base_remuneratio
 --
 
 COPY public.offre_has_competence (id_offre, id_competence) FROM stdin;
+1	4
 \.
 
 
@@ -356,7 +363,6 @@ COPY public.offre_has_competence (id_offre, id_competence) FROM stdin;
 
 COPY public.page_fonction (permission, menu, label, url, menu_order, item_order) FROM stdin;
 entreprise_create	Entreprise	Create	entreprise/create	1	1
-entreprise_modify	Entreprise	Modify	entreprise/modify	1	2
 entreprise_recherche	Entreprise	Recherche	entreprise/recherche	1	0
 admin_permissions	Admin	Permissions	admin/permissions	98	0
 home_index	Home	Accueil	home/index	0	0
@@ -367,6 +373,15 @@ sitemap_index	\N	\N	\N	0	0
 static_contact	Static	Contact	contact	97	0
 static_mentions_legales	Static	Mentions Legales	mentions_legales	97	1
 static_plan_site	Static	Plan	plan_site	97	2
+ident_delete	\N	\N	\N	0	0
+ident_create	Ident	Create	ident/create	2	1
+ident_recherche	Ident	Recherche	ident/recherche	2	0
+ident_modify	Ident	Modify	ident/recherche	2	2
+entreprise_modify	Entreprise	Modify	entreprise/recherche	1	2
+offre_create	Offre	Create	offre/create	3	1
+offre_recherche	Offre	Recherche	offre/recherche	3	0
+offre_modify	Offre	Modify	offre/recherche	3	2
+offre_delete	\N	\N	\N	0	0
 \.
 
 
@@ -377,26 +392,36 @@ static_plan_site	Static	Plan	plan_site	97	2
 --
 
 COPY public.permission (id_role, permission, allowed) FROM stdin;
-1	admin_permissions	t
-1	auth_login	t
-1	auth_logout	t
-1	entreprise_create	t
-1	entreprise_delete	t
-1	entreprise_modify	t
-1	entreprise_recherche	t
-1	home_index	t
+1	ident_modify	t
+1	ident_recherche	t
+1	offre_create	t
+4	offre_modify	f
+4	offre_recherche	t
+4	sitemap_index	t
+4	static_contact	t
+1	offre_modify	t
+1	offre_recherche	t
 1	sitemap_index	t
 1	static_contact	t
 1	static_mentions_legales	t
 1	static_plan_site	t
 2	admin_permissions	f
+4	static_mentions_legales	t
+4	static_plan_site	t
 2	auth_login	t
 2	auth_logout	t
 2	entreprise_create	t
-2	entreprise_delete	f
+2	entreprise_delete	t
 2	entreprise_modify	t
 2	entreprise_recherche	t
 2	home_index	t
+2	ident_create	t
+2	ident_delete	f
+2	ident_modify	t
+2	ident_recherche	t
+2	offre_create	t
+2	offre_modify	t
+2	offre_recherche	t
 2	sitemap_index	t
 2	static_contact	t
 2	static_mentions_legales	t
@@ -409,6 +434,13 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 3	entreprise_modify	f
 3	entreprise_recherche	t
 3	home_index	t
+3	ident_create	f
+3	ident_delete	f
+3	ident_modify	t
+3	ident_recherche	t
+3	offre_create	f
+3	offre_modify	f
+3	offre_recherche	t
 3	sitemap_index	t
 3	static_contact	t
 3	static_mentions_legales	t
@@ -418,13 +450,24 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 4	auth_logout	f
 4	entreprise_create	f
 4	entreprise_delete	f
+1	admin_permissions	t
+1	auth_login	t
+1	auth_logout	t
+1	entreprise_create	t
+1	entreprise_delete	t
+1	entreprise_modify	t
+1	entreprise_recherche	t
 4	entreprise_modify	f
 4	entreprise_recherche	t
 4	home_index	t
-4	sitemap_index	t
-4	static_contact	t
-4	static_mentions_legales	t
-4	static_plan_site	t
+4	ident_create	f
+4	ident_delete	f
+1	home_index	t
+1	ident_create	t
+1	ident_delete	t
+4	ident_modify	f
+4	ident_recherche	t
+4	offre_create	f
 \.
 
 
@@ -468,7 +511,7 @@ COPY public.wishlist (id_ident, id_offre) FROM stdin;
 -- Name: competence_id_competence_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.competence_id_competence_seq', 1, false);
+SELECT pg_catalog.setval('public.competence_id_competence_seq', 5, true);
 
 
 --
@@ -495,7 +538,7 @@ SELECT pg_catalog.setval('public.ident_id_ident_seq', 3, true);
 -- Name: offre_id_offre_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.offre_id_offre_seq', 1, false);
+SELECT pg_catalog.setval('public.offre_id_offre_seq', 1, true);
 
 
 --
@@ -714,11 +757,11 @@ ALTER TABLE ONLY public.wishlist
     ADD CONSTRAINT wishlist_id_offre_fkey FOREIGN KEY (id_offre) REFERENCES public.offre(id_offre) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
--- Completed on 2026-03-18 18:17:26 CET
+-- Completed on 2026-03-20 16:39:10 CET
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict Mczm4ntJlq8vSXciWdRfHsrgIk5mTWLHbcLkMh1FiLQqGMuUvEaLtpYhUwcbn5q
+\unrestrict ZhgDnFw03hI9WxBtu7dcKaD8KiYfcyCrMn3d2abYEpb0Ii9zaecNTZ2xuQu8u82
 

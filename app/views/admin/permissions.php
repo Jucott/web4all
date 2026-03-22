@@ -31,4 +31,5 @@
        </table>
        <br>
        <button type="submit">Enregistrer</button>
+       <button type="button" onclick="window.location.href='/home/index'">Annule</button>
 </form>

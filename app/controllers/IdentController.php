@@ -1,0 +1,367 @@
+<?php
+
+require_once __DIR__ . '/../core/Controller.php';
+require_once __DIR__ . '/../core/Validator.php';
+require_once __DIR__ . '/../core/Datanormalizer.php';
+
+/**
+ * Contrôleur de gestion des identifiants.
+ * 
+ * Gère les opérations CRUD ainsi que la recherche avec pagination :
+ * - Création
+ * - Recherche (avec filtres et pagination)
+ * - Modification
+ * - Suppression
+ */
+class IdentController extends Controller
+{
+    /**
+     * Création d'un identifiant.
+     *
+     * - En GET : affiche le formulaire de création.
+     * - En POST : valide les données puis crée un identifiant.
+     *   - En cas d'erreur : réaffiche le formulaire avec les erreurs.
+     *   - En cas de succès : redirige vers la page de recherche.
+     *
+     * @return void
+     */
+    public function create()
+    {
+        $roleModel = new Role();
+        $roles = $roleModel->findAll();
+        $filters = [
+            'nom'       => null,
+            'prenom'    => null,
+            'email'     => null,
+            'passwd'    => null,
+            'id_role'   => -1,
+            'valide'    => true,
+        ];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
+                http_response_code(403);
+                die("CSRF token invalide");
+            }
+            // Données filtrées pour pré-remplissage en cas d'erreur
+            $filters = [
+                'nom'       => $_POST['nom'] ?? null,
+                'prenom'    => $_POST['prenom'] ?? null,
+                'email'     => $_POST['email'] ?? null,
+                'passwd'    => $_POST['passwd'] ?? null,
+                'id_role'   => $_POST['id_role'] ?? null,
+                'valide'    => isset($_POST['valide']) ? true : false,
+            ];
+
+            // Validation des données
+            $validator = new Validator();
+            $valid = $validator->validate($_POST, [
+                'nom'       => ['required', 'alpha'],
+                'prenom'    => ['required', 'alpha'],
+                'id_role'   => ['required', 'integer'],
+                'email'     => ['required', 'email'],
+                'passwd'    => ['required', 'alpha'],
+            ]);
+
+            // Retour formulaire avec erreurs
+            if (!$valid) {
+                return $this->render('ident/create', [
+                    'errors' => $validator->errors(),
+                    'filters' => $filters,
+                    'results' => [],
+                ]);
+            }
+            $filters['passwd'] = password_hash($_POST['passwd'], PASSWORD_DEFAULT);
+
+            // Création en base
+            $ident = $this->getIdentModel();
+            $ident->create($filters);
+
+            // Redirection après succès
+            $this->redirect('/ident/recherche');
+        }
+
+        // Affichage formulaire (GET)
+        $this->render('ident/create', [ 'roles' => $roles, 'filters' => $filters ]);
+    }
+
+    /**
+     * Recherche d'identifiant avec filtres et pagination.
+     *
+     * - En GET : affiche la page de recherche vide.
+     * - En POST : applique les filtres, valide les entrées et retourne les résultats paginés.
+     *
+     * @return void
+     */
+    public function recherche()
+    {
+        $roleModel = new Role();
+        $roles = $roleModel->findAll();
+        $filters = [
+            'nom'       => null,
+            'prenom'    => null,
+            'email'     => null,
+            'passwd'    => null,
+            'id_role'   => -1,
+            'valide'    => true,
+        ];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
+                http_response_code(403);
+                die("CSRF token invalide");
+            }
+            // Gestion de la pagination
+            $page = $_POST['page'] ?? 1;
+            $page = max(1, (int)$page);
+
+            $perPage = ITEM_PER_PAGES;
+
+            // Filtres de recherche
+            $filters = [
+                'nom'           => $_POST['nom'] ?? null,
+                'prenom'        => $_POST['prenom'] ?? null,
+                'email'         => $_POST['email'] ?? null,
+                'id_role'       => $_POST['id_role'] ?? -1,
+                'valide'        => isset($_POST['valide']) ? true : false,
+            ];
+            $validator = new Validator();
+            $valid = true;
+
+            // Validation conditionnelle des champs
+            if (!empty($_POST['nom'])) {
+                $valid = $validator->validate($_POST, ['nom' => ['required', 'alpha']]);
+            }
+
+            if ($valid && !empty($_POST['prenom'])) {
+                $valid = $validator->validate($_POST, [
+                    'prenom' => ['required', 'alpha'],
+                    'email' => ['required', 'email'],
+                    'id_role' => ['required', 'integer'],
+                ]);
+            }
+
+            // Retour avec erreurs
+            if (!$valid) {
+                return $this->render('ident/recherche', [
+                    'errors'    => $validator->errors(),
+                    'filters'   => $filters,
+                    'roles'     => $roles,
+                    'results'   => [],
+                    'page'      => 1,
+                    'totalPages'=> 0,
+                    'pagination'=> [],
+                ]);
+            }
+
+            // Exécution de la recherche
+            $ident = $this->getIdentModel();
+            $data = $ident->search($filters, $page, $perPage);
+
+            $results = $data['results'];
+            $total = $data['total'];
+
+            // Calcul du nombre total de pages
+            $totalPages = ceil($total / $perPage);
+
+            // Rendu des résultats
+            return $this->render('ident/recherche', [
+                'errors'    => null,
+                'filters'   => $filters,
+                'roles'     => $roles,
+                'results'   => $results,
+                'page'      => $page,
+                'totalPages'=> $totalPages,
+                'pagination'=> View::buildPagination($page, $totalPages),
+            ]);
+        }
+
+        // Affichage initial (GET)
+        $this->render('ident/recherche', [ 'roles' => $roles, 'filters' => $filters ]);
+    }
+
+    /**
+     * Modification d'un identifiant existant.
+     *
+     * @param int $id Identifiant
+     * 
+     * - Vérifie l'existence de l'identifiant
+     * - En GET : affiche le formulaire pré-rempli
+     * - En POST : valide puis met à jour les données
+     *
+     * @return void
+     * @throws \Exception Si l'entreprise est introuvable (en environnement de test)
+     */
+    public function modify($id)
+    {
+        $identModel = $this->getIdentModel();
+        $old_ident = $identModel->findById($id);
+        $roleModel = new Role();
+        $roles = $roleModel->findAll();
+        // Vérification existence
+        if (!$old_ident) {
+            if (defined('PHPUNIT_RUNNING')) {
+                throw new \Exception("Identifiant introuvable");
+            }
+            http_response_code(404);
+            die("Identifiant introuvable");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
+                http_response_code(403);
+                die("CSRF token invalide");
+            }
+
+            switch ($_POST['form_type'] ?? '') {
+
+                case 'update_profile':
+                    // traitement infos
+                    // Données modifiées
+                    $ident = [
+                        'nom'       => $_POST['nom']        ?? null,
+                        'prenom'    => $_POST['prenom']     ?? null,
+                        'email'     => $_POST['email']      ?? null,
+                        'id_role'   => $_POST['id_role']    ?? null,
+                        'valide'    => (bool) $_POST['valide'],
+                    ];
+
+                    // Validation
+                    $validator = new Validator();
+                    $valid = $validator->validate($_POST, [
+                        'nom'       => ['required', 'alpha'],
+                        'prenom'    => ['required', 'alpha'],
+                        'id_role'   => ['required', 'integer'],
+                        'email'     => ['required', 'email'],
+                    ]);
+
+                    // Retour avec erreurs
+                    if (!$valid) {
+                        return $this->render('ident/modify', [
+                            'errors' => $validator->errors(),
+                            'ident' => $ident,
+                            'roles' => $roles,
+                        ]);
+                    }
+
+                    // Verification s'il y a eu une modif ou pas
+                    $schema = [
+                        'nom'           => 'string',
+                        'prenom'        => 'string',
+                        'email'         => 'string',
+                        'id_role'       => 'int',
+                        'valide'        => 'bool',
+                    ];
+                    $cleanPost  = Datanormalizer::normalizeWithSchema($ident, $schema);
+                    $cleanDb    = Datanormalizer::normalizeWithSchema($old_ident, $schema);
+                    if ($cleanPost !== $cleanDb) {
+                        // il y a une différence entre la data en sgbd et la data du formulaire
+                        $ident['valide_id_ident'] = $_SESSION['user']['id'];
+                        $ident['valide_lastupdate'] = (new DateTime())->format('Y-m-d H:i:s');
+                    }
+                    
+                    // Nettoyage des données avec update
+                    foreach ($ident as $key => $value) {
+                        if ($value === '') {
+                            $ident[$key] = null;
+                        }
+                    }
+                    break;
+
+                case 'update_password':
+                    // traitement password
+                    // Données modifiées
+                    $ident = [
+                        'passwd'       => $_POST['passwd'] ?? null,
+                    ];
+
+                    // Validation
+                    $validator = new Validator();
+                    $valid = $validator->validate($_POST, [
+                        'passwd'       => ['required', 'alpha'],
+                    ]);
+
+                    // Retour avec erreurs
+                    if (!$valid) {
+                        return $this->render('ident/modify', [
+                            'errors' => $validator->errors(),
+                            'ident' => $ident,
+                            'roles' => $roles,
+                        ]);
+                    }
+                    $ident['passwd'] = password_hash($_POST['passwd'], PASSWORD_DEFAULT);
+                    break;
+
+                default:
+                    http_response_code(400);
+                    die('Formulaire inconnu');
+            }
+            // Mise à jour
+            $identModel->update($id, $ident);
+
+            // Redirection après succès
+            $this->redirect('/ident/recherche');
+        }
+
+        // Affichage formulaire (GET)
+        $this->render('ident/modify', [
+            'ident' => $old_ident,
+            'errors' => [],
+            'roles' => $roles,
+        ]);
+    }
+
+    /**
+     * Suppression d'un identifiant.
+     *
+     * @param int $id Identifiant
+     * 
+     * Supprime l'entité puis redirige vers la liste.
+     *
+     * @return void
+     */
+    public function delete($id)
+    {
+        $identModel = $this->getIdentModel();
+
+        $ident = [
+            'valide_id_ident'   => $_SESSION['user']['id'],
+            'valide'            => false,
+            'valide_lastupdate' => (new DateTime())->format('Y-m-d H:i:s'),
+        ];
+        // Mise à jour
+        $identModel->update($id, $ident);
+
+
+        $this->redirect('/ident/recherche');
+    }
+
+    /**
+     * Redirection HTTP.
+     *
+     * Méthode surchargée pour permettre le test unitaire
+     * sans exécuter réellement les headers HTTP.
+     *
+     * @param string $url URL de redirection
+     * @return void
+     */
+    protected function redirect($url)
+    {
+        if (defined('PHPUNIT_RUNNING')) {
+            return; // désactivé en test
+        }
+        header("Location: $url");
+        exit;
+    }
+
+    /**
+     * Fournit une instance du modèle Entreprise.
+     *
+     * Méthode isolée pour faciliter le mock en test.
+     *
+     * @return Ident
+     */
+    protected function getIdentModel()
+    {
+        return new Ident();
+    }
+}

@@ -1,6 +1,6 @@
 <header class="header">
-    <div class="logo"><img src="/app-icons/icon-192.png" alt="LOGO" width="30" height="30"></div>
-    <h1 class="title">Web4All</h1>
+    <div class="logo"><img src="<?= CDN ?>/app-icons/icon-192.png" alt="LOGO" width="30" height="30"></div>
+    <h1 class="title"><?= APP_NAME ?></h1>
     <div class="burger">☰</div>
     <?php $menus = Menu::get(); ?>
     <nav class="nav">

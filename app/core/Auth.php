@@ -26,7 +26,7 @@ class Auth
             return 4; // guest
         }
 
-        return $_SESSION['user']['role_id'];
+        return $_SESSION['user']['id_role'];
     }
 
     /**

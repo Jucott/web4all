@@ -37,24 +37,24 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | ID    | Catégorie       | Fonctionnalité                        | Description courte                             | Données principales                                                              | Statut |
 | ----- | --------------- | ------------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
 | SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles    | email, mot de passe, rôle                                                        | ✅      |
-| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + offres liées  | nom, description, contact, nb candidatures, moyenne évaluations                  | 🟡      |
+| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + **avis** + **offres liées**  | nom, description, contact, **nb candidatures**, **moyenne évaluations**                  | 🟡      |
 | SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                      | nom, description, contact                                                        | ✅      |
 | SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                  | nom, description, contact                                                        | ✅      |
 | SFx5  | Entreprises     | Évaluer entreprise                    | Notation entreprise                            | évaluation                                                                       | ⬜      |
 | SFx6  | Entreprises     | Supprimer entreprise                  | Suppression entreprise                         | -                                                                                | ✅      |
-| SFx7  | Offres          | Rechercher & afficher offre           | Recherche multicritères offre                  | entreprise, titre, description, compétences, rémunération, date, nb candidatures | ⬜      |
-| SFx8  | Offres          | Créer offre                           | Création offre                                 | compétences, titre, description, entreprise, rémunération, date                  | ⬜      |
-| SFx9  | Offres          | Modifier offre                        | Modification offre                             | compétences, titre, description, entreprise, rémunération, date                  | ⬜      |
-| SFx10 | Offres          | Supprimer offre                       | Suppression offre                              | -                                                                                | ⬜      |
+| SFx7  | Offres          | Rechercher & afficher offre           | Recherche multicritères offre                  | entreprise, titre, description, compétences, rémunération, date, **nb candidatures** | 🟡      |
+| SFx8  | Offres          | Créer offre                           | Création offre                                 | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
+| SFx9  | Offres          | Modifier offre                        | Modification offre                             | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
+| SFx10 | Offres          | Supprimer offre                       | Suppression offre                              | -                                                                                | ✅      |
 | SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                     | répartition durée, top wishlist, total offres, moyenne candidatures              | ⬜      |
-| SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                        | nom, prénom                                                                      | ⬜      |
-| SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                         | nom, prénom                                                                      | ⬜      |
-| SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                     | nom, prénom                                                                      | ⬜      |
-| SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                      | -                                                                                | ⬜      |
-| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + état recherche stage               | nom, prénom, email                                                               | ⬜      |
-| SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                       | nom, prénom, email                                                               | ⬜      |
-| SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                   | nom, prénom, email                                                               | ⬜      |
-| SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                    | -                                                                                | ⬜      |
+| SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                        | nom, prénom                                                                      | ✅      |
+| SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                         | nom, prénom                                                                      | ✅      |
+| SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                     | nom, prénom                                                                      | ✅      |
+| SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                      | -                                                                                | ✅      |
+| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + **état recherche stage**               | nom, prénom, email                                                               | 🟡      |
+| SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                       | nom, prénom, email                                                               | ✅      |
+| SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                   | nom, prénom, email                                                               | ✅      |
+| SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                    | -                                                                                | ✅      |
 | SFx20 | Candidatures    | Postuler à une offre                  | Envoi CV + LM                                  | offre, CV, LM                                                                    | ⬜      |
 | SFx21 | Candidatures    | Voir candidatures étudiant            | Liste des offres postulées                     | offre, CV, LM                                                                    | ⬜      |
 | SFx22 | Candidatures    | Voir candidatures des élèves (pilote) | Liste des candidatures des étudiants du pilote | offre, CV, LM                                                                    | ⬜      |
@@ -79,9 +79,9 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | STx6  | Stack technique        | Apache, HTML/CSS/JS, PHP, SGBD SQL                               | ✅      |
 | STx7  | Template engine        | Moteur de template backend obligatoire                           | ✅      |
 | STx8  | Clés étrangères        | Utilisation FK en base                                           | ✅      |
-| STx9  | Vhost statique         | Vhost pour ressources statiques                                  | 🟡      |
+| STx9  | Vhost statique         | Vhost pour ressources statiques                                  | ✅      |
 | STx10 | Responsive             | Responsive + menu burger                                         | ✅      |
-| STx11 | Sécurité               | Cookies sécurisés, **hash mdp**, anti SQLi/XSS/CSRF, **HTTPS**           | 🟡      |
+| STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, **HTTPS**           | 🟡      |
 | STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ✅      |
 | STx13 | Routage                | Système de routing backend                                       | ✅      |
 | STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ✅      |
@@ -264,6 +264,33 @@ ALTER....
 
 ```
 
+### Le fichier `.env` contenant les secrets de l'application
+
+Situé à la racine du projet `/var/www/html/web4all/.env` il contient les secrets notamment ceux permettant la connexion à la database.
+
+Ce fichier ne doit JAMAIS figurer dans GitHub par mesure évidente de sécurité, c'est pourquoi il appartient aux développeurs de le créer eux-même.
+
+Ce fichier doit être explicitement exclue de toute synchronisation git.
+
+Pour cela, il appartient aux développeurs, en se plaçant dans le répertoire racine de l'application de taper la commande suivante :
+
+```bash
+cd /var/www/html/web4all
+echo ".env" >> .gitignore
+```
+
+Selon l'exemple ci-dessus, en tenant compte des crédentials positionnés dans postgresq plus haut, le fichier `.env` doit à minima contenir :
+
+```bash
+# Fichier contenant les secrets de l'application
+# surtout ne pas versionner !!!
+APP_ENV=dev
+DB_HOST=localhost
+DB_NAME=web4all
+DB_USER=web4all
+DB_PASS=web4all
+DB_PORT=5432
+```
 
 ### 📘 Procédure Git – Projet Web4All
 

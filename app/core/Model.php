@@ -62,25 +62,71 @@ abstract class Model
      * @param string $order chaine de caractere contenant les critère d'ORDER BY (ex: 'nom ASC')
      * @param array $limit_offset Tableau clé => valeur (ex: ['limit' => 3, 'offset' => 0]
      * @return array Liste des enregistrements correspondants
+     * exemple : $criteria = [
+     *              ['id', 3, '='],
+     *              ['nom', '%toto%', 'ILIKE'],
+     *              ['age', 5, '>='],
+     *          ];
+     * 
+     *          $results = $model->findBy($criteria, 'nom ASC', [
+     *              'limit' => 10,
+     *              'offset' => 0
+     *          ]);
      */
-    public function findBy(array $criteria, $order = "", array $limit_offset): array
+    public function findBy(array $criteria = [], string $order = "", array $limit_offset = []): array
     {
-        $where = implode(' AND ', array_map(fn($k) => "$k = :$k", array_keys($criteria)));
-        $sql = "SELECT * FROM {$this->table} WHERE $where ";
-        if (!empty($order)){
-            $sql .= "ORDER BY $order ";
+        $conditions = [];
+        $params = [];
+        $i = 0;
+
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+
+        foreach ($criteria as $crit) {
+
+            // Format attendu : [champ, valeur, opérateur]
+            [$field, $value, $operator] = $crit;
+
+            $operator = strtoupper(trim($operator));
+
+            // Sécurité : whitelist des opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+
+            // Paramètre unique (évite collision si même champ plusieurs fois)
+            $paramName = $field . '_' . $i++;
+
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
         }
-        if (!empty($limit_offset)){
-            foreach ($limit_offset as $key => $value) {
-                $sql .= " $key :$key ";
-                $criteria[$key] = $value;
+
+        $sql = "SELECT * FROM {$this->table}";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        // ORDER BY (⚠️ ne pas binder → whitelist conseillé)
+        if (!empty($order)) {
+            $sql .= " ORDER BY $order";
+        }
+
+        // limit / offset
+        if (!empty($limit_offset)) {
+            if (isset($limit_offset['limit'])) {
+                $sql .= " LIMIT :limit";
+                $params['limit'] = (int)$limit_offset['limit'];
+            }
+            if (isset($limit_offset['offset'])) {
+                $sql .= " OFFSET :offset";
+                $params['offset'] = (int)$limit_offset['offset'];
             }
         }
-        
+
         $stmt = $this->db->prepare($sql);
 
-        // Liaison des paramètres pour recherche ILIKE
-        foreach ($criteria as $key => $value) {
+        // Binding typé
+        foreach ($params as $key => $value) {
             if (is_bool($value)) {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
             } elseif (is_int($value)) {
@@ -91,7 +137,9 @@ abstract class Model
                 $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
             }
         }
+
         $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -103,15 +151,39 @@ abstract class Model
      */
     public function count(array $criteria = []): int
     {
-        if (empty($criteria)) {
-            $stmt = $this->db->query("SELECT COUNT(*) FROM {$this->table}");
-            return (int) $stmt->fetchColumn();
+        $conditions = [];
+        $params = [];
+        $i = 0;
+
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+
+        foreach ($criteria as $crit) {
+
+            [$field, $value, $operator] = $crit;
+
+            $operator = strtoupper(trim($operator));
+
+            // Sécurité opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+
+            $paramName = $field . '_' . $i++;
+
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
         }
 
-        $where = implode(' AND ', array_map(fn($k) => "$k = :$k", array_keys($criteria)));
-        $stmt = $this->db->prepare("SELECT COUNT(*) FROM {$this->table} WHERE $where");
-        // Liaison des paramètres pour recherche ILIKE
-        foreach ($criteria as $key => $value) {
+        $sql = "SELECT COUNT(*) FROM {$this->table}";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        $stmt = $this->db->prepare($sql);
+
+        // Binding typé (identique à findBy)
+        foreach ($params as $key => $value) {
             if (is_bool($value)) {
                 $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
             } elseif (is_int($value)) {
@@ -122,9 +194,77 @@ abstract class Model
                 $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
             }
         }
+
         $stmt->execute();
+
         return (int) $stmt->fetchColumn();
     }
+
+
+    /**
+     * Insère des enregistrements
+     *
+     * @param array $columns => nom des colonnes
+     * @param array $rows => valeurs à insérer
+     * @return bool True si les enregistrements ont été insérés, false sinon
+     * exemple : $columns = [id_offre', 'id_competence']
+     *           $rows = [
+     *               [1, 3],
+     *               [1, 5],
+     *               ...
+     *           ]
+     */
+    public function insert(array $columns, array $rows): bool
+    {
+        if (empty($columns) || empty($rows)) {
+            throw new InvalidArgumentException("Colonnes ou données vides");
+        }
+
+        $colString = implode(',', $columns);
+
+        $valuesSql = [];
+        $params = [];
+        $i = 0;
+
+        foreach ($rows as $row) {
+
+            if (count($row) !== count($columns)) {
+                throw new InvalidArgumentException("Nombre de valeurs incohérent avec les colonnes");
+            }
+
+            $placeholders = [];
+
+            foreach ($row as $value) {
+                $paramName = "p" . $i++;
+                $placeholders[] = ":$paramName";
+                $params[$paramName] = $value;
+            }
+
+            $valuesSql[] = '(' . implode(',', $placeholders) . ')';
+        }
+
+        $sql = "INSERT INTO {$this->table} ($colString) VALUES " . implode(',', $valuesSql) . " ON CONFLICT DO NOTHING";
+
+        $stmt = $this->db->prepare($sql);
+
+        // Binding typé (comme ton findBy)
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+
+        return $stmt->execute();
+    }
+
+
+
 
     /**
      * Vérifie si un enregistrement existe par sa clé primaire.
@@ -145,17 +285,23 @@ abstract class Model
      * Crée un nouvel enregistrement.
      *
      * @param array $data Tableau clé => valeur des colonnes
-     * @return bool True si succès, false sinon
+     * @return int|bool Integer representant le lastInsertId ou bien True si succès, false sinon
      */
-    public function create(array $data): bool
+    public function create(array $data): int|false
     {
         $columns = implode(',', array_keys($data));
-        $values = ':' . implode(',:', array_keys($data));
+        $placeholders = ':' . implode(',:', array_keys($data));
 
-        $sql = "INSERT INTO {$this->table} ($columns) VALUES ($values)";
+        $sql = "INSERT INTO {$this->table} ($columns)
+                VALUES ($placeholders)
+                RETURNING {$this->primaryKey}";
+
         $stmt = $this->db->prepare($sql);
 
-        return $stmt->execute($data);
+        $stmt->execute($data);
+
+        $id = $stmt->fetchColumn();
+        return $id !== false ? (int)$id : false;
     }
 
     /**

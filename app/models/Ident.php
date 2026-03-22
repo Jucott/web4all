@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Modèle pour la table "entreprise".
+ * Modèle pour la table "ident".
  *
  * Fournit les opérations CRUD via Model et une méthode de recherche paginée.
  */
-class Entreprise extends Model
+class Ident extends Model
 {
     /** @var string Nom de la table */
-    protected string $table = 'entreprise';
+    protected string $table = 'ident';
 
     /** @var string Clé primaire */
-    protected string $primaryKey = 'id_entreprise';
+    protected string $primaryKey = 'id_ident';
 
     /**
-     * Recherche des entreprises selon des filtres et pagine les résultats.
+     * Recherche des identifiants selon des filtres et pagine les résultats.
      *
-     * @param array $filters Tableau clé => valeur pour filtrer (nom, description, telephone, email)
+     * @param array $filters Tableau clé => valeur pour filtrer (nom, prenom, telephone, email)
      * @param int $page Page courante (>=1)
      * @param int $perPage Nombre d'enregistrements par page
      * @return array ['results' => array, 'total' => int]
@@ -28,21 +28,30 @@ class Entreprise extends Model
             $params[] = ['nom', $filters['nom'], 'ILIKE'];
         }
 
-        if (!empty($filters['description'])) {
-            $params[] = ['description', $filters['description'], 'ILIKE'];
-        }
-
-        if (!empty($filters['telephone'])) {
-            $params[] = ['telephone', $filters['telephone'], 'ILIKE'];
+        if (!empty($filters['prenom'])) {
+            $params[] = ['prenom', $filters['prenom'], 'ILIKE'];
         }
 
         if (!empty($filters['email'])) {
             $params[] = ['email', $filters['email'], 'ILIKE'];
         }
 
+        if (empty($filters['id_role'])){
+            $params[] = ['id_role', Auth::user()['id_role'], '>='];
+        }
+        elseif (!empty($filters['id_role'])){
+            if ((string)($filters['id_role']) >= (string)(Auth::user()['id_role'])) {
+                $params[] = ['id_role', $filters['id_role'], '='];
+            }
+            else {
+                $params[] = ['id_role', Auth::user()['id_role'], '>='];
+            }
+        }
+        
         if (is_bool($filters['valide'])) {
             $params[] = ['valide', $filters['valide'], '='];
         }
+        
         // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
         
@@ -57,4 +66,8 @@ class Entreprise extends Model
             'total' => $total
         ];
     }
+
+
+
+
 }
