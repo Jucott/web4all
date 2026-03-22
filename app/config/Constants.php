@@ -1,9 +1,10 @@
-<?php 
+<?php
+
 
 define('ENV', 'dev'); // dev | prod
 define('APP_NAME', 'StageFinder');
 define('BASE_URL', '/');
-define('FULL_BASE_URL', 'http://localhost/');
+define('FULL_BASE_URL', 'http://web4all.local/');
 define('CDN', 'http://static.web4all.local');
 
 //define('DB_HOST', 'localhost');
@@ -15,4 +16,3 @@ define('CDN', 'http://static.web4all.local');
 define('ITEM_PER_PAGES', 3);
 
 define('UPLOAD_DIR', __DIR__ . '/../../public/uploads');
-
