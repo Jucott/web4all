@@ -6,7 +6,7 @@ require_once __DIR__ . '/../core/Datanormalizer.php';
 
 /**
  * Contrôleur de gestion des entreprises.
- * 
+ *
  * Gère les opérations CRUD ainsi que la recherche avec pagination :
  * - Création
  * - Recherche (avec filtres et pagination)
@@ -62,7 +62,6 @@ class EntrepriseController extends Controller
                 return $this->render('entreprise/create', [
                     'errors' => $validator->errors(),
                     'filters' => $filters,
-                    'results' => [],
                 ]);
             }
 
@@ -165,14 +164,21 @@ class EntrepriseController extends Controller
         }
 
         // Affichage initial (GET)
-        $this->render('entreprise/recherche', [ 'filters' => $filters ]);
+        $this->render('entreprise/recherche', [
+            'errors' => [],
+            'filters' => $filters,
+            'results' => [],
+            'page' => 1,
+            'totalPages' => 0,
+            'pagination' => [],
+        ]);
     }
 
     /**
      * Modification d'une entreprise existante.
      *
      * @param int $id Identifiant de l'entreprise
-     * 
+     *
      * - Vérifie l'existence de l'entreprise
      * - En GET : affiche le formulaire pré-rempli
      * - En POST : valide puis met à jour les données
@@ -240,7 +246,7 @@ class EntrepriseController extends Controller
                 $entreprise['valide_id_ident'] = $_SESSION['user']['id'];
                 $entreprise['valide_lastupdate'] = (new DateTime())->format('Y-m-d H:i:s');
             }
-            
+
             // Nettoyage des données avec update
             foreach ($entreprise as $key => $value) {
                 if ($value === '') {
@@ -265,7 +271,7 @@ class EntrepriseController extends Controller
      * Suppression d'une entreprise.
      *
      * @param int $id Identifiant de l'entreprise
-     * 
+     *
      * Supprime l'entité puis redirige vers la liste.
      *
      * @return void

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../core/Datanormalizer.php';
 
 /**
  * Contrôleur de gestion des offres.
- * 
+ *
  * Gère les opérations CRUD ainsi que la recherche avec pagination :
  * - Création
  * - Recherche (avec filtres et pagination)
@@ -54,11 +54,11 @@ class OffreController extends Controller
                 'date_offre'            => $_POST['date_offre']         ?? (new DateTime())->format('Y-m-d'),
                 'valide'                => isset($_POST['valide']) ? true : false,
             ];
-            
+
             // Validation des données
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
-                'id_entreprise'     => ['required', 'integer'],
+                'id_entreprise'     => ['required', 'integerpositif'],
                 'titre'             => ['required', 'alpha'],
                 'description'       => ['required', 'txt'],
                 'base_remuneration' => ['required', 'integer'],
@@ -70,24 +70,26 @@ class OffreController extends Controller
                 return $this->render('offre/create', [
                     'errors' => $validator->errors(),
                     'filters' => $filters,
-                    'results' => [],
+                    'entreprises' => $entreprises,
+                    'competences' => $competences,
                 ]);
             }
-            
-            var_dump($_POST);
-            print("<br/>");
-            var_dump($filters);
-            print("<br/>");
-
-
-            
 
             // Création en base
             $offre = $this->getOffre();
             $id_offre = $offre->create($filters);
-            print("IdOffre:");
-            var_dump($id_offre);
 
+            // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
+            foreach ($_POST['competences'] as $value) {
+                if (filter_var($value, FILTER_VALIDATE_INT) === false || $value <= 0) {
+                    return $this->render('offre/create', [
+                        'errors' => ['id_competence invalide'],
+                        'filters' => $filters,
+                        'entreprises' => $entreprises,
+                        'competences' => $competences,
+                    ]);
+                }
+            }
             // Ajout des competences requises pour cette offre
             $offreHasCompetence = new OffreHasCompetence();
             $offreHasCompetence->syncCompetences((int)($id_offre), $_POST['competences']);
@@ -97,7 +99,7 @@ class OffreController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('offre/create', [ 'entreprises' => $entreprises, 'competences' => $competences, 'filters' => $filters ]);
+        $this->render('offre/create', [ 'errors' => [], 'entreprises' => $entreprises, 'competences' => $competences, 'filters' => $filters ]);
     }
 
     /**
@@ -158,6 +160,7 @@ class OffreController extends Controller
                     'description'       => ['required', 'txt'],
                     'base_remuneration' => ['required', 'integer'],
                     'date_offre'        => ['required', 'date'],
+                    'id_entreprise'     => ['required', 'integer'],
                 ]);
             }
 
@@ -199,14 +202,23 @@ class OffreController extends Controller
         }
 
         // Affichage initial (GET)
-        $this->render('offre/recherche', [ 'filters' => $filters, 'entreprises' => $entreprises, 'competences' => $competences ]);
+        $this->render('offre/recherche', [
+                    'errors'        => [],
+                    'filters'       => $filters,
+                    'entreprises'   => $entreprises,
+                    'competences'   => $competences,
+                    'results'       => [],
+                    'page'          => 1,
+                    'totalPages'    => 0,
+                    'pagination'    => [],
+        ]);
     }
 
     /**
      * Modification d'une offre existant.
      *
      * @param int $id ID de l'Offre
-     * 
+     *
      * - Vérifie l'existence de l'offre
      * - En GET : affiche le formulaire pré-rempli
      * - En POST : valide puis met à jour les données
@@ -218,7 +230,7 @@ class OffreController extends Controller
     {
         $offreModel = $this->getOffre();
         $old_offre = $offreModel->findById($id);
-        
+
         $offreHasCompetence = new OffreHasCompetence();
         $selectedCompetences = $offreHasCompetence->getCompetences($id);
 
@@ -226,7 +238,7 @@ class OffreController extends Controller
         $entreprises = $entrepriseModel->findBy([['valide', true, '=' ]], 'nom ASC', []);
         $competenceModel = new Competence();
         $competences = $competenceModel->findAll();
-        
+
         // Vérification existence
         if (!$old_offre) {
             if (defined('PHPUNIT_RUNNING')) {
@@ -242,7 +254,7 @@ class OffreController extends Controller
                 die("CSRF token invalide");
             }
 
-            
+
             // traitement infos
             // Données modifiées
             // Données filtrées pour pré-remplissage en cas d'erreur
@@ -268,10 +280,12 @@ class OffreController extends Controller
 
             // Retour formulaire avec erreurs
             if (!$valid) {
-                return $this->render('offre/create', [
-                    'errors' => $validator->errors(),
-                    'offre' => $offre,
-                    'results' => [],
+                return $this->render('offre/modify', [
+                    'errors'                => $validator->errors(),
+                    'offre'                 => $offre,
+                    'entreprises'           => $entreprises,
+                    'competences'           => $competences,
+                    'selectedCompetences'   => $selectedCompetences,
                 ]);
             }
 
@@ -290,16 +304,30 @@ class OffreController extends Controller
                 $offre['valide_id_ident'] = $_SESSION['user']['id'];
                 $offre['valide_lastupdate'] = (new DateTime())->format('Y-m-d H:i:s');
             }
-            
+
             // Nettoyage des données avec update
             foreach ($offre as $key => $value) {
                 if ($value === '') {
                     $offre[$key] = null;
                 }
             }
-            
+
             // Mise à jour
             $offreModel->update($id, $offre);
+
+            // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
+            foreach ($_POST['competences'] as $value) {
+                if (filter_var($value, FILTER_VALIDATE_INT) === false || $value <= 0) {
+                    return $this->render('offre/modify', [
+                        'errors'      => ['id_competence invalide'],
+                        'offre'       => $offre,
+                        'entreprises' => $entreprises,
+                        'competences' => $competences,
+                        'selectedCompetences'   => $selectedCompetences,
+                    ]);
+                }
+            }
+
             $offreHasCompetence->syncCompetences((int)($id), $_POST['competences']);
 
             // Redirection après succès
@@ -320,7 +348,7 @@ class OffreController extends Controller
      * Suppression d'une offre.
      *
      * @param int $id Offre
-     * 
+     *
      * Supprime l'entité puis redirige vers la liste.
      *
      * @return void

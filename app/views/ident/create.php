@@ -30,6 +30,7 @@
 
     <label>Profil
         <select name="id_role">
+            <option value="-1">---Choisir---</option>
             <?php foreach ($roles as $role): ?>
                 <option value="<?= $role['id_role'] ?>"
                     <?= (isset($filters['id_role']) && (string)($filters['id_role']) === (string)($role['id_role'])) ? 'selected' : '' ?>>

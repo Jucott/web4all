@@ -13,6 +13,8 @@ class OffreHasCompetence extends Model
     /** @var string Clé primaire */
     protected string $primaryKey = 'id_offre';
 
+
+
     public function syncCompetences(int $id_offre, array $ids_competence): bool
     {
         // D'abord on supprime toutes les compétences requises pour cette offre si elles existaient
@@ -20,7 +22,7 @@ class OffreHasCompetence extends Model
         $offreHasCompetenceModel->delete($id_offre);
 
         // On prepare les couples id_offre / id_competence
-        $rows=[];
+        $rows = [];
         foreach ($ids_competence as $id_competence) {
             $rows[] = [$id_offre, $id_competence];
         }
@@ -32,7 +34,7 @@ class OffreHasCompetence extends Model
     public function getCompetences(int $id): array
     {
         $db = Database::getInstance();
-        
+
         // Requête pour récupérer toutes les competences d'une offre
         $sql = "
             SELECT 

@@ -36,6 +36,7 @@
 
     <label>Entreprise</label>
     <select name="id_entreprise">
+        <option value="">-- Choisir une entreprise --</option>
         <?php foreach ($entreprises as $entreprise): ?>
             <option value="<?= $entreprise['id_entreprise'] ?>"
                 <?= (isset($filters['id_entreprise']) && (string)($filters['id_entreprise']) === (string)($entreprise['id_entreprise'])) ? 'selected' : '' ?>>

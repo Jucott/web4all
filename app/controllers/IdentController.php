@@ -6,7 +6,7 @@ require_once __DIR__ . '/../core/Datanormalizer.php';
 
 /**
  * Contrôleur de gestion des identifiants.
- * 
+ *
  * Gère les opérations CRUD ainsi que la recherche avec pagination :
  * - Création
  * - Recherche (avec filtres et pagination)
@@ -28,7 +28,7 @@ class IdentController extends Controller
     public function create()
     {
         $roleModel = new Role();
-        $roles = $roleModel->findAll();
+        $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         $filters = [
             'nom'       => null,
             'prenom'    => null,
@@ -57,7 +57,7 @@ class IdentController extends Controller
             $valid = $validator->validate($_POST, [
                 'nom'       => ['required', 'alpha'],
                 'prenom'    => ['required', 'alpha'],
-                'id_role'   => ['required', 'integer'],
+                'id_role'   => ['required', 'integerpositif'],
                 'email'     => ['required', 'email'],
                 'passwd'    => ['required', 'alpha'],
             ]);
@@ -67,7 +67,7 @@ class IdentController extends Controller
                 return $this->render('ident/create', [
                     'errors' => $validator->errors(),
                     'filters' => $filters,
-                    'results' => [],
+                    'roles' => $roles,
                 ]);
             }
             $filters['passwd'] = password_hash($_POST['passwd'], PASSWORD_DEFAULT);
@@ -81,7 +81,7 @@ class IdentController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('ident/create', [ 'roles' => $roles, 'filters' => $filters ]);
+        $this->render('ident/create', [ 'errors' => [], 'roles' => $roles, 'filters' => $filters ]);
     }
 
     /**
@@ -95,7 +95,7 @@ class IdentController extends Controller
     public function recherche()
     {
         $roleModel = new Role();
-        $roles = $roleModel->findAll();
+        $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         $filters = [
             'nom'       => null,
             'prenom'    => null,
@@ -148,8 +148,8 @@ class IdentController extends Controller
                     'roles'     => $roles,
                     'results'   => [],
                     'page'      => 1,
-                    'totalPages'=> 0,
-                    'pagination'=> [],
+                    'totalPages' => 0,
+                    'pagination' => [],
                 ]);
             }
 
@@ -170,20 +170,28 @@ class IdentController extends Controller
                 'roles'     => $roles,
                 'results'   => $results,
                 'page'      => $page,
-                'totalPages'=> $totalPages,
-                'pagination'=> View::buildPagination($page, $totalPages),
+                'totalPages' => $totalPages,
+                'pagination' => View::buildPagination($page, $totalPages),
             ]);
         }
 
         // Affichage initial (GET)
-        $this->render('ident/recherche', [ 'roles' => $roles, 'filters' => $filters ]);
+        $this->render('ident/recherche', [
+            'errors'    => [],
+            'filters'   => $filters,
+            'roles'     => $roles,
+            'results'   => [],
+            'page'      => 1,
+            'totalPages' => 0,
+            'pagination' => [],
+         ]);
     }
 
     /**
      * Modification d'un identifiant existant.
      *
      * @param int $id Identifiant
-     * 
+     *
      * - Vérifie l'existence de l'identifiant
      * - En GET : affiche le formulaire pré-rempli
      * - En POST : valide puis met à jour les données
@@ -196,7 +204,7 @@ class IdentController extends Controller
         $identModel = $this->getIdentModel();
         $old_ident = $identModel->findById($id);
         $roleModel = new Role();
-        $roles = $roleModel->findAll();
+        $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         // Vérification existence
         if (!$old_ident) {
             if (defined('PHPUNIT_RUNNING')) {
@@ -230,7 +238,7 @@ class IdentController extends Controller
                     $valid = $validator->validate($_POST, [
                         'nom'       => ['required', 'alpha'],
                         'prenom'    => ['required', 'alpha'],
-                        'id_role'   => ['required', 'integer'],
+                        'id_role'   => ['required', 'integerpositif'],
                         'email'     => ['required', 'email'],
                     ]);
 
@@ -258,7 +266,7 @@ class IdentController extends Controller
                         $ident['valide_id_ident'] = $_SESSION['user']['id'];
                         $ident['valide_lastupdate'] = (new DateTime())->format('Y-m-d H:i:s');
                     }
-                    
+
                     // Nettoyage des données avec update
                     foreach ($ident as $key => $value) {
                         if ($value === '') {
@@ -314,7 +322,7 @@ class IdentController extends Controller
      * Suppression d'un identifiant.
      *
      * @param int $id Identifiant
-     * 
+     *
      * Supprime l'entité puis redirige vers la liste.
      *
      * @return void

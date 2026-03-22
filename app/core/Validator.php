@@ -5,7 +5,7 @@
  *
  * Permet de valider les entrées utilisateur selon des règles simples.
  * Exemple d'utilisation :
- * 
+ *
  * $validator = new Validator();
  * $valid = $validator->validate($_POST, [
  *     'nom' => ['required', 'alpha'],
@@ -72,7 +72,13 @@ class Validator
                             $this->errors[$field][] = "integer: Caractères invalides";
                         }
                         break;
-                    
+
+                    case 'integerpositif':
+                        if ($value !== '' && !preg_match('/^[0-9]+$/u', $value)) {
+                            $this->errors[$field][] = "integer: Caractères invalides";
+                        }
+                        break;
+
                     case 'float':
                         if ($value !== '' && !preg_match('/^-?[0-9]+(\.[0-9]+)?$/u', $value)) {
                             $this->errors[$field][] = "float: Caractères invalides";
@@ -84,7 +90,7 @@ class Validator
                             $this->errors[$field][] = "date: Caractères invalides";
                         }
                         break;
-                    
+
                     default:
                         // Possibilité d'ajouter d'autres règles ou lancer une exception
                         throw new InvalidArgumentException("Règle de validation inconnue : $rule");

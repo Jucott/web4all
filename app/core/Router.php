@@ -48,9 +48,9 @@ class Router
         } else {
             $segments = explode('/', $uri);
             /*
-            Exemple : /entreprise/show/12
+            Exemple : /entreprise/modify/12
             [0] => entreprise
-            [1] => show
+            [1] => modify
             [2] => 12
             */
             $controllerSegment = $segments[0] ?? 'home';
@@ -74,13 +74,8 @@ class Router
 
         if (!isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-            // print("On DOIT creer un csrf_token");
-            // var_dump($_SESSION['csrf_token']);
         }
-        // else {
-        //     print("Pas besoin de creer un csrf_token");
-        //     var_dump($_SESSION['csrf_token']);
-        // }
+
         // Génération automatique de la permission (ex: entreprise_create)
         $permission = strtolower($controllerSegment . '_' . $method);
         $this->registerPermission($permission);
