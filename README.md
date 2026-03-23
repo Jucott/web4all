@@ -81,7 +81,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | STx8  | Clés étrangères        | Utilisation FK en base                                           | ✅      |
 | STx9  | Vhost statique         | Vhost pour ressources statiques                                  | ✅      |
 | STx10 | Responsive             | Responsive + menu burger                                         | ✅      |
-| STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, **HTTPS**       | 🟡      |
+| STx11 | Sécurité               | Cookies sécurisés, hash mdp, anti SQLi/XSS/CSRF, HTTPS           | ✅      |
 | STx12 | SEO                    | Meta, Hn, alt, <3s chargement, sitemap, robots.txt               | ✅      |
 | STx13 | Routage                | Système de routing backend                                       | ✅      |
 | STx14 | Tests unitaires        | Tests PHPUnit sur au moins 1 contrôleur                          | ✅      |
@@ -177,29 +177,104 @@ On peut à présent passer en full screen.
 
 ## Les paramétrages à faire
 
-### Apache 2
+### Apache 2 avec HTTPS
 
-A mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` qu'il faut créer pour le projet
+Prérequis, installer la librairie libnss
+
+```bash
+sudo apt install libnss3-tools
+```
+
+On pourrais créer un certificat auto-signé et l'installer, mais cela va poser plusieurs problèmes :
+
+- Le navigateur va bloquer dans un premier temps en demandant qu'on lui valide le certificat auto-signé
+- comme nous avons deux domaines (web4all.local et static.web4all.local), il faudra le faire pour les deux
+- le service worker https://web4all.local/sw.js ne pourra pas s'installer avec cette limitation et on ne pourra pas installer l'application PWA
+
+La solution : utiliser `mkcert`
+
+Il s'agit d'un projet qui installer dans l'environnement de développement un système de certificats de niveau supérieur faisant croire aux navigateurs locaux que le certificat qui a été généré est bon.
+
+Pour cela, il faut télécharger le programme écrit en GO et compilé pour l'architecture amd64 ([mkcert-v1.4.4-linux-amd64](https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64))
+
+Puis lancer les commandes suivantes (**Attention, on ne met pas `sudo` devant pour une fois !!**)
+
+```bash
+$ mkcert -install
+Created a new local CA 💥
+The local CA is now installed in the system trust store! ⚡️
+The local CA is now installed in the Firefox and/or Chrome/Chromium trust store (requires browser restart)! 🦊
+
+$ mkcert web4all.local static.web4all.local
+
+Created a new certificate valid for the following names 📜
+ - "web4all.local"
+ - "static.web4all.local"
+
+The certificate is at "./web4all.local+1.pem" and the key at "./web4all.local+1-key.pem" ✅
+
+It will expire on 23 June 2028 🗓
+```
+
+Il ne reste plus qu'à copier/déplacer les deux fichiers dans leurs emplacements finaux afin qu'apache puisse les utiliser.
+
+```bash
+sudo mv web4all.local+1.pem /etc/ssl/certs/web4all.crt
+sudo mv web4all.local+1-key.pem /etc/ssl/private/web4all.key
+```
+
+Il ne reste plus qu'à mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` : 
 
 ```
 <VirtualHost *:80>
     ServerName web4all.local
-    DocumentRoot /var/www/html/web4all/public
-    <Directory /var/www/html/web4all/public>
-        AllowOverride All
-        Require all granted
-    </Directory>
-    ErrorLog ${APACHE_LOG_DIR}/web4all_error.log
-    CustomLog ${APACHE_LOG_DIR}/web4all_access.log combined
+    Redirect permanent / https://web4all.local/
 </VirtualHost>
 
 <VirtualHost *:80>
     ServerName static.web4all.local
+    Redirect permanent / https://static.web4all.local/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName web4all.local
+
     DocumentRoot /var/www/html/web4all/public
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/web4all.crt
+    SSLCertificateKeyFile /etc/ssl/private/web4all.key
+
+    <Directory /var/www/html/web4all/public>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    # Sécurité
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+
+    ErrorLog ${APACHE_LOG_DIR}/web4all_error.log
+    CustomLog ${APACHE_LOG_DIR}/web4all_access.log combined
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName static.web4all.local
+
+    DocumentRoot /var/www/html/web4all/public
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/web4all.crt
+    SSLCertificateKeyFile /etc/ssl/private/web4all.key
+
     <Directory /var/www/html/web4all/public>
         AllowOverride None
         Require all granted
     </Directory>
+
+    # Cache statique
     <IfModule mod_expires.c>
         ExpiresActive On
         ExpiresByType text/css "access + 1 month"
@@ -207,11 +282,13 @@ A mettre dans le fichier `/etc/apache2/sites-available/web4all.conf` qu'il faut 
         ExpiresByType image/png "access + 1 month"
         ExpiresByType image/jpeg "access + 1 month"
     </IfModule>
+
+    # headers perf
+    Header set Cache-Control "public, max-age=2592000"
+
     ErrorLog ${APACHE_LOG_DIR}/web4all_static_error.log
     CustomLog ${APACHE_LOG_DIR}/web4all_static_access.log combined
 </VirtualHost>
-
-
 ```
 
 Puis taper :
@@ -220,6 +297,8 @@ Puis taper :
 sudo a2ensite web4all.conf
 sudo a2dissite 000-default.conf
 sudo a2enmod rewrite
+sudo a2enmod ssl
+sudo a2enmod headers
 sudo systemctl reload apache2
 ```
 
@@ -229,14 +308,12 @@ Puis éditer le fichier `/etc/hosts`
 127.0.0.1 localhost web4all.local static.web4all.local
 127.0.1.1 {votre_user}-VirtualBox
 
-
 # The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback
 fe00::0 ip6-localnet
 ff00::0 ip6-mcastprefix
 ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
-
 ```
 
 ### Le projet web4all
@@ -250,7 +327,6 @@ git clone 'https://github.com/Jucott/web4all.git'
 cd web4all
 sudo chown -R {votre_user}:{votre_user} *
 sudo chmod -R 755 *
-
 ```
 
 
@@ -279,6 +355,15 @@ __[snip]__
 ALTER....
 
 ```
+
+Afin de ne pas avoir à entrer systématiquement le mot de passe à chaque commande SQL passée depuis la ligne de commande (et accessoirement aussi pour le script `./dump_database.sh`), il suffit de créer un fichier dans le home directory.
+
+```bash
+echo "127.0.0.1:5432:web4all:web4all:web4all" > ~/.pgpass
+chmod 600 ~/.pgpass
+```
+
+
 
 ### Le fichier `.env` contenant les secrets de l'application
 

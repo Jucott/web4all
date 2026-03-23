@@ -9,6 +9,9 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2c3e50">
     <link rel="stylesheet" href="<?= CDN ?>/css/style.css">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-title" content="Web4All">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="<?= CDN ?>/js/modules/menu.js"></script>
     <script src="<?= CDN ?>/js/modules/modal.js"></script>

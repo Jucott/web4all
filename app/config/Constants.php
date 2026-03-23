@@ -4,8 +4,8 @@
 define('ENV', 'dev'); // dev | prod
 define('APP_NAME', 'StageFinder');
 define('BASE_URL', '/');
-define('FULL_BASE_URL', 'http://web4all.local/');
-define('CDN', 'http://static.web4all.local');
+define('FULL_BASE_URL', 'https://web4all.local/');
+define('CDN', 'https://static.web4all.local');
 
 //define('DB_HOST', 'localhost');
 //define('DB_PORT', 5432);
