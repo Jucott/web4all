@@ -77,7 +77,7 @@ class AuthController extends Controller
             $_SESSION['permissions'] = $auth->getPermissions($user['id_role']);
 
             // Redirection après connexion réussie
-            $this->redirect('/home/index');
+            $this->redirect('home/index');
 
         }
 
@@ -99,7 +99,7 @@ class AuthController extends Controller
         Auth::logout();
 
         // Redirection vers l'accueil
-        header('Location: /home');
+        header('Location: '. CDN . PREFIX . '/home/index');
         exit;
     }
 

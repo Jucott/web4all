@@ -40,19 +40,37 @@ class Auth
     {
         $roleId = $roleId ?? self::roleId();
 
+        
+        // 0. Cas permission in whitelist -> tjs autorisées pour tout le monde
+        $whitelist = [
+            'home_index',
+            'auth_login',
+            'auth_logout',
+            'static_unauthorized',
+        ];
+        if (in_array($permission, $whitelist)){
+            return true;
+        }
+
         // 1. Cas utilisateur connecté → session
         if (isset($_SESSION['permissions'])) {
-            return in_array($permission, $_SESSION['permissions']);
+            if (isset($_SESSION['permissions'][$permission])){
+                return (bool) $_SESSION['permissions'][$permission];
+            }
+            else {
+                return false;
+            }
         }
 
         // 2. Fallback DB (guest ou session absente)
         $db = Database::getInstance();
 
         $stmt = $db->prepare("
-            SELECT allowed
+            SELECT 1
             FROM permission
             WHERE id_role = :role
             AND permission = :perm
+            AND allowed = true
         ");
 
         $stmt->execute([

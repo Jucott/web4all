@@ -25,6 +25,10 @@ class Controller
         View::render($view, $data);
     }
 
+    protected function url($path = '') {
+        return BASE_URL . '/' . ltrim($path, '/');
+    }
+
     /**
      * Effectue une redirection HTTP.
      *
@@ -36,7 +40,10 @@ class Controller
      */
     protected function redirect($url)
     {
-        header("Location: $url");
+        if (defined('PHPUNIT_RUNNING')) {
+            return; // désactivé en test
+        }
+        header("Location: ". $this->url($url));
         exit;
     }
 }

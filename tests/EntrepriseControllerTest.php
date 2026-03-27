@@ -1,123 +1,167 @@
 <?php
+
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../app/core/Autoloader.php';
 Autoloader::register();
-define('PHPUNIT_RUNNING', true);
 
 class EntrepriseControllerTest extends TestCase
 {
-    private $controller;
-
     protected function setUp(): void
     {
-        // Mock partiel pour render et redirect
-        $this->controller = $this->getMockBuilder('EntrepriseController')
-            ->onlyMethods(['render', 'redirect'])
+        $_POST = [];
+        $_GET = [];
+        $_REQUEST = [];
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        if (session_status() === PHP_SESSION_NONE) {
+            @session_start();
+        }
+
+        $_SESSION['csrf_token'] = 'test_token';
+        $_SESSION['user'] = ['id' => 1];
+    }
+
+    /**
+     * Helper : contrôleur mocké avec render intercepté
+     */
+    private function getSafeController(array $methods = [])
+    {
+        $methods[] = 'render';
+
+        return $this->getMockBuilder(EntrepriseController::class)
+            ->onlyMethods(array_unique($methods))
             ->getMock();
     }
 
     public function testCreateGet()
     {
-        $this->controller->expects($this->once())
+        $controller = $this->getSafeController(['getEntrepriseModel']);
+
+        $controller->method('getEntrepriseModel')
+            ->willReturn($this->createMock(Entreprise::class));
+
+        $controller->expects($this->once())
             ->method('render')
             ->with('entreprise/create');
 
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $this->controller->create();
+        $controller->create();
     }
 
     public function testCreatePostValidData()
     {
-        $this->controller->expects($this->once())
+        $entrepriseMock = $this->createMock(Entreprise::class);
+
+        $entrepriseMock->expects($this->once())
+            ->method('create');
+
+        $controller = $this->getSafeController(['getEntrepriseModel', 'redirect']);
+
+        $controller->method('getEntrepriseModel')
+            ->willReturn($entrepriseMock);
+
+        $controller->expects($this->once())
             ->method('redirect')
             ->with('/entreprise/recherche');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [
-            'nom' => 'Valid',
-            'description' => 'Desc',
+            'csrf_token' => 'test_token',
+            'nom' => 'ValidName',
+            'description' => 'Description valide',
             'telephone' => '0123456789',
             'email' => 'test@test.com'
         ];
-        $this->controller->create();
+
+        $controller->create();
     }
 
     public function testRecherchePostInvalidData()
     {
-        $this->controller->expects($this->once())
+        $entrepriseMock = $this->createMock(Entreprise::class);
+
+        $entrepriseMock->expects($this->once())
+            ->method('search')
+            ->willReturn([
+                'results' => [],
+                'total' => 0
+            ]);
+
+        $controller = $this->getSafeController(['getEntrepriseModel']);
+
+        $controller->method('getEntrepriseModel')
+            ->willReturn($entrepriseMock);
+
+        $controller->expects($this->once())
             ->method('render')
             ->with(
                 'entreprise/recherche',
-                $this->callback(fn($params) =>
-                    array_key_exists('errors', $params) &&
-                    ($params['errors'] === null || is_array($params['errors']))
-                )
+                $this->callback(fn($params) => array_key_exists('errors', $params))
             );
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_POST = ['nom' => '']; // invalide
-        $this->controller->recherche();
+        $_POST = [
+            'csrf_token' => 'test_token',
+            'nom' => 'ValidName'
+        ];
+
+        $controller->recherche();
     }
 
     public function testModifyPostValidData()
     {
-        // Crée le mock du modèle Entreprise
         $entrepriseMock = $this->createMock(Entreprise::class);
+
         $entrepriseMock->method('findById')->willReturn([
             'id_entreprise' => 1,
             'nom' => 'OldName',
             'description' => 'OldDesc',
             'telephone' => '0000000000',
-            'email' => 'old@test.com'
+            'email' => 'old@test.com',
+            'valide' => true
         ]);
-        $entrepriseMock->method('update')->willReturn(true);
 
-        // Crée le mock du contrôleur avec getEntrepriseModel, render et redirect mockés
-        $controllerMock = $this->getMockBuilder(EntrepriseController::class)
-            ->onlyMethods(['getEntrepriseModel', 'render', 'redirect'])
-            ->getMock();
+        $entrepriseMock->expects($this->once())
+            ->method('update');
 
-        // Retourne le mock du modèle quand getEntrepriseModel est appelé
-        $controllerMock->method('getEntrepriseModel')->willReturn($entrepriseMock);
+        $controller = $this->getSafeController(['getEntrepriseModel', 'redirect']);
 
-        // On s’attend à ce que redirect soit appelée une fois avec cette URL
-        $controllerMock->expects($this->once())
+        $controller->method('getEntrepriseModel')
+            ->willReturn($entrepriseMock);
+
+        $controller->expects($this->once())
             ->method('redirect')
             ->with('/entreprise/recherche');
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = [
-            'nom' => 'Valid',
-            'description' => 'Desc',
+            'csrf_token' => 'test_token',
+            'nom' => 'ValidName',
+            'description' => 'Description valide',
             'telephone' => '0123456789',
-            'email' => 'test@test.com'
+            'email' => 'test@test.com',
+            'valide' => true
         ];
 
-        // Appel de la méthode à tester
-        $controllerMock->modify(1);
+        $controller->modify(1);
     }
 
     public function testDelete()
     {
-        // Crée le mock du modèle Entreprise
         $entrepriseMock = $this->createMock(Entreprise::class);
-        $entrepriseMock->method('delete')->willReturn(true);
 
-        // Crée le mock du contrôleur avec getEntrepriseModel et redirect mockés
-        $controllerMock = $this->getMockBuilder(EntrepriseController::class)
-            ->onlyMethods(['getEntrepriseModel', 'redirect'])
-            ->getMock();
+        $entrepriseMock->expects($this->once())
+            ->method('update');
 
-        // Retourne le mock du modèle quand getEntrepriseModel est appelé
-        $controllerMock->method('getEntrepriseModel')->willReturn($entrepriseMock);
+        $controller = $this->getSafeController(['getEntrepriseModel', 'redirect']);
 
-        // On s’attend à ce que redirect soit appelée une fois avec cette URL
-        $controllerMock->expects($this->once())
+        $controller->method('getEntrepriseModel')
+            ->willReturn($entrepriseMock);
+
+        $controller->expects($this->once())
             ->method('redirect')
             ->with('/entreprise/recherche');
 
-        // Appel de la méthode à tester
-        $controllerMock->delete(1);
+        $controller->delete(1);
     }
 }

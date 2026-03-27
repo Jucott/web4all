@@ -37,25 +37,65 @@
 <!-- ZONE RESULTATS -->
 <div class="results">
     <?php if (!empty($results)) : ?>
-        <?php foreach ($results as $entreprise) : ?>
+        <?php foreach ($results as $id => $entreprise) : ?>
             <div class="card">
                 <div class="card-left">
                     <h3>
                         <?= htmlspecialchars($entreprise['nom']) ?>
                     </h3>
                     <p><?= htmlspecialchars($entreprise['description']) ?></p>
-                    <div class="stars">★★★★★</div>
+                    <p><u>Email</u>: <?= htmlspecialchars($entreprise['email']) ?></p>
+                    <p><u>Téléphone</u>: <?= htmlspecialchars($entreprise['telephone']) ?></p>
                 </div>
                 <div class="card-right">
-                    <a class="btn-icon edit"
-                        href="/entreprise/modify/<?= $entreprise['id_entreprise'] ?>">
-                        ✏
-                    </a>
-                    <a class="btn-icon delete"
-                        href="/entreprise/delete/<?= $entreprise['id_entreprise'] ?>"
-                        onclick="return confirm('Confirmer la suppression ?');">
-                        🗑
-                    </a>
+                    <div class="stars-rating" data-value="<?= $entreprise['eval_stars'] ?>" data-readonly="true">
+                        <span data-value="1">☆</span>
+                        <span data-value="2">☆</span>
+                        <span data-value="3">☆</span>
+                        <span data-value="4">☆</span>
+                        <span data-value="5">☆</span>
+
+                        <?php if ($entreprise['eval_stars']) : ?>
+                            <?= 'moy: '.$entreprise['eval_moyenne'] ?> (<a class="btn-icon" href="<?= CDN . PREFIX ?>/evaluation/show/<?= $entreprise['id_entreprise'] ?>" ><?= $entreprise['eval_nbre'] ?></a>)
+                        <?php endif; ?>
+                    </div>
+                    
+                </div>
+                <div class="card-right">
+                    <?php if (! $entreprise['in_evaluate']) : ?>
+                        <!-- ⭐ Evaluate -->
+                        <?php View::button([
+                                    'permission' => 'evaluation_create',
+                                    'url'        => '/evaluation/create/'.$entreprise['id_entreprise'],
+                                    'class'      => 'wishlist',
+                                    'icon'       => '☆',
+                                    'title'      => 'Evaluer',
+                                ]);
+                        ?>
+                    <?php endif; ?>
+
+                    <!-- ✏️ Edit -->
+                    <?php View::button([
+                                'permission' => 'entreprise_modify',
+                                'url'        => '/entreprise/modify/'.$entreprise['id_entreprise'],
+                                'class'      => 'edit',
+                                'icon'       => '✏',
+                                'title'      => 'Modifier',
+                            ]);
+                    ?>
+
+                    <!-- 🗑 Delete -->
+                    <?php View::button([
+                                'permission' => 'entreprise_delete',
+                                'url'        => '/entreprise/delete/'.$entreprise['id_entreprise'],
+                                'class'      => 'delete',
+                                'icon'       => '🗑',
+                                'title'      => 'Supprimer',
+                                'attributes' => [
+                                    'onclick' => "return confirm('Confirmer la suppression ?');"
+                                ]
+                            ]);
+                    ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -93,7 +133,7 @@
 </div>
 
 <button class="btn-add"
-        onclick="window.location.href='/entreprise/create'">
+        onclick="window.location.href='<?= CDN . PREFIX ?>/entreprise/create'">
     Ajouter
 </button>
 

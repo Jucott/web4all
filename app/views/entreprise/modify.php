@@ -24,15 +24,17 @@
     <label>Email</label>
     <input type="email" name="email" value="<?= htmlspecialchars($entreprise['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|email">
 
-    <label>Active</label>
+    <label for="valide">Active</label>
     <input type="checkbox"
        name="valide"
+       id="valide"
        value="1"
        <?= $entreprise['valide'] ? 'checked' : '' ?>>
 
     <p>Dernière mise a jour le <?= htmlspecialchars($entreprise['valide_lastupdate'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+
     <button type="submit">Sauve</button>
-    <button type="button" onclick="window.location.href='/entreprise/recherche'">Annule</button>
+    <button type="button" onclick="window.location.href='<?= CDN . PREFIX ?>/entreprise/recherche'">Annule</button>
 
 </form>
 

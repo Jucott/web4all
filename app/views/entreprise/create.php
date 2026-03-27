@@ -55,7 +55,7 @@
     <label><input type="checkbox" name="domaine[]" value="d4"> Domaine 4</label>
 
     <button type="submit">Sauve</button>
-    <button type="button" onclick="window.location.href='/entreprise/recherche'">Annule</button>
+    <button type="button" onclick="window.location.href='<?= CDN . PREFIX ?>/entreprise/recherche'">Annule</button>
 
 </form>
 

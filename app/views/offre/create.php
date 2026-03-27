@@ -1,6 +1,6 @@
 <h2>Création d'offre</h2>
 
-<script src="<?= CDN ?>/js/modules/offre.js"></script>
+<script src="<?= CDN . PREFIX ?>/js/modules/offre.js"></script>
 
 
 <?php if (!empty($errors)) : ?>
@@ -67,7 +67,7 @@
     <hr/>
     
     <button type="submit">Sauve</button>
-    <button type="button" onclick="window.location.href='/offre/recherche'">Annule</button>
+    <button type="button" onclick="window.location.href='<?= CDN . PREFIX ?>/offre/recherche'">Annule</button>
 
 </form>
 

@@ -84,4 +84,51 @@ class View
 
         return $pages;
     }
+
+    public static function Dumper($data): void 
+    {
+        echo '<pre>' . print_r($data, true) . '</pre>';
+    }
+
+
+    public static function button(array $config): void
+    {
+        $roleId = Auth::roleId();    
+        if (!Auth::can($config['permission'], $roleId)) {
+            return;
+        }
+
+        // URL
+        $url = $config['url'] ?? '#';
+        $fullUrl = ($url === '#') ? '#' : (CDN . PREFIX . $url);
+
+        // classes
+        $class = 'btn-icon ' . ($config['class'] ?? '');
+
+        // attributs dynamiques
+        $attributes = '';
+
+        if (!empty($config['attributes']) && is_array($config['attributes'])) {
+            foreach ($config['attributes'] as $key => $value) {
+                $attributes .= sprintf(' %s="%s"', $key, htmlspecialchars($value));
+            }
+        }
+
+        // title
+        if (!empty($config['title'])) {
+            $attributes .= ' title="'.htmlspecialchars($config['title']).'"';
+            $attributes .= ' data-tooltip="'.htmlspecialchars($config['title']).'"';
+        }
+
+        // contenu
+        $content = $config['icon'] ?? '';
+
+        echo sprintf(
+            '<a href="%s" class="%s"%s>%s</a>',
+            $fullUrl,
+            $class,
+            $attributes,
+            $content
+        );
+    }
 }

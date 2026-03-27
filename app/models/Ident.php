@@ -35,19 +35,22 @@ class Ident extends Model
         if (!empty($filters['email'])) {
             $params[] = ['email', $filters['email'], 'ILIKE'];
         }
-
-        if (empty($filters['id_role'])){
+        
+        if (empty($filters['id_role']) || $filters['id_role'] == -1){
             $params[] = ['id_role', Auth::user()['id_role'], '>='];
         }
         elseif (!empty($filters['id_role'])){
-            if ((string)($filters['id_role']) >= (string)(Auth::user()['id_role'])) {
+            if ((string)($filters['id_role']) > (string)(Auth::user()['id_role'])) {
                 $params[] = ['id_role', $filters['id_role'], '='];
             }
+            elseif ((string)($filters['id_role']) == (string)(Auth::user()['id_role'])) {
+                $params[] = ['id_ident', Auth::user()['id'], '='];
+            }
             else {
-                $params[] = ['id_role', Auth::user()['id_role'], '>='];
+                $params[] = ['id_role', Auth::user()['id_role'], '>'];
             }
         }
-        
+
         if (is_bool($filters['valide'])) {
             $params[] = ['valide', $filters['valide'], '='];
         }
@@ -67,7 +70,29 @@ class Ident extends Model
         ];
     }
 
+    public function getEtudiants(): array
+    {
+        $db = Database::getInstance();
 
+        // Requête pour récupérer la liste des étudiants
+        $sql = "
+            SELECT 
+                id_ident,
+                nom,
+                prenom
+            FROM ident
+            WHERE valide = true
+            and id_role = :id_role
+            ORDER BY nom, prenom
+        ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id_role' => ETUDIANT]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    
 
 
 }

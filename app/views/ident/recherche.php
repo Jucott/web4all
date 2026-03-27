@@ -40,21 +40,36 @@
         <?php foreach ($results as $ident) : ?>
             <div class="card">
                 <div class="card-left">
-                    <h3>
-                        <?= htmlspecialchars($ident['nom']) ?>
-                    </h3>
-                    <p><?= htmlspecialchars($ident['prenom']) ?></p>
+                    <h3><?= htmlspecialchars($ident['nom'].' '.$ident['prenom']) ?></h3>
                 </div>
                 <div class="card-right">
-                    <a class="btn-icon edit"
-                        href="/ident/modify/<?= $ident['id_ident'] ?>">
-                        ✏
-                    </a>
-                    <a class="btn-icon delete"
-                        href="/ident/delete/<?= $ident['id_ident'] ?>"
-                        onclick="return confirm('Confirmer la suppression ?');">
-                        🗑
-                    </a>
+                    <p><u>Email</u>: <?= htmlspecialchars($ident['email']) ?></p>
+                </div>
+                <div class="card-right">
+                    <?php if ($ident['not_me'] === 0) : ?>
+                        <!-- ✏️ Edit -->
+                        <?php View::button([
+                                    'permission' => 'ident_modify',
+                                    'url'        => '/ident/modify/'.$ident['id_ident'],
+                                    'class'      => 'edit',
+                                    'icon'       => '✏',
+                                    'title'      => 'Modifier',
+                                ]);
+                        ?>
+
+                        <!-- 🗑 Delete -->
+                        <?php View::button([
+                                    'permission' => 'ident_delete',
+                                    'url'        => '/ident/delete/'.$ident['id_ident'],
+                                    'class'      => 'delete',
+                                    'icon'       => '🗑',
+                                    'title'      => 'Supprimer',
+                                    'attributes' => [
+                                        'onclick' => "return confirm('Confirmer la suppression ?');"
+                                    ]
+                                ]);
+                        ?>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -91,7 +106,7 @@
 </div>
 
 <button class="btn-add"
-        onclick="window.location.href='/ident/create'">
+        onclick="window.location.href='<?= CDN . PREFIX ?>/ident/create'">
     Ajouter
 </button>
 

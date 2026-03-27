@@ -59,7 +59,30 @@ class Offre extends Model
         ];
     }
 
+    public function getOffre(int $id): array
+    {
+        $db = Database::getInstance();
 
+        // Requête pour récupérer la wishlist
+        $sql = "
+            SELECT 
+                o.titre             ,
+                o.description       ,
+                o.base_remuneration ,
+                o.date_offre        ,
+                e.nom
+            FROM offre      o
+            JOIN entreprise e using (id_entreprise)
+            WHERE o.valide = true
+            AND o.id_offre = :id
+            AND e.valide = true
+        ";
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 
 }

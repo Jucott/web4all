@@ -67,8 +67,10 @@ class EntrepriseController extends Controller
 
             // Création en base
             $entreprise = $this->getEntrepriseModel();
-            $entreprise->create($filters);
+            $id_entreprise = $entreprise->create($filters);
 
+            $evaluationModel = $this->getEvaluationModel();
+            $evaluationModel->evaluate($id_entreprise, $_SESSION['user']['id'], null);
             // Redirection après succès
             $this->redirect('/entreprise/recherche');
         }
@@ -152,14 +154,35 @@ class EntrepriseController extends Controller
             // Calcul du nombre total de pages
             $totalPages = ceil($total / $perPage);
 
+            $resultat=[];
+            $evaluationModel = new Evaluation();
+            foreach ($results as $res){
+                $r = $evaluationModel->moyenne($res['id_entreprise']);
+                $resultat[$res['id_entreprise']] = $res;
+                $resultat[$res['id_entreprise']]['eval_moyenne']    = $r['moyenne'];
+                $resultat[$res['id_entreprise']]['eval_nbre']       = $r['nbre'];
+                $resultat[$res['id_entreprise']]['eval_stars']      = floor($r['moyenne']);
+
+                $notation = $evaluationModel->findBy([
+                    ['id_ident'     , $_SESSION['user']['id']   , "="],
+                    ['id_entreprise', $res['id_entreprise']     , "="],
+                ]);
+                if (isset($notation[0])){
+                    $resultat[$res['id_entreprise']]['in_evaluate'] = 1;
+                }
+                else {
+                    $resultat[$res['id_entreprise']]['in_evaluate'] = 0;
+                }
+            }
+            
             // Rendu des résultats
             return $this->render('entreprise/recherche', [
-                'errors' => null,
-                'filters' => $filters,
-                'results' => $results,
-                'page' => $page,
-                'totalPages' => $totalPages,
-                'pagination' => View::buildPagination($page, $totalPages),
+                'errors'        => null,
+                'filters'       => $filters,
+                'results'       => $resultat,
+                'page'          => $page,
+                'totalPages'    => $totalPages,
+                'pagination'    => View::buildPagination($page, $totalPages),
             ]);
         }
 
@@ -190,6 +213,7 @@ class EntrepriseController extends Controller
     {
         $entrepriseModel = $this->getEntrepriseModel();
         $old_entreprise = $entrepriseModel->findById($id);
+
 
         // Vérification existence
         if (!$old_entreprise) {
@@ -259,11 +283,134 @@ class EntrepriseController extends Controller
             // Redirection après succès
             $this->redirect('/entreprise/recherche');
         }
-
+        
         // Affichage formulaire (GET)
         $this->render('entreprise/modify', [
             'entreprise' => $old_entreprise,
             'errors' => [],
+        ]);
+    }
+
+
+    /**
+     * Evaluation d'une entreprise existante.
+     *
+     * @param int $id Identifiant de l'entreprise
+     *
+     * - Vérifie l'existence de l'entreprise
+     * - En GET : affiche le formulaire pré-rempli
+     * - En POST : valide puis met à jour les données
+     *
+     * @return void
+     * @throws \Exception Si l'entreprise est introuvable (en environnement de test)
+     */
+    public function evaluate($id)
+    {
+        $entrepriseModel = $this->getEntrepriseModel();
+        $old_entreprise = $entrepriseModel->findById($id);
+
+        $evaluationModel = new Evaluation();
+        $evaluation = $evaluationModel->findBy([ ['id_entreprise', $id, '='], ['id_ident', $_SESSION['user']['id'], '='] ], "", [ 'limit' => 1 ]);
+        $old_entreprise['evaluation']       = $evaluation[0]['note'] ?? '';
+        $old_entreprise['commentaire']      = $evaluation[0]['commentaire'] ?? '';
+        $old_entreprise['date_evaluation']  = $evaluation[0]['date_evaluation'] ?? '';
+
+
+        // Vérification existence
+        if (!$old_entreprise) {
+            if (defined('PHPUNIT_RUNNING')) {
+                throw new \Exception("Entreprise introuvable");
+            }
+            http_response_code(404);
+            die("Entreprise introuvable");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
+                http_response_code(403);
+                die("CSRF token invalide");
+            }
+            // Validation
+            $validator = new Validator();
+            $valid = $validator->validate($_POST, [
+                'commentaire'   => ['required', 'txt'],
+            ]);
+
+            // Retour avec erreurs
+            if (!$valid) {
+                return $this->render('entreprise/evaluate', [
+                    'errors'    => $validator->errors(),
+                    'entreprise' => $entreprise,
+                ]);
+            }
+            // Mettre a jour la notation
+            if (    isset($_POST['evaluation'])
+                    &&  (int)($_POST['evaluation']) > 0 
+                    &&  (int)($_POST['evaluation']) <= 5){
+                
+                $evaluationModel->evaluate($id, (int)($_POST['evaluation']), $_POST['commentaire']);
+            }
+
+            // Redirection après succès
+            $this->redirect('/entreprise/recherche');
+        }
+        
+        // Affichage formulaire (GET)
+        $this->render('entreprise/evaluate', [
+            'entreprise' => $old_entreprise,
+            'errors' => [],
+        ]);
+    }
+
+
+    /**
+     * Affiche les evaluations d'une entreprise existante.
+     *
+     * @param int $id Identifiant de l'entreprise
+     *
+     * - Vérifie l'existence de l'entreprise
+     * - En GET : affiche le formulaire pré-rempli
+     * - En POST : valide puis met à jour les données
+     *
+     * @return void
+     * @throws \Exception Si l'entreprise est introuvable (en environnement de test)
+     */
+    public function showevaluations($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
+                http_response_code(403);
+                die("CSRF token invalide");
+            }
+        }
+        // Gestion de la pagination
+        $page = $_POST['page'] ?? 1;
+        $page = max(1, (int)$page);
+        $perPage = ITEM_PER_PAGES;
+
+        // Exécution de la recherche
+        $evaluationModel = new Evaluation();
+        $r = $evaluationModel->moyenne($id);
+        $note = [];
+        $note['eval_moyenne']    = $r['moyenne'];
+        $note['eval_nbre']       = $r['nbre'];
+        $note['eval_stars']      = floor($r['moyenne']);
+
+        $data = $evaluationModel->search($id, $page, $perPage);
+
+        $results = $data['results'];
+        $total = $data['total'];
+
+        // Calcul du nombre total de pages
+        $totalPages = ceil($total / $perPage);
+
+        // Affichage formulaire (GET)
+        return $this->render('entreprise/showevaluations', [
+            'results'       => $results,
+            'note'          => $note,
+            'page'          => $page,
+            'totalPages'    => $totalPages,
+            'pagination'    => View::buildPagination($page, $totalPages),
         ]);
     }
 
@@ -293,13 +440,17 @@ class EntrepriseController extends Controller
         $this->redirect('/entreprise/recherche');
     }
 
+    protected function url($path = '') {
+        return BASE_URL . '/' . ltrim($path, '/');
+    }
+
     /**
-     * Redirection HTTP.
+     * Effectue une redirection HTTP.
      *
-     * Méthode surchargée pour permettre le test unitaire
-     * sans exécuter réellement les headers HTTP.
+     * Envoie un header Location puis termine l'exécution du script.
      *
-     * @param string $url URL de redirection
+     * @param string $url URL de destination
+     * 
      * @return void
      */
     protected function redirect($url)
@@ -307,7 +458,7 @@ class EntrepriseController extends Controller
         if (defined('PHPUNIT_RUNNING')) {
             return; // désactivé en test
         }
-        header("Location: $url");
+        header("Location: ". $this->url($url));
         exit;
     }
 

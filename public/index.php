@@ -1,8 +1,6 @@
 <?php
 
 date_default_timezone_set('Europe/Paris');
-require_once __DIR__ . '/../app/config/Constants.php';
-
 /**
  * Chargement du fichier .env situé à la racine du projet
  *
@@ -40,6 +38,9 @@ loadEnv(__DIR__ . '/../.env');
 //     'httponly' => true,             // impossible d’y accéder via JS
 //     'samesite' => 'Strict'          // ou Lax selon besoin
 // ]);
+
+require_once __DIR__ . '/../app/config/Constants.php';
+
 session_start();
 
 require_once __DIR__ . '/../app/core/Autoloader.php';

@@ -100,21 +100,22 @@ class Router
      * @param string $permission
      * @return bool True si accès autorisé
      */
-    private function checkAccess(string $permission): bool
+    public function checkAccess(string $permission): bool
     {
         $roleId = Auth::roleId();
 
         if (!Auth::can($permission, $roleId)) {
 
             if (!Auth::check()) {
-                header('Location: /auth/login');
+                header('Location: '. CDN . PREFIX . '/auth/login');
                 exit;
             }
-
-            http_response_code(403);
-            die("Accès interdit : permission '$permission'");
+            header('Location: '. CDN . PREFIX . '/static/unauthorized');
+            exit;
+            //http_response_code(403);
+            //die("Accès interdit : permission '$permission'");
         }
-
+        
         return true;
     }
 

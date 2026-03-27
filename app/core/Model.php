@@ -281,6 +281,61 @@ abstract class Model
         return (bool) $stmt->fetchColumn();
     }
 
+
+    public function existsBy(array $criteria = []): bool
+    {
+        $conditions = [];
+        $params = [];
+        $i = 0;
+
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+
+        foreach ($criteria as $crit) {
+
+            // Format attendu : [champ, valeur, opérateur]
+            [$field, $value, $operator] = $crit;
+
+            $operator = strtoupper(trim($operator));
+
+            // Sécurité : whitelist des opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+
+            // Paramètre unique (évite collision si même champ plusieurs fois)
+            $paramName = $field . '_' . $i++;
+
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
+        }
+
+        $sql = "SELECT 1 FROM {$this->table}";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        $stmt = $this->db->prepare($sql);
+
+        // Binding typé
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+        $stmt->execute();
+        return (bool) $stmt->fetchColumn();
+    }
+
+
+
+
     /**
      * Crée un nouvel enregistrement.
      *
@@ -350,4 +405,134 @@ abstract class Model
 
         return $stmt->execute(['id' => $id]);
     }
+
+
+    /**
+     * Supprime un enregistrement par sa clé primaire.
+     *
+     * @param mixed $id Clé primaire de l'enregistrement
+     * @return bool True si succès, false sinon
+     */
+    public function deleteWithCriteria(array $criteria): bool
+    {
+        $conditions = [];
+        $params = [];
+        $i = 0;
+
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+
+        foreach ($criteria as $crit) {
+
+            // Format attendu : [champ, valeur, opérateur]
+            [$field, $value, $operator] = $crit;
+
+            $operator = strtoupper(trim($operator));
+
+            // Sécurité : whitelist des opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+
+            // Paramètre unique (évite collision si même champ plusieurs fois)
+            $paramName = $field . '_' . $i++;
+
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
+        }
+
+        $sql = "DELETE FROM {$this->table}";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+
+        $stmt = $this->db->prepare($sql);
+
+        // Binding typé
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+
+        return $stmt->execute();
+    }
+
+
+    public function updateWithCriteria(array $data, array $criteria): bool
+    {
+        // Processing de $criteria afin de fabriquer la clause WHERE
+        $conditions = [];
+        $params = [];
+        $i = 0;
+
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+
+        foreach ($criteria as $crit) {
+
+            // Format attendu : [champ, valeur, opérateur]
+            [$field, $value, $operator] = $crit;
+
+            $operator = strtoupper(trim($operator));
+
+            // Sécurité : whitelist des opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+
+            // Paramètre unique (évite collision si même champ plusieurs fois)
+            $paramName = $field . '_' . $i++;
+
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
+        }
+
+        // Processing de $data afin de fabriquer la clause SET
+        $set = implode(',', array_map(fn($k) => "$k = :$k", array_keys($data)));
+
+        $sql = "UPDATE {$this->table} SET $set ";
+
+        if (!empty($conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $conditions);
+        }
+        
+        //var_dump($sql); var_dump($data); exit;
+        $stmt = $this->db->prepare($sql);
+
+        // Binding typé pour la clause SET
+        foreach ($data as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+
+        // Binding typé pour la clause WHERE
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+
+        return $stmt->execute();
+    }
+
+
 }

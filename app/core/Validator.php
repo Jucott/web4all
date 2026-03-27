@@ -62,7 +62,7 @@ class Validator
                         break;
 
                     case 'txt':
-                        if ($value !== '' && !preg_match('/^[\p{L}0-9\s\p{P}]{10,1000}$/u', $value)) {
+                        if ($value !== '' && !preg_match('/^[\p{L}0-9\s\p{P}]{2,1000}$/u', $value)) {
                             $this->errors[$field][] = "text: Caractères invalides";
                         }
                         break;
@@ -135,5 +135,21 @@ class Validator
         if (!$callback($value)) {
             $this->errors[$field][] = $message;
         }
+    }
+
+    /**
+     * Vérifie si un tableau contient des valeurs integer supérieures à 0
+     *
+     * @param array $data Nom du tableau
+     * @return bool True si vrai, false sinon
+     */
+    public function containsIntGreaterThan0(array $data): bool
+    {
+        foreach ($data as $value) {
+            if (filter_var($value, FILTER_VALIDATE_INT) === false || $value <= 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

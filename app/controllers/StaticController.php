@@ -29,7 +29,7 @@ class StaticController extends Controller
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <?php foreach ($pages as $page): ?>
     <url>
-        <loc><?= FULL_BASE_URL . htmlspecialchars($page['url']) ?></loc>
+        <loc><?= CDN . PREFIX . '/' . htmlspecialchars($page['url']) ?></loc>
         <lastmod><?= date('Y-m-d') ?></lastmod>
         <changefreq>weekly</changefreq>
         <priority><?= $page['url'] === '' ? '1.0' : '0.8' ?></priority>
@@ -42,6 +42,11 @@ class StaticController extends Controller
     public function contact()
     {
         $this->render('static/contact');
+    }
+
+    public function unauthorized()
+    {
+        $this->render('static/unauthorized');
     }
 
     public function mentions_legales()

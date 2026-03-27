@@ -15,7 +15,7 @@ var FormValidation = (function($){
         },
 
         txt: function(value){
-            return /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;:!?()'"\-]{10,1000}$/.test(value);
+            return /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s.,;:!?()'"\-]{2,1000}$/.test(value);
         },
 
         phone: function(value){

@@ -52,7 +52,7 @@ class AuthModel extends Model
      */
     public function getPermissions(int $roleId): array
     {
-        $sql = "SELECT permission, allowed FROM permission WHERE id_role = :role";
+        $sql = "SELECT permission, allowed FROM permission WHERE id_role = :role and allowed=true";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['role' => $roleId]);

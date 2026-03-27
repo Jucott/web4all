@@ -163,6 +163,20 @@ class IdentController extends Controller
             // Calcul du nombre total de pages
             $totalPages = ceil($total / $perPage);
 
+            // Dans le cas ou un role est identique à celui qui consulte
+            // Alors possibilite de modifier/supprimer que sa propre fiche
+            foreach ($results as &$item){
+                if (        $item['id_role'] == Auth::user()['id_role']
+                        &&  $item['id_ident'] != Auth::user()['id']
+                    ){
+                    $item['not_me'] = 1;
+                }
+                else {
+                    $item['not_me'] = 0;
+                }
+            }
+            unset($item); // important
+
             // Rendu des résultats
             return $this->render('ident/recherche', [
                 'errors'    => null,
@@ -203,6 +217,30 @@ class IdentController extends Controller
     {
         $identModel = $this->getIdentModel();
         $old_ident = $identModel->findById($id);
+
+        if ($old_ident['id_role'] < Auth::roleId()){
+            $this->redirect('/ident/recherche');
+        }
+        if ($old_ident['id_role'] > Auth::roleId()){
+        }
+        elseif ($old_ident['id_role'] == Auth::roleId()){
+            if ((int)($id) !== (int)($_SESSION['user']['id'])){
+                $this->redirect('/ident/recherche');
+            }
+        }
+        
+
+        $etudiants = $identModel->getEtudiants();
+
+        $etudiantModel = new Etudiant();
+        $etudiantsSelectionnes = $etudiantModel->getEtudiantsSelectionnes();
+
+        $wishlistModel = new Wishlist();
+        $wishlist = $wishlistModel->getWishlist($id);
+
+        $postuleModel = new PostuleModel();
+        $postule = $postuleModel->getPostuleData($id);
+        
         $roleModel = new Role();
         $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         // Vérification existence
@@ -219,7 +257,7 @@ class IdentController extends Controller
                 http_response_code(403);
                 die("CSRF token invalide");
             }
-
+            $students=[];
             switch ($_POST['form_type'] ?? '') {
 
                 case 'update_profile':
@@ -245,9 +283,13 @@ class IdentController extends Controller
                     // Retour avec erreurs
                     if (!$valid) {
                         return $this->render('ident/modify', [
-                            'errors' => $validator->errors(),
-                            'ident' => $ident,
-                            'roles' => $roles,
+                            'errors'       => $validator->errors(),
+                            'ident'        => $ident,
+                            'roles'        => $roles,
+                            'wishlist'     => $wishlist,
+                            'postule'      => $postule,
+                            'etudiants'    => $etudiants,
+                            'etu_selected' => $etudiantsSelectionnes,
                         ]);
                     }
 
@@ -273,6 +315,24 @@ class IdentController extends Controller
                             $ident[$key] = null;
                         }
                     }
+
+                    if (in_array((int)($ident['id_role']), PILOTE)){
+                        // Je suis un pilote -> gestion des étudiants à gérer... (cf tableau $_POST['etudiants'])
+                        if (! $validator->containsIntGreaterThan0($_POST['etudiants'])){
+                            return $this->render('ident/modify', [
+                                'errors'        => ['id_etudiant invalide'],
+                                'ident'         => $ident,
+                                'roles'         => $roles,
+                                'wishlist'      => $wishlist,
+                                'postule'       => $postule,
+                                'etudiants'     => $etudiants,
+                                'etu_selected'  => $etudiantsSelectionnes,
+                            ]);
+                        }
+                        foreach ($_POST['etudiants'] as $etu){
+                            $students[] = [$id, (int)($etu)];
+                        }
+                    }
                     break;
 
                 case 'update_password':
@@ -291,9 +351,13 @@ class IdentController extends Controller
                     // Retour avec erreurs
                     if (!$valid) {
                         return $this->render('ident/modify', [
-                            'errors' => $validator->errors(),
-                            'ident' => $ident,
-                            'roles' => $roles,
+                            'errors'        => $validator->errors(),
+                            'ident'         => $ident,
+                            'roles'         => $roles,
+                            'wishlist'      => $wishlist,
+                            'postule'       => $postule,
+                            'etudiants'     => $etudiants,
+                            'etu_selected'  => $etudiantsSelectionnes,
                         ]);
                     }
                     $ident['passwd'] = password_hash($_POST['passwd'], PASSWORD_DEFAULT);
@@ -303,8 +367,20 @@ class IdentController extends Controller
                     http_response_code(400);
                     die('Formulaire inconnu');
             }
+
+            
+
             // Mise à jour
             $identModel->update($id, $ident);
+
+            
+            // Ajout des étudiants en gestion
+            if ($students){
+                $etudiantModel->deleteWithCriteria([
+                    [ 'id_ident', $id, '=' ],
+                ]);                                                                     // suppression des anciennes associations
+                $etudiantModel->insert(['id_ident', 'id_ident_etudiant'], $students);   // positionnement des nouvelles
+            }
 
             // Redirection après succès
             $this->redirect('/ident/recherche');
@@ -312,9 +388,13 @@ class IdentController extends Controller
 
         // Affichage formulaire (GET)
         $this->render('ident/modify', [
-            'ident' => $old_ident,
-            'errors' => [],
-            'roles' => $roles,
+            'ident'         => $old_ident,
+            'errors'        => [],
+            'roles'         => $roles,
+            'wishlist'      => $wishlist,
+            'postule'       => $postule,
+            'etudiants'     => $etudiants,
+            'etu_selected'  => $etudiantsSelectionnes,
         ]);
     }
 
@@ -343,23 +423,6 @@ class IdentController extends Controller
         $this->redirect('/ident/recherche');
     }
 
-    /**
-     * Redirection HTTP.
-     *
-     * Méthode surchargée pour permettre le test unitaire
-     * sans exécuter réellement les headers HTTP.
-     *
-     * @param string $url URL de redirection
-     * @return void
-     */
-    protected function redirect($url)
-    {
-        if (defined('PHPUNIT_RUNNING')) {
-            return; // désactivé en test
-        }
-        header("Location: $url");
-        exit;
-    }
 
     /**
      * Fournit une instance du modèle Entreprise.

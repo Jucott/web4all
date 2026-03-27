@@ -3,16 +3,21 @@
 
 define('ENV', 'dev'); // dev | prod
 define('APP_NAME', 'StageFinder');
-define('BASE_URL', '/');
-define('FULL_BASE_URL', 'https://web4all.local/');
-define('CDN', 'https://static.web4all.local');
-
-//define('DB_HOST', 'localhost');
-//define('DB_PORT', 5432);
-//define('DB_NAME', 'web4all');
-//define('DB_USER', 'web4all');
-//define('DB_PASS', 'web4all');
-
+if ($_ENV['APP_ENV'] == 'dev'){
+	define('BASE_URL',	'');
+	define('CDN',		'https://web4all.local');
+	define('STATIQUE',	'https://static.web4all.local');
+	define('PREFIX',	'');
+}
+else {
+	define('BASE_URL',	'/web4all');
+	define('CDN', 		'https://services.hashment.com');
+	define('STATIQUE',	'https://services.hashment.com');
+	define('PREFIX',	'/web4all');
+}
 define('ITEM_PER_PAGES', 3);
+define('ETUDIANT'	, 3);
+define('POSTULE'	, [ 3 ]);
+define('PILOTE'		, [ 2 ]);
 
-define('UPLOAD_DIR', __DIR__ . '/../../public/uploads');
+define('UPLOAD_DIR', __DIR__ . '/../../uploads');

@@ -80,15 +80,13 @@ class OffreController extends Controller
             $id_offre = $offre->create($filters);
 
             // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
-            foreach ($_POST['competences'] as $value) {
-                if (filter_var($value, FILTER_VALIDATE_INT) === false || $value <= 0) {
-                    return $this->render('offre/create', [
-                        'errors' => ['id_competence invalide'],
-                        'filters' => $filters,
-                        'entreprises' => $entreprises,
-                        'competences' => $competences,
-                    ]);
-                }
+            if (! $validator->containsIntGreaterThan0($_POST['competences'])){
+                return $this->render('offre/create', [
+                    'errors' => ['id_competence invalide'],
+                    'filters' => $filters,
+                    'entreprises' => $entreprises,
+                    'competences' => $competences,
+                ]);
             }
             // Ajout des competences requises pour cette offre
             $offreHasCompetence = new OffreHasCompetence();
@@ -114,6 +112,7 @@ class OffreController extends Controller
     {
         $entrepriseModel = new Entreprise();
         $entreprises = $entrepriseModel->findBy([['valide', true, '=' ]], 'nom ASC', []);
+
         $competenceModel = new Competence();
         $competences = $competenceModel->findAll();
         $filters = [
@@ -125,6 +124,7 @@ class OffreController extends Controller
             'date_offre'        => (new DateTime())->format('Y-m-d'),
             'valide'            => true,
         ];
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
@@ -187,6 +187,38 @@ class OffreController extends Controller
 
             // Calcul du nombre total de pages
             $totalPages = ceil($total / $perPage);
+
+
+            // On regarde si l'offres qui vont s'afficher sont présentes dans la wishlist du user courant
+            $wishlistModel = new Wishlist();
+            foreach ($results as &$item) {
+                $exists = $wishlistModel->existsBy([['id_offre', $item['id_offre'], '=' ], ['id_ident', $_SESSION['user']['id'], '=']]);
+                $item['in_wishlist'] = (int)($exists) ?? 0;
+            }
+            unset($item); // important
+
+
+            // On regarde si l'offres qui vont s'afficher sont présentes dans les candidatures du user courant
+            $postuleModel = new PostuleModel();
+            foreach ($results as &$item) {
+                $exists = $postuleModel->existsBy([
+                    ['id_offre', $item['id_offre'], '=' ],
+                    ['id_ident', $_SESSION['user']['id'], '='],
+                    ['valide', true, '=' ],
+                ]);
+                $item['in_postule'] = (int)($exists) ?? 0;
+
+                $nb_candidatures = $postuleModel->count([
+                    ['id_offre', $item['id_offre'], '=' ],
+                    ['valide', true, '=' ],
+                ]);
+                $item['nb_candidatures'] = (int)($nb_candidatures) ?? 0;
+
+            }
+            unset($item); // important
+
+
+
 
             // Rendu des résultats
             return $this->render('offre/recherche', [
@@ -316,16 +348,14 @@ class OffreController extends Controller
             $offreModel->update($id, $offre);
 
             // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
-            foreach ($_POST['competences'] as $value) {
-                if (filter_var($value, FILTER_VALIDATE_INT) === false || $value <= 0) {
-                    return $this->render('offre/modify', [
-                        'errors'      => ['id_competence invalide'],
-                        'offre'       => $offre,
-                        'entreprises' => $entreprises,
-                        'competences' => $competences,
-                        'selectedCompetences'   => $selectedCompetences,
-                    ]);
-                }
+            if (! $validator->containsIntGreaterThan0($_POST['competences'])){
+                return $this->render('offre/modify', [
+                    'errors'      => ['id_competence invalide'],
+                    'offre'       => $offre,
+                    'entreprises' => $entreprises,
+                    'competences' => $competences,
+                    'selectedCompetences'   => $selectedCompetences,
+                ]);
             }
 
             $offreHasCompetence->syncCompetences((int)($id), $_POST['competences']);
@@ -369,23 +399,6 @@ class OffreController extends Controller
         $this->redirect('/offre/recherche');
     }
 
-    /**
-     * Redirection HTTP.
-     *
-     * Méthode surchargée pour permettre le test unitaire
-     * sans exécuter réellement les headers HTTP.
-     *
-     * @param string $url URL de redirection
-     * @return void
-     */
-    protected function redirect($url)
-    {
-        if (defined('PHPUNIT_RUNNING')) {
-            return; // désactivé en test
-        }
-        header("Location: $url");
-        exit;
-    }
 
     /**
      * Fournit une instance du modèle Offre.

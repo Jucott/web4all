@@ -35,7 +35,7 @@
         votre recherche d’entreprise.
     </p>
 
-    <a href="/entreprise/recherche" class="btn-primary">
+    <a href="<?= CDN . PREFIX ?>/entreprise/recherche" class="btn-primary">
         Rechercher une entreprise
     </a>
 </section>

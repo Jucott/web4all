@@ -16,7 +16,7 @@
     <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($filters['nom'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|alpha">
 
     <label for="prenom">Prénom</label>
-    <input type="text" name="prenom" id="prenom" value="<?= htmlspecialchars($filters['prenom'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|alpha|min:10">
+    <input type="text" name="prenom" id="prenom" value="<?= htmlspecialchars($filters['prenom'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|alpha">
 
     <label for="email">Email</label>
     <input type="email" id="email" name="email" value="<?= htmlspecialchars($filters['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" data-validate="required|email">
@@ -44,7 +44,7 @@
     <input type="password" name="passwd" id="passwd" data-validate="required|alpha">
     
     <button type="submit">Sauve</button>
-    <button type="button" onclick="window.location.href='/ident/recherche'">Annule</button>
+    <button type="button" onclick="window.location.href='<?= CDN . PREFIX ?>/ident/recherche'">Annule</button>
 
 </form>
 
