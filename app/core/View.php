@@ -1,7 +1,8 @@
 <?php
 
-use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
 /**
  * Gestionnaire de rendu des vues.
  *
@@ -10,7 +11,6 @@ use Twig\Environment;
  */
 class View
 {
-
     private static $twig;
 
 
@@ -69,7 +69,7 @@ class View
 
         die("Vue introuvable : " . htmlspecialchars($view));
     }
-    
+
 
     /**
      * Construit un tableau de pagination pour affichage.
@@ -113,15 +113,15 @@ class View
         return $pages;
     }
 
-    public static function Dumper($data): void 
+    public static function Dumper($data): void
     {
         echo '<pre>' . print_r($data, true) . '</pre>';
     }
 
 
-    public static function button(array $config, bool $toprint): ?string
+    public static function button(array $config, bool $toprint = true): ?string
     {
-        $roleId = Auth::roleId();    
+        $roleId = Auth::roleId();
         if (!Auth::can($config['permission'], $roleId)) {
             return null;
         }
@@ -150,7 +150,7 @@ class View
 
         // contenu
         $content = $config['icon'] ?? '';
-        if ($toprint){
+        if ($toprint) {
             echo sprintf(
                 '<a href="%s" class="%s"%s>%s</a>',
                 $fullUrl,
@@ -159,8 +159,7 @@ class View
                 $content
             );
             return null;
-        }
-        else {
+        } else {
             return sprintf(
                 '<a href="%s" class="%s"%s>%s</a>',
                 $fullUrl,

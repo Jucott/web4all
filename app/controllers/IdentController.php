@@ -225,12 +225,14 @@ class IdentController extends Controller
         $old_ident = $identModel->findById($id);
 
         if ($old_ident['id_role'] < Auth::roleId()){
+            // Interdiction de modifier une fiche dont le role est < à moi même (escalade de droit)
             $this->redirect('/ident/recherche');
         }
         if ($old_ident['id_role'] > Auth::roleId()){
-        }
+            // Possibilité de modofoer des fiche dont le role est > à moi (subalternes)
         elseif ($old_ident['id_role'] == Auth::roleId()){
             if ((int)($id) !== (int)($_SESSION['user']['id'])){
+                // Interdiction de modifier une fiche possédant le même role que moi
                 $this->redirect('/ident/recherche');
             }
         }
@@ -394,6 +396,7 @@ class IdentController extends Controller
 
         // Affichage formulaire (GET)
         $this->render('ident/modify', [
+            
             'ident'         => $old_ident,
             'errors'        => [],
             'roles'         => $roles,

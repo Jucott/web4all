@@ -31,29 +31,6 @@
             <?= !isset($filters['valide']) ? 'checked' : ($filters['valide'] ? 'checked' : '') ?>>
     </label>
 
-    <label for="logo">Logo</label>
-    <input type="file" id="logo" name="logo">
-
-    <label for="date_creation">Date de création</label>
-    <input type="date" id="date_creation" name="date_creation">
-
-    <label>Evaluation</label>
-    <input type="hidden" name="evaluation" id="evaluation">
-    <div class="stars-rating">
-        <span data-value="1">☆</span>
-        <span data-value="2">☆</span>
-        <span data-value="3">☆</span>
-        <span data-value="4">☆</span>
-        <span data-value="5">☆</span>
-    </div>
-    
-
-    <label>Domaines</label>
-    <label><input type="checkbox" name="domaine[]" value="d1"> Domaine 1</label>
-    <label><input type="checkbox" name="domaine[]" value="d2"> Domaine 2</label>
-    <label><input type="checkbox" name="domaine[]" value="d3"> Domaine 3</label>
-    <label><input type="checkbox" name="domaine[]" value="d4"> Domaine 4</label>
-
     <button type="submit">Sauve</button>
     <button type="button" onclick="window.location.href='<?= CDN . PREFIX ?>/entreprise/recherche'">Annule</button>
 

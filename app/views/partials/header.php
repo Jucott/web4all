@@ -2,11 +2,13 @@
     <div class="logo"><img src="<?= STATIQUE . PREFIX ?>/app-icons/icon-192.png" alt="LOGO" width="30" height="30"></div>
     <h1 class="title"><?= APP_NAME ?></h1>
     <div class="burger">☰</div>
-    <?php $menus = Menu::get(); ?>
+    <?php $menus = Menu::get(Auth::roleId()); ?>
     <nav class="nav">
         <ul>
             <?php foreach ($menus as $menu => $items): ?>
-                <?php if (empty($menu)){ continue; } ?>
+                <?php if (empty($menu)) {
+                    continue;
+                } ?>
                 <li class="menu-group">
                     <span><?= htmlspecialchars($menu, ENT_QUOTES, 'UTF-8') ?></span>
                     <ul>

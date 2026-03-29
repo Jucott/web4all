@@ -16,7 +16,7 @@ class Offre extends Model
     /**
      * Recherche des offres selon des filtres et pagine les résultats.
      *
-     * @param array $filters Tableau clé => valeur pour filtrer 
+     * @param array $filters Tableau clé => valeur pour filtrer
      * @param int $page Page courante (>=1)
      * @param int $perPage Nombre d'enregistrements par page
      * @return array ['results' => array, 'total' => int]
@@ -36,22 +36,22 @@ class Offre extends Model
             $params[] = ['remuneration', $filters['remuneration'] * 0.9, '>='];
         }
 
-        if (empty($filters['date_offre'])){
+        if (empty($filters['date_offre'])) {
             $params[] = ['date_offre', $filters['date_offre'], '>='];
         }
-        
+
         if (is_bool($filters['valide'])) {
             $params[] = ['valide', $filters['valide'], '='];
         }
-        
+
         // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
-        
+
         // Pagination
         $offset = ($page - 1) * $perPage;
         $limit_offset['limit']    = (int)($perPage);
         $limit_offset['offset']   = (int)($offset);
-        
+
         // Requete de recherche
         return [
             'results' => $this->findBy($params, 'titre ASC', $limit_offset),

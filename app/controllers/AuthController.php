@@ -2,13 +2,12 @@
 
 /**
  * Contrôleur d'authentification.
- * 
+ *
  * Gère les actions liées à l'authentification des utilisateurs :
  * connexion et déconnexion.
  */
 class AuthController extends Controller
 {
-
     /**
      * Gère la connexion utilisateur.
      *
@@ -72,7 +71,7 @@ class AuthController extends Controller
             ];
             // Chargement en cache des menus
             Menu::reset();
-            Menu::get();
+            Menu::get($user['id_role']);
             // Chargement et stockage des permissions associées au rôle
             $_SESSION['permissions'] = $auth->getPermissions($user['id_role']);
 

@@ -58,15 +58,18 @@ class Menu
             if (!isset($menu[$menuName])) {
                 $menu[$menuName] = [];
             }
-
+            $addon = '';
+            if ((string)($row['menu']) === 'Ident' && (string)($row['label']) === 'Modify') {
+                $addon = $_SESSION['user']['id'];
+            }
             $menu[$menuName][] = [
                 'label' => $row['label'],
                 'menu' => $row['menu'],
-                'url' => '/' . ltrim($row['url'], '/'), // garantit /url absolue
+                'url' => '/' . ltrim($row['url'], '/'.$addon), // garantit /url absolue
             ];
         }
 
-        if ($id_role === null){
+        if ($id_role === null) {
             // Sauvegarde du menu par rôle pour eviter les futures requetes
             $_SESSION['menu'] = $menu;
         }
@@ -75,7 +78,7 @@ class Menu
 
     /**
      * Réinitialise le menu en session.
-     * 
+     *
      * Utile pour tests unitaires ou après changement de rôle/permissions.
      */
     public static function reset(): void
