@@ -35,18 +35,15 @@ class Ident extends Model
         if (!empty($filters['email'])) {
             $params[] = ['email', $filters['email'], 'ILIKE'];
         }
-        
-        if (empty($filters['id_role']) || $filters['id_role'] == -1){
+
+        if (empty($filters['id_role']) || $filters['id_role'] == -1) {
             $params[] = ['id_role', Auth::user()['id_role'], '>='];
-        }
-        elseif (!empty($filters['id_role'])){
+        } elseif (!empty($filters['id_role'])) {
             if ((string)($filters['id_role']) > (string)(Auth::user()['id_role'])) {
                 $params[] = ['id_role', $filters['id_role'], '='];
-            }
-            elseif ((string)($filters['id_role']) == (string)(Auth::user()['id_role'])) {
+            } elseif ((string)($filters['id_role']) == (string)(Auth::user()['id_role'])) {
                 $params[] = ['id_ident', Auth::user()['id'], '='];
-            }
-            else {
+            } else {
                 $params[] = ['id_role', Auth::user()['id_role'], '>'];
             }
         }
@@ -54,15 +51,15 @@ class Ident extends Model
         if (is_bool($filters['valide'])) {
             $params[] = ['valide', $filters['valide'], '='];
         }
-        
+
         // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
-        
+
         // Pagination
         $offset = ($page - 1) * $perPage;
         $limit_offset['limit']    = (int)($perPage);
         $limit_offset['offset']   = (int)($offset);
-        
+
         // Requete de recherche
         return [
             'results' => $this->findBy($params, 'nom ASC', $limit_offset),
@@ -92,7 +89,7 @@ class Ident extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    
+
 
 
 }

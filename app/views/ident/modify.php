@@ -144,20 +144,20 @@
                                     'icon'       => '✏',
                                     'title'      => 'Modifier',
                                 ]);
-                        ?>
+                ?>
                         
                         <!-- 🗑 Delete -->
                         <?php View::button([
-                                    'permission' => 'postule_delete',
-                                    'url'        => '/postule/delete/'.$item['id_offre'],
-                                    'class'      => 'delete',
-                                    'icon'       => '🗑',
-                                    'title'      => 'Supprimer',
-                                    'attributes' => [
-                                        'onclick' => "return confirm('Confirmer la suppression ?');"
-                                    ]
-                                ]);
-                        ?>
+                            'permission' => 'postule_delete',
+                            'url'        => '/postule/delete/'.$item['id_offre'],
+                            'class'      => 'delete',
+                            'icon'       => '🗑',
+                            'title'      => 'Supprimer',
+                            'attributes' => [
+                                'onclick' => "return confirm('Confirmer la suppression ?');"
+                            ]
+                        ]);
+                ?>
 
                     </div>
                     <div class="card-right">

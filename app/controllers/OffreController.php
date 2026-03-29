@@ -80,7 +80,7 @@ class OffreController extends Controller
             $id_offre = $offre->create($filters);
 
             // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
-            if (! $validator->containsIntGreaterThan0($_POST['competences'])){
+            if (! $validator->containsIntGreaterThan0($_POST['competences'])) {
                 return $this->render('offre/create', [
                     'errors' => ['id_competence invalide'],
                     'filters' => $filters,
@@ -348,7 +348,7 @@ class OffreController extends Controller
             $offreModel->update($id, $offre);
 
             // TODO : vérifier que le tableau $_POST['competences'] contient des integer supérieurs à 0
-            if (! $validator->containsIntGreaterThan0($_POST['competences'])){
+            if (! $validator->containsIntGreaterThan0($_POST['competences'])) {
                 return $this->render('offre/modify', [
                     'errors'      => ['id_competence invalide'],
                     'offre'       => $offre,

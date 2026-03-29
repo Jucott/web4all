@@ -41,14 +41,14 @@ class Evaluation extends Model
 
     public function moyenne(int $id_entreprise): array
     {
-        $ret=['moyenne' => 0, 'count' => 0];
+        $ret = ['moyenne' => 0, 'count' => 0];
         $sql = "SELECT COUNT(*) AS nbre, ROUND(AVG(note)::numeric, 2) AS moyenne FROM {$this->table} WHERE id_entreprise =  :id_entreprise;";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['id_entreprise' => $id_entreprise]);
         $r = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($r) {
-            $ret=[
+            $ret = [
                 'moyenne'   => $r['moyenne'],
                 'nbre'      => $r['nbre'],
             ];

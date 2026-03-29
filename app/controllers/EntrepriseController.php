@@ -77,10 +77,10 @@ class EntrepriseController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('entreprise/create', [ 
+        $this->render('entreprise/create', [
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
             'errors'        => [],
-            'filters'       => $filters 
+            'filters'       => $filters
         ]);
     }
 
@@ -101,7 +101,7 @@ class EntrepriseController extends Controller
             'email'         => null,
             'valide'        => true,
         ];
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
@@ -161,9 +161,9 @@ class EntrepriseController extends Controller
             // Calcul du nombre total de pages
             $totalPages = ceil($total / $perPage);
 
-            $resultat=[];
+            $resultat = [];
             $evaluationModel = new Evaluation();
-            foreach ($results as $res){
+            foreach ($results as $res) {
                 $r = $evaluationModel->moyenne($res['id_entreprise']);
                 $resultat[$res['id_entreprise']] = $res;
                 $resultat[$res['id_entreprise']]['eval_moyenne']    = $r['moyenne'];
@@ -174,10 +174,9 @@ class EntrepriseController extends Controller
                     ['id_ident'     , $_SESSION['user']['id']   , "="],
                     ['id_entreprise', $res['id_entreprise']     , "="],
                 ]);
-                if (isset($notation[0])){
+                if (isset($notation[0])) {
                     $resultat[$res['id_entreprise']]['in_evaluate'] = 1;
-                }
-                else {
+                } else {
                     $resultat[$res['id_entreprise']]['in_evaluate'] = 0;
                 }
 
@@ -189,14 +188,14 @@ class EntrepriseController extends Controller
                                                 'class'      => 'wishlist',
                                                 'icon'       => '☆',
                                                 'title'      => 'Evaluer',
-                                            ], false ),                  // retourne string
+                                            ], false),                  // retourne string
                     'edit'     => View::button([
                                                 'permission' => 'entreprise_modify',
                                                 'url'        => '/entreprise/modify/'.$res['id_entreprise'],
                                                 'class'      => 'edit',
                                                 'icon'       => '✏',
                                                 'title'      => 'Modifier',
-                                            ], false ),                  // retourne string
+                                            ], false),                  // retourne string
                     'delete'   => View::button([
                                                 'permission' => 'entreprise_delete',
                                                 'url'        => '/entreprise/delete/'.$res['id_entreprise'],
@@ -206,11 +205,11 @@ class EntrepriseController extends Controller
                                                 'attributes' => [
                                                     'onclick' => "return confirm('Confirmer la suppression ?');"
                                                 ]
-                                            ], false ),                 // retourne string
+                                            ], false),                 // retourne string
                 ];
 
             }
-            
+
             // Rendu des résultats
             return $this->render('entreprise/recherche', [
                 'csrf_token'    => $_SESSION['csrf_token'] ?? '',
@@ -322,7 +321,7 @@ class EntrepriseController extends Controller
             // Redirection après succès
             $this->redirect('/entreprise/recherche');
         }
-        
+
         // Affichage formulaire (GET)
         $this->render('entreprise/modify', [
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
@@ -358,7 +357,8 @@ class EntrepriseController extends Controller
         $this->redirect('/entreprise/recherche');
     }
 
-    protected function url($path = '') {
+    protected function url($path = '')
+    {
         return BASE_URL . '/' . ltrim($path, '/');
     }
 
@@ -368,7 +368,7 @@ class EntrepriseController extends Controller
      * Envoie un header Location puis termine l'exécution du script.
      *
      * @param string $url URL de destination
-     * 
+     *
      * @return void
      */
     protected function redirect($url)

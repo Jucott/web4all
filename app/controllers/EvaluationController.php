@@ -81,17 +81,17 @@ class EvaluationController extends Controller
                 ]);
             }
             // Mettre a jour la notation
-            if (    isset($_POST['evaluation'])
-                    &&  (int)($_POST['evaluation']) > 0 
-                    &&  (int)($_POST['evaluation']) <= 5){
-                
+            if (isset($_POST['evaluation'])
+                    &&  (int)($_POST['evaluation']) > 0
+                    &&  (int)($_POST['evaluation']) <= 5) {
+
                 $evaluationModel->evaluate($id, (int)($_POST['evaluation']), $_POST['commentaire']);
             }
 
             // Redirection après succès
             $this->redirect('/entreprise/recherche');
         }
-        
+
         // Affichage formulaire (GET)
         $this->render('evaluation/create', [
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',

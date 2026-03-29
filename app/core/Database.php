@@ -2,7 +2,7 @@
 
 /**
  * Gestionnaire de connexion à la base de données.
- * 
+ *
  * Implémente le pattern Singleton afin de garantir
  * une seule instance de connexion PDO dans l'application.
  */
@@ -40,7 +40,7 @@ class Database
             $db   = $_ENV['DB_NAME'];
 
             $dsn = "pgsql:host=$host;port=$port;dbname=$db";
-            
+
 
             try {
                 self::$instance = new PDO(

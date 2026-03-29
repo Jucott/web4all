@@ -82,20 +82,20 @@
                                 'icon'       => '✏',
                                 'title'      => 'Modifier',
                             ]);
-                    ?>
+            ?>
 
                     <!-- 🗑 Delete -->
                     <?php View::button([
-                                'permission' => 'entreprise_delete',
-                                'url'        => '/entreprise/delete/'.$entreprise['id_entreprise'],
-                                'class'      => 'delete',
-                                'icon'       => '🗑',
-                                'title'      => 'Supprimer',
-                                'attributes' => [
-                                    'onclick' => "return confirm('Confirmer la suppression ?');"
-                                ]
-                            ]);
-                    ?>
+                        'permission' => 'entreprise_delete',
+                        'url'        => '/entreprise/delete/'.$entreprise['id_entreprise'],
+                        'class'      => 'delete',
+                        'icon'       => '🗑',
+                        'title'      => 'Supprimer',
+                        'attributes' => [
+                            'onclick' => "return confirm('Confirmer la suppression ?');"
+                        ]
+                    ]);
+            ?>
                 </div>
             </div>
         <?php endforeach; ?>

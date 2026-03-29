@@ -64,7 +64,7 @@ class StaticController extends Controller
             foreach ($items as $item) {
                 // on retire le slash initial pour concaténation
                 $url = ltrim($item['url'], '/');
-                if (!empty($item['label'])){
+                if (!empty($item['label'])) {
                     if (!in_array(['url' => $url], $pages)) {
                         $pages[] = ['url' => $url, 'label' => $item['label'], 'menu' => $group];
                     }

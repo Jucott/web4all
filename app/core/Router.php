@@ -115,7 +115,7 @@ class Router
             //http_response_code(403);
             //die("Accès interdit : permission '$permission'");
         }
-        
+
         return true;
     }
 

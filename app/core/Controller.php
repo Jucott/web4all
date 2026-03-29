@@ -2,7 +2,7 @@
 
 /**
  * Classe de base des contrôleurs.
- * 
+ *
  * Fournit des méthodes utilitaires communes à tous les contrôleurs :
  * - Rendu des vues
  * - Redirections HTTP
@@ -17,7 +17,7 @@ class Controller
      *
      * @param string $view Nom de la vue (ex: 'home/index')
      * @param array $data Données à transmettre à la vue
-     * 
+     *
      * @return void
      */
     protected function render($view, $data = [])
@@ -25,7 +25,8 @@ class Controller
         View::render($view, $data);
     }
 
-    protected function url($path = '') {
+    protected function url($path = '')
+    {
         return BASE_URL . '/' . ltrim($path, '/');
     }
 
@@ -35,7 +36,7 @@ class Controller
      * Envoie un header Location puis termine l'exécution du script.
      *
      * @param string $url URL de destination
-     * 
+     *
      * @return void
      */
     protected function redirect($url)

@@ -2,10 +2,10 @@
 
 /**
  * Autoloader de l'application.
- * 
+ *
  * Permet le chargement automatique des classes sans avoir besoin
  * d'inclure manuellement les fichiers avec require/include.
- * 
+ *
  * Fonctionnement :
  * - Recherche le fichier correspondant au nom de la classe
  * - Parcourt plusieurs répertoires (core, models, controllers)

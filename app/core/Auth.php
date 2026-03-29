@@ -40,24 +40,24 @@ class Auth
     {
         $roleId = $roleId ?? self::roleId();
 
-        
+
         // 0. Cas permission in whitelist -> tjs autorisées pour tout le monde
         $whitelist = [
             'home_index',
             'auth_login',
             'auth_logout',
+            'static_sitemap',
             'static_unauthorized',
         ];
-        if (in_array($permission, $whitelist)){
+        if (in_array($permission, $whitelist)) {
             return true;
         }
 
         // 1. Cas utilisateur connecté → session
         if (isset($_SESSION['permissions'])) {
-            if (isset($_SESSION['permissions'][$permission])){
+            if (isset($_SESSION['permissions'][$permission])) {
                 return (bool) $_SESSION['permissions'][$permission];
-            }
-            else {
+            } else {
                 return false;
             }
         }

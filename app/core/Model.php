@@ -67,7 +67,7 @@ abstract class Model
      *              ['nom', '%toto%', 'ILIKE'],
      *              ['age', 5, '>='],
      *          ];
-     * 
+     *
      *          $results = $model->findBy($criteria, 'nom ASC', [
      *              'limit' => 10,
      *              'offset' => 0
@@ -369,7 +369,7 @@ abstract class Model
     public function update($id, array $data): bool
     {
 
-        $set = implode(',', array_map(fn($k) => "$k = :$k", array_keys($data)));
+        $set = implode(',', array_map(fn ($k) => "$k = :$k", array_keys($data)));
         $data[$this->primaryKey] = $id;
 
         $sql = "UPDATE {$this->table} SET $set
@@ -494,14 +494,14 @@ abstract class Model
         }
 
         // Processing de $data afin de fabriquer la clause SET
-        $set = implode(',', array_map(fn($k) => "$k = :$k", array_keys($data)));
+        $set = implode(',', array_map(fn ($k) => "$k = :$k", array_keys($data)));
 
         $sql = "UPDATE {$this->table} SET $set ";
 
         if (!empty($conditions)) {
             $sql .= " WHERE " . implode(' AND ', $conditions);
         }
-        
+
         //var_dump($sql); var_dump($data); exit;
         $stmt = $this->db->prepare($sql);
 

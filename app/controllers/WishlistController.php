@@ -2,16 +2,15 @@
 
 /**
  * Contrôleur de wishlist
- * 
+ *
  * Gère les fonctionnalités liées à la gestion de la wishliste
  */
 class WishlistController extends Controller
 {
-
     /**
      * Appel Ajax pour ajouter une offre dans la wishliste
      *
-     * - En POST : 
+     * - En POST :
      *
      * @return void
      */
@@ -22,8 +21,7 @@ class WishlistController extends Controller
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405);
             return;
-        }
-        else {
+        } else {
 
             // CSRF
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
@@ -33,14 +31,13 @@ class WishlistController extends Controller
             }
 
             $wishlistModel = new Wishlist();
-            if ((int)($_POST['value']) === 1){
+            if ((int)($_POST['value']) === 1) {
                 $rows = [
                     [ $_POST['id_offre'], $_SESSION['user']['id']   , (new DateTime())->format('Y-m-d H:i:s')]
                 ];
                 // On insère les data
                 $wishlistModel->insert(['id_offre', 'id_ident', 'date_wishlist'], $rows);
-            }
-            else {
+            } else {
                 $rows = [
                     [ 'id_offre', $_POST['id_offre']        , '='],
                     [ 'id_ident', $_SESSION['user']['id']   , '='],

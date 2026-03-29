@@ -2,13 +2,12 @@
 
 /**
  * Contrôleur d'administration.
- * 
+ *
  * Gère les fonctionnalités liées à l'administration du site,
  * notamment la gestion des rôles et des permissions.
  */
 class AdminController extends Controller
 {
-
     /**
      * Affiche et traite la matrice des permissions.
      *

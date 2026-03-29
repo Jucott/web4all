@@ -4,7 +4,7 @@ class Datanormalizer
 {
     public static function normalizeWithSchema(array $data, array $schema): array
     {
-        $retour=[];
+        $retour = [];
         foreach ($schema as $field => $type) {
 
             $value = $data[$field] ?? null;

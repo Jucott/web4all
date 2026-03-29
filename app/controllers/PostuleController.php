@@ -62,7 +62,7 @@ class PostuleController extends Controller
                 'file_cv'               => bin2hex(random_bytes(16)) . '.pdf',
             ];
 
-            
+
             $userDir = UPLOAD_DIR . '/' . $_SESSION['user']['id'] . '/';
 
             // 🔧 créer le dossier si inexistant
@@ -95,7 +95,7 @@ class PostuleController extends Controller
                 // 💾 chemin relatif pour BDD
                 $filters[$inputName] = "/uploads/" . $_SESSION['user']['id'] . "/" . $filters[$inputName];
             }
-            
+
             // Création en base
             $postuleModel = new PostuleModel();
 
@@ -103,15 +103,15 @@ class PostuleController extends Controller
             if ($postuleModel->existsBy([
                                             ['id_offre', $id, '=' ],
                                             ['id_ident', $_SESSION['user']['id'], '='],
-                                        ])){
-                $postuleModel->updateWithCriteria(  $filters, 
-                                                    [
+                                        ])) {
+                $postuleModel->updateWithCriteria(
+                    $filters,
+                    [
                                                         ['id_offre', $id, '=' ],
                                                         ['id_ident', $_SESSION['user']['id'], '='],
                                                     ]
                 );
-            }
-            else {
+            } else {
                 // Aucun enregistrement existe -> creation
                 $k = array_keys($filters);
                 $v = [];
@@ -122,7 +122,7 @@ class PostuleController extends Controller
             // Suppression de la wishlist
             $wishlistModel = new Wishlist();
             $wishlistModel->deleteWithCriteria([
-                ['id_offre' , $id                       , "=" ], 
+                ['id_offre' , $id                       , "=" ],
                 ['id_ident' , $_SESSION['user']['id']   , '=' ],
             ]);
 
@@ -275,7 +275,7 @@ class PostuleController extends Controller
         $offre = $offreModel->getOffre($id);
         $postuleModel = new PostuleModel();
         $filters = $postuleModel->getPostuleDataByOffreAndIdent($id, Auth::user()['id']);
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
                 http_response_code(403);
@@ -326,7 +326,7 @@ class PostuleController extends Controller
                 // 💾 chemin relatif pour BDD
                 $filters[$inputName] = "/uploads/" . $_SESSION['user']['id'] . "/" . $filters[$inputName];
             }
-            
+
             // Mise à jour en base
             $postule = new PostuleModel();
             $postule->updateWithCriteria($filters, [ ['id_offre', $id, '='], ['id_ident', $_SESSION['user']['id'], '='] ]);
@@ -334,7 +334,7 @@ class PostuleController extends Controller
             // Redirection après succès
             $this->redirect('/ident/modify/'.$_SESSION['user']['id']);
         }
-        
+
         $filters[0]['file_cv'] = basename($filters[0]['file_cv']);
         $filters[0]['file_lm'] = basename($filters[0]['file_lm']);
         // Affichage formulaire (GET)

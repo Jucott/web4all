@@ -4,7 +4,7 @@ require_once __DIR__ . '/../core/Controller.php';
 
 /**
  * Contrôleur principal (page d'accueil).
- * 
+ *
  * Gère l'affichage de la page d'accueil de l'application
  * ainsi que certaines redirections simples.
  */

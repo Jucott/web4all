@@ -82,11 +82,11 @@ class IdentController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('ident/create', [ 
+        $this->render('ident/create', [
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
-            'errors'        => [], 
-            'roles'         => $roles, 
-            'filters'       => $filters 
+            'errors'        => [],
+            'roles'         => $roles,
+            'filters'       => $filters
         ]);
     }
 
@@ -171,13 +171,12 @@ class IdentController extends Controller
 
             // Dans le cas ou un role est identique à celui qui consulte
             // Alors possibilite de modifier/supprimer que sa propre fiche
-            foreach ($results as &$item){
-                if (        $item['id_role'] == Auth::user()['id_role']
+            foreach ($results as &$item) {
+                if ($item['id_role'] == Auth::user()['id_role']
                         &&  $item['id_ident'] != Auth::user()['id']
-                    ){
+                ) {
                     $item['not_me'] = 1;
-                }
-                else {
+                } else {
                     $item['not_me'] = 0;
                 }
             }
@@ -224,19 +223,19 @@ class IdentController extends Controller
         $identModel = $this->getIdentModel();
         $old_ident = $identModel->findById($id);
 
-        if ($old_ident['id_role'] < Auth::roleId()){
+        if ($old_ident['id_role'] < Auth::roleId()) {
             // Interdiction de modifier une fiche dont le role est < à moi même (escalade de droit)
             $this->redirect('/ident/recherche');
         }
-        if ($old_ident['id_role'] > Auth::roleId()){
-            // Possibilité de modofoer des fiche dont le role est > à moi (subalternes)
-        elseif ($old_ident['id_role'] == Auth::roleId()){
-            if ((int)($id) !== (int)($_SESSION['user']['id'])){
+        if ($old_ident['id_role'] > Auth::roleId()) {
+            // Possibilité de modifoer des fiche dont le role est > à moi (subalternes)
+        } elseif ($old_ident['id_role'] == Auth::roleId()) {
+            if ((int)($id) !== (int)($_SESSION['user']['id'])) {
                 // Interdiction de modifier une fiche possédant le même role que moi
                 $this->redirect('/ident/recherche');
             }
         }
-        
+
 
         $etudiants = $identModel->getEtudiants();
 
@@ -248,7 +247,7 @@ class IdentController extends Controller
 
         $postuleModel = new PostuleModel();
         $postule = $postuleModel->getPostuleData($id);
-        
+
         $roleModel = new Role();
         $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         // Vérification existence
@@ -265,7 +264,7 @@ class IdentController extends Controller
                 http_response_code(403);
                 die("CSRF token invalide");
             }
-            $students=[];
+            $students = [];
             switch ($_POST['form_type'] ?? '') {
 
                 case 'update_profile':
@@ -324,9 +323,9 @@ class IdentController extends Controller
                         }
                     }
 
-                    if (in_array((int)($ident['id_role']), PILOTE)){
+                    if (in_array((int)($ident['id_role']), PILOTE)) {
                         // Je suis un pilote -> gestion des étudiants à gérer... (cf tableau $_POST['etudiants'])
-                        if (! $validator->containsIntGreaterThan0($_POST['etudiants'])){
+                        if (! $validator->containsIntGreaterThan0($_POST['etudiants'])) {
                             return $this->render('ident/modify', [
                                 'errors'        => ['id_etudiant invalide'],
                                 'ident'         => $ident,
@@ -337,7 +336,7 @@ class IdentController extends Controller
                                 'etu_selected'  => $etudiantsSelectionnes,
                             ]);
                         }
-                        foreach ($_POST['etudiants'] as $etu){
+                        foreach ($_POST['etudiants'] as $etu) {
                             $students[] = [$id, (int)($etu)];
                         }
                     }
@@ -376,14 +375,14 @@ class IdentController extends Controller
                     die('Formulaire inconnu');
             }
 
-            
+
 
             // Mise à jour
             $identModel->update($id, $ident);
 
-            
+
             // Ajout des étudiants en gestion
-            if ($students){
+            if ($students) {
                 $etudiantModel->deleteWithCriteria([
                     [ 'id_ident', $id, '=' ],
                 ]);                                                                     // suppression des anciennes associations
@@ -396,7 +395,7 @@ class IdentController extends Controller
 
         // Affichage formulaire (GET)
         $this->render('ident/modify', [
-            
+
             'ident'         => $old_ident,
             'errors'        => [],
             'roles'         => $roles,

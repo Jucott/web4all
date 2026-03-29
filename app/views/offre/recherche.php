@@ -95,20 +95,20 @@
                                 'icon'       => '✏',
                                 'title'      => 'Modifier',
                             ]);
-                    ?>
+            ?>
 
                     <!-- 🗑 Delete -->
                     <?php View::button([
-                                'permission' => 'offre_delete',
-                                'url'        => '/offre/delete/'.$offre['id_offre'],
-                                'class'      => 'delete',
-                                'icon'       => '🗑',
-                                'title'      => 'Supprimer',
-                                'attributes' => [
-                                    'onclick' => "return confirm('Confirmer la suppression ?');"
-                                ]
-                            ]);
-                    ?>
+                        'permission' => 'offre_delete',
+                        'url'        => '/offre/delete/'.$offre['id_offre'],
+                        'class'      => 'delete',
+                        'icon'       => '🗑',
+                        'title'      => 'Supprimer',
+                        'attributes' => [
+                            'onclick' => "return confirm('Confirmer la suppression ?');"
+                        ]
+                    ]);
+            ?>
                 </div>
             </div>
         <?php endforeach; ?>

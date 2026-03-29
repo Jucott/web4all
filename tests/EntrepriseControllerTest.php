@@ -96,7 +96,7 @@ class EntrepriseControllerTest extends TestCase
             ->method('render')
             ->with(
                 'entreprise/recherche',
-                $this->callback(fn($params) => array_key_exists('errors', $params))
+                $this->callback(fn ($params) => array_key_exists('errors', $params))
             );
 
         $_SERVER['REQUEST_METHOD'] = 'POST';
