@@ -34,36 +34,36 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 
 ## 📊 Tableau de suivi des spécifications fonctionnelles
 
-| ID    | Catégorie       | Fonctionnalité                        | Description courte                                    | Données principales                                                                  | Statut |
-| ----- | --------------- | ------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------ | ------ |
-| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles           | email, mot de passe, rôle                                                            | ✅      |
-| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + **offres liées**     | nom, description, contact, **nb candidatures**, moyenne évaluations                  | 🟡      |
-| SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                             | nom, description, contact                                                            | ✅      |
-| SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                         | nom, description, contact                                                            | ✅      |
-| SFx5  | Entreprises     | Évaluer entreprise                    | Notation entreprise                                   | évaluation                                                                           | ✅      |
-| SFx6  | Entreprises     | Supprimer entreprise                  | Suppression entreprise                                | -                                                                                    | ✅      |
-| SFx7  | Offres          | Rechercher & afficher offre           | Recherche multicritères offre                         | entreprise, titre, description, compétences, rémunération, date, nb candidatures     | ✅      |
-| SFx8  | Offres          | Créer offre                           | Création offre                                        | compétences, titre, description, entreprise, rémunération, date                      | ✅      |
-| SFx9  | Offres          | Modifier offre                        | Modification offre                                    | compétences, titre, description, entreprise, rémunération, date                      | ✅      |
-| SFx10 | Offres          | Supprimer offre                       | Suppression offre                                     | -                                                                                    | ✅      |
-| SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                            | répartition durée, top wishlist, total offres, moyenne candidatures                  | ⬜      |
-| SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                               | nom, prénom                                                                          | ✅      |
-| SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                                | nom, prénom                                                                          | ✅      |
-| SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                            | nom, prénom                                                                          | ✅      |
-| SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                             | -                                                                                    | ✅      |
-| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + **état recherche stage**                  | nom, prénom, email                                                                   | 🟡      |
-| SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                              | nom, prénom, email                                                                   | ✅      |
-| SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                          | nom, prénom, email                                                                   | ✅      |
-| SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                           | -                                                                                    | ✅      |
-| SFx20 | Candidatures    | Postuler à une offre                  | Envoi CV + LM                                         | offre, CV, LM                                                                        | ✅      |
-| SFx21 | Candidatures    | Voir candidatures étudiant            | Liste des offres postulées                            | offre, CV, LM                                                                        | ✅      |
-| SFx22 | Candidatures    | Voir candidatures des élèves (pilote) | Liste des candidatures des étudiants du pilote        | offre, CV, LM                                                                        | ⬜      |
-| SFx23 | Wish-list       | Afficher wish-list                    | Voir offres ajoutées                                  | -                                                                                    | ✅      |
-| SFx24 | Wish-list       | Ajouter à wish-list                   | Ajouter offre                                         | offre                                                                                | ✅      |
-| SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                           | offre                                                                                | ✅      |
-| SFx27 | Transversal     | Pagination                            | Pagination sur listes                                 | -                                                                                    | ✅      |
-| SFx28 | Transversal     | Mentions légales                      | Conformité légale                                     | -                                                                                    | ✅      |
-| BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                         | -                                                                                    | ✅      |
+| ID    | Catégorie       | Fonctionnalité                        | Description courte                                | Données principales                                                              | Statut |
+| ----- | --------------- | ------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
+| SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles       | email, mot de passe, rôle                                                        | ✅      |
+| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + **offres liées** | nom, description, contact, **nb candidatures**, moyenne évaluations              | 🟡      |
+| SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                         | nom, description, contact                                                        | ✅      |
+| SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                     | nom, description, contact                                                        | ✅      |
+| SFx5  | Entreprises     | Évaluer entreprise                    | Notation entreprise                               | évaluation                                                                       | ✅      |
+| SFx6  | Entreprises     | Supprimer entreprise                  | Suppression entreprise                            | -                                                                                | ✅      |
+| SFx7  | Offres          | Rechercher & afficher offre           | Recherche multicritères offre                     | entreprise, titre, description, compétences, rémunération, date, nb candidatures | ✅      |
+| SFx8  | Offres          | Créer offre                           | Création offre                                    | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
+| SFx9  | Offres          | Modifier offre                        | Modification offre                                | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
+| SFx10 | Offres          | Supprimer offre                       | Suppression offre                                 | -                                                                                | ✅      |
+| SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                        | répartition durée, top wishlist, total offres, moyenne candidatures              | ⬜      |
+| SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                           | nom, prénom                                                                      | ✅      |
+| SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                            | nom, prénom                                                                      | ✅      |
+| SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                        | nom, prénom                                                                      | ✅      |
+| SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                         | -                                                                                | ✅      |
+| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + **état recherche stage**              | nom, prénom, email                                                               | 🟡      |
+| SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                          | nom, prénom, email                                                               | ✅      |
+| SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                      | nom, prénom, email                                                               | ✅      |
+| SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                       | -                                                                                | ✅      |
+| SFx20 | Candidatures    | Postuler à une offre                  | Envoi CV + LM                                     | offre, CV, LM                                                                    | ✅      |
+| SFx21 | Candidatures    | Voir candidatures étudiant            | Liste des offres postulées                        | offre, CV, LM                                                                    | ✅      |
+| SFx22 | Candidatures    | Voir candidatures des élèves (pilote) | Liste des candidatures des étudiants du pilote    | offre, CV, LM                                                                    | ⬜      |
+| SFx23 | Wish-list       | Afficher wish-list                    | Voir offres ajoutées                              | -                                                                                | ✅      |
+| SFx24 | Wish-list       | Ajouter à wish-list                   | Ajouter offre                                     | offre                                                                            | ✅      |
+| SFx25 | Wish-list       | Retirer de wish-list                  | Supprimer offre de la liste                       | offre                                                                            | ✅      |
+| SFx27 | Transversal     | Pagination                            | Pagination sur listes                             | -                                                                                | ✅      |
+| SFx28 | Transversal     | Mentions légales                      | Conformité légale                                 | -                                                                                | ✅      |
+| BONUS | Bonus           | PWA (Accès mobile)                    | Installation comme app mobile                     | -                                                                                | ✅      |
 
 
 
@@ -77,7 +77,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | STx4  | Pas de CMS             | Aucun CMS autorisé                                               | ✅      |
 | STx5  | Frameworks             | Pas de React/Vue/Laravel/Symfony                                 | ✅      |
 | STx6  | Stack technique        | Apache, HTML/CSS/JS, PHP, SGBD SQL                               | ✅      |
-| STx7  | Template engine        | Moteur de template backend obligatoire                           | ❌      |
+| STx7  | Template engine        | Moteur de template backend obligatoire                           | ✅      |
 | STx8  | Clés étrangères        | Utilisation FK en base                                           | ✅      |
 | STx9  | Vhost statique         | Vhost pour ressources statiques                                  | ✅      |
 | STx10 | Responsive             | Responsive + menu burger                                         | ✅      |
@@ -92,6 +92,8 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 - ✅ : Postgresql
     - : ✅ Base de données
 - ✅ : PHP
+- ✅ : Twig
+- ✅ : PHPUnit
 
 
 # VM Ubuntu 24.04 LTS virtualisée dans Oracle VirtualBox
@@ -161,6 +163,7 @@ sudo apt install bzip2 tar gcc make perl terminator php apache2 postgresql tree 
 sudo a2enmod php8.3
 ```
 
+------- Partie optionnelle : uniquement à faire dans le cas d'une image cirtuelle VirtualBox ---------
 Il vaut mieux installer les extensions VirtualBox afin (notamment) de bénéficier du "full screen" dans la VM.
 
 Pour cela, Cliquer sur "Périphériques" - "Insérer l'image CD des additions invitées"
@@ -174,6 +177,7 @@ reboot
 ```
 
 On peut à présent passer en full screen.
+------- Fin Partie optionnelle ---------
 
 ## Les paramétrages à faire
 
@@ -364,7 +368,6 @@ chmod 600 ~/.pgpass
 ```
 
 
-
 ### Le fichier `.env` contenant les secrets de l'application
 
 Situé à la racine du projet `/var/www/html/web4all/.env` il contient les secrets notamment ceux permettant la connexion à la database.
@@ -530,4 +533,20 @@ php-cs-fixer fix
 
 Pour qu'à chaque sauvegarde dans Vscode, les modifications respectant la conformité PSR-12 soit respectées, il faut installer l'extension : "php cs fixer"
 
+## PHPUnit et Twig
 
+Depuis la racine du projet, installer ces deux modules ainsi :
+
+```bash
+cd /var/www/hmtl/web4all
+composer require --dev phpunit/phpunit:^12
+sudo apt install php-xml php-mbstring php-curl php-zip
+sudo systemctl restart apache2
+composer require twig/twig
+```
+
+Pour tester le code de test sur la class Entreprise
+
+```bash
+php -d display_errors=1 ./vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/EntrepriseControllerTest.php
+```

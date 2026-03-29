@@ -42,7 +42,7 @@ class EvaluationController extends Controller
      */
     public function create($id)
     {
-        $entrepriseModel = $this->getEntrepriseModel();
+        $entrepriseModel = new Entreprise();
         $old_entreprise = $entrepriseModel->findById($id);
 
         $evaluationModel = new Evaluation();
@@ -75,8 +75,9 @@ class EvaluationController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('evaluation/create', [
-                    'errors'    => $validator->errors(),
-                    'entreprise' => $entreprise,
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'entreprise'    => $entreprise,
                 ]);
             }
             // Mettre a jour la notation
@@ -93,8 +94,9 @@ class EvaluationController extends Controller
         
         // Affichage formulaire (GET)
         $this->render('evaluation/create', [
-            'entreprise' => $old_entreprise,
-            'errors' => [],
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'entreprise'    => $old_entreprise,
+            'errors'        => [],
         ]);
     }
 
@@ -142,6 +144,7 @@ class EvaluationController extends Controller
 
         // Affichage formulaire (GET)
         return $this->render('evaluation/show', [
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
             'results'       => $results,
             'note'          => $note,
             'page'          => $page,

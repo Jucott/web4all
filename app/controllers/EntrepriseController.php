@@ -60,8 +60,9 @@ class EntrepriseController extends Controller
             // Retour formulaire avec erreurs
             if (!$valid) {
                 return $this->render('entreprise/create', [
-                    'errors' => $validator->errors(),
-                    'filters' => $filters,
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'filters'       => $filters,
                 ]);
             }
 
@@ -76,7 +77,11 @@ class EntrepriseController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('entreprise/create', [ 'filters' => $filters ]);
+        $this->render('entreprise/create', [ 
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'errors'        => [],
+            'filters'       => $filters 
+        ]);
     }
 
     /**
@@ -96,6 +101,7 @@ class EntrepriseController extends Controller
             'email'         => null,
             'valide'        => true,
         ];
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
@@ -135,12 +141,13 @@ class EntrepriseController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('entreprise/recherche', [
-                    'errors' => $validator->errors(),
-                    'filters' => $filters,
-                    'results' => [],
-                    'page' => 1,
-                    'totalPages' => 0,
-                    'pagination' => [],
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'filters'       => $filters,
+                    'results'       => [],
+                    'page'          => 1,
+                    'totalPages'    => 0,
+                    'pagination'    => [],
                 ]);
             }
 
@@ -173,10 +180,40 @@ class EntrepriseController extends Controller
                 else {
                     $resultat[$res['id_entreprise']]['in_evaluate'] = 0;
                 }
+
+                // gestion des boutons par entreprise
+                $resultat[$res['id_entreprise']]['buttons'] = [
+                    'evaluate' => View::button([
+                                                'permission' => 'evaluation_create',
+                                                'url'        => '/evaluation/create/'.$res['id_entreprise'],
+                                                'class'      => 'wishlist',
+                                                'icon'       => '☆',
+                                                'title'      => 'Evaluer',
+                                            ], false ),                  // retourne string
+                    'edit'     => View::button([
+                                                'permission' => 'entreprise_modify',
+                                                'url'        => '/entreprise/modify/'.$res['id_entreprise'],
+                                                'class'      => 'edit',
+                                                'icon'       => '✏',
+                                                'title'      => 'Modifier',
+                                            ], false ),                  // retourne string
+                    'delete'   => View::button([
+                                                'permission' => 'entreprise_delete',
+                                                'url'        => '/entreprise/delete/'.$res['id_entreprise'],
+                                                'class'      => 'delete',
+                                                'icon'       => '🗑',
+                                                'title'      => 'Supprimer',
+                                                'attributes' => [
+                                                    'onclick' => "return confirm('Confirmer la suppression ?');"
+                                                ]
+                                            ], false ),                 // retourne string
+                ];
+
             }
             
             // Rendu des résultats
             return $this->render('entreprise/recherche', [
+                'csrf_token'    => $_SESSION['csrf_token'] ?? '',
                 'errors'        => null,
                 'filters'       => $filters,
                 'results'       => $resultat,
@@ -188,12 +225,13 @@ class EntrepriseController extends Controller
 
         // Affichage initial (GET)
         $this->render('entreprise/recherche', [
-            'errors' => [],
-            'filters' => $filters,
-            'results' => [],
-            'page' => 1,
-            'totalPages' => 0,
-            'pagination' => [],
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'errors'        => [],
+            'filters'       => $filters,
+            'results'       => [],
+            'page'          => 1,
+            'totalPages'    => 0,
+            'pagination'    => [],
         ]);
     }
 
@@ -250,8 +288,9 @@ class EntrepriseController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('entreprise/modify', [
-                    'errors'    => $validator->errors(),
-                    'entreprise' => $entreprise,
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'entreprise'    => $entreprise,
                 ]);
             }
 
@@ -286,133 +325,12 @@ class EntrepriseController extends Controller
         
         // Affichage formulaire (GET)
         $this->render('entreprise/modify', [
-            'entreprise' => $old_entreprise,
-            'errors' => [],
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'entreprise'    => $old_entreprise,
+            'errors'        => [],
         ]);
     }
 
-
-    /**
-     * Evaluation d'une entreprise existante.
-     *
-     * @param int $id Identifiant de l'entreprise
-     *
-     * - Vérifie l'existence de l'entreprise
-     * - En GET : affiche le formulaire pré-rempli
-     * - En POST : valide puis met à jour les données
-     *
-     * @return void
-     * @throws \Exception Si l'entreprise est introuvable (en environnement de test)
-     */
-    public function evaluate($id)
-    {
-        $entrepriseModel = $this->getEntrepriseModel();
-        $old_entreprise = $entrepriseModel->findById($id);
-
-        $evaluationModel = new Evaluation();
-        $evaluation = $evaluationModel->findBy([ ['id_entreprise', $id, '='], ['id_ident', $_SESSION['user']['id'], '='] ], "", [ 'limit' => 1 ]);
-        $old_entreprise['evaluation']       = $evaluation[0]['note'] ?? '';
-        $old_entreprise['commentaire']      = $evaluation[0]['commentaire'] ?? '';
-        $old_entreprise['date_evaluation']  = $evaluation[0]['date_evaluation'] ?? '';
-
-
-        // Vérification existence
-        if (!$old_entreprise) {
-            if (defined('PHPUNIT_RUNNING')) {
-                throw new \Exception("Entreprise introuvable");
-            }
-            http_response_code(404);
-            die("Entreprise introuvable");
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
-                http_response_code(403);
-                die("CSRF token invalide");
-            }
-            // Validation
-            $validator = new Validator();
-            $valid = $validator->validate($_POST, [
-                'commentaire'   => ['required', 'txt'],
-            ]);
-
-            // Retour avec erreurs
-            if (!$valid) {
-                return $this->render('entreprise/evaluate', [
-                    'errors'    => $validator->errors(),
-                    'entreprise' => $entreprise,
-                ]);
-            }
-            // Mettre a jour la notation
-            if (    isset($_POST['evaluation'])
-                    &&  (int)($_POST['evaluation']) > 0 
-                    &&  (int)($_POST['evaluation']) <= 5){
-                
-                $evaluationModel->evaluate($id, (int)($_POST['evaluation']), $_POST['commentaire']);
-            }
-
-            // Redirection après succès
-            $this->redirect('/entreprise/recherche');
-        }
-        
-        // Affichage formulaire (GET)
-        $this->render('entreprise/evaluate', [
-            'entreprise' => $old_entreprise,
-            'errors' => [],
-        ]);
-    }
-
-
-    /**
-     * Affiche les evaluations d'une entreprise existante.
-     *
-     * @param int $id Identifiant de l'entreprise
-     *
-     * - Vérifie l'existence de l'entreprise
-     * - En GET : affiche le formulaire pré-rempli
-     * - En POST : valide puis met à jour les données
-     *
-     * @return void
-     * @throws \Exception Si l'entreprise est introuvable (en environnement de test)
-     */
-    public function showevaluations($id)
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ((string)($_POST['csrf_token'] ?? '') !== (string)($_SESSION['csrf_token'] ?? '')) {
-                http_response_code(403);
-                die("CSRF token invalide");
-            }
-        }
-        // Gestion de la pagination
-        $page = $_POST['page'] ?? 1;
-        $page = max(1, (int)$page);
-        $perPage = ITEM_PER_PAGES;
-
-        // Exécution de la recherche
-        $evaluationModel = new Evaluation();
-        $r = $evaluationModel->moyenne($id);
-        $note = [];
-        $note['eval_moyenne']    = $r['moyenne'];
-        $note['eval_nbre']       = $r['nbre'];
-        $note['eval_stars']      = floor($r['moyenne']);
-
-        $data = $evaluationModel->search($id, $page, $perPage);
-
-        $results = $data['results'];
-        $total = $data['total'];
-
-        // Calcul du nombre total de pages
-        $totalPages = ceil($total / $perPage);
-
-        // Affichage formulaire (GET)
-        return $this->render('entreprise/showevaluations', [
-            'results'       => $results,
-            'note'          => $note,
-            'page'          => $page,
-            'totalPages'    => $totalPages,
-            'pagination'    => View::buildPagination($page, $totalPages),
-        ]);
-    }
 
     /**
      * Suppression d'une entreprise.

@@ -1,5 +1,7 @@
 <?php
 
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment;
 /**
  * Gestionnaire de rendu des vues.
  *
@@ -8,6 +10,29 @@
  */
 class View
 {
+
+    private static $twig;
+
+
+    public static function init(): void
+    {
+        $loader = new FilesystemLoader(__DIR__ . '/../views');
+        self::$twig = new Environment($loader, [
+            'cache' => false,
+        ]);
+        // 🔥 VARIABLES GLOBALES
+        self::$twig->addGlobal('APP_NAME', APP_NAME);
+        self::$twig->addGlobal('CDN', CDN);
+        self::$twig->addGlobal('PREFIX', PREFIX);
+        self::$twig->addGlobal('STATIQUE', STATIQUE);
+
+        // 🔥 MENU + AUTH
+        self::$twig->addGlobal('menus', Menu::get());
+        self::$twig->addGlobal('isLogged', Auth::check());
+        self::$twig->addGlobal('user', Auth::check() ? Auth::user() : null);
+
+    }
+
     /**
      * Rend une vue avec un layout.
      *
@@ -17,31 +42,34 @@ class View
      */
     public static function render(string $view, array $data = []): void
     {
-        $data['title']          = 'Web4All';
-        $data['description']    = 'Site Web pour trouver des entreprises et stages';
-        $data['robots']         = 'index,follow';
-        // Extraction des variables pour la vue
-        extract($data, EXTR_SKIP);
+        $data['title'] = 'Web4All';
+        $data['description'] = 'Site Web pour trouver des entreprises et stages';
+        $data['robots'] = 'index,follow';
 
-        $viewPath = __DIR__ . '/../views/' . $view . '.php';
+        $twigPath = __DIR__ . '/../views/' . $view . '.twig';
+        $phpPath  = __DIR__ . '/../views/' . $view . '.php';
 
-        if (!file_exists($viewPath)) {
-            die("Vue introuvable : " . htmlspecialchars($view));
+        // 👉 PRIORITÉ à Twig
+        if (file_exists($twigPath)) {
+            echo self::$twig->render($view . '.twig', $data);
+            return;
         }
 
-        // Capture du contenu spécifique de la vue
-        ob_start();
-        require $viewPath;
-        $content = ob_get_clean();
+        // 👉 fallback PHP
+        if (file_exists($phpPath)) {
+            extract($data, EXTR_SKIP);
 
-        // Chargement du layout principal
-        $layoutPath = __DIR__ . '/../views/layout.php';
-        if (!file_exists($layoutPath)) {
-            die("Layout introuvable");
+            ob_start();
+            require $phpPath;
+            $content = ob_get_clean();
+
+            require __DIR__ . '/../views/layout.php';
+            return;
         }
 
-        require $layoutPath;
+        die("Vue introuvable : " . htmlspecialchars($view));
     }
+    
 
     /**
      * Construit un tableau de pagination pour affichage.
@@ -91,11 +119,11 @@ class View
     }
 
 
-    public static function button(array $config): void
+    public static function button(array $config, bool $toprint): ?string
     {
         $roleId = Auth::roleId();    
         if (!Auth::can($config['permission'], $roleId)) {
-            return;
+            return null;
         }
 
         // URL
@@ -122,13 +150,24 @@ class View
 
         // contenu
         $content = $config['icon'] ?? '';
-
-        echo sprintf(
-            '<a href="%s" class="%s"%s>%s</a>',
-            $fullUrl,
-            $class,
-            $attributes,
-            $content
-        );
+        if ($toprint){
+            echo sprintf(
+                '<a href="%s" class="%s"%s>%s</a>',
+                $fullUrl,
+                $class,
+                $attributes,
+                $content
+            );
+            return null;
+        }
+        else {
+            return sprintf(
+                '<a href="%s" class="%s"%s>%s</a>',
+                $fullUrl,
+                $class,
+                $attributes,
+                $content
+            );
+        }
     }
 }

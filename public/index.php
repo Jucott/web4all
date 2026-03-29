@@ -42,9 +42,10 @@ loadEnv(__DIR__ . '/../.env');
 require_once __DIR__ . '/../app/config/Constants.php';
 
 session_start();
-
+require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../app/core/Autoloader.php';
 Autoloader::register();
+View::init();
 
 // Initialisation permissions guest si non définies
 if (!isset($_SESSION['permissions'])) {

@@ -65,9 +65,10 @@ class IdentController extends Controller
             // Retour formulaire avec erreurs
             if (!$valid) {
                 return $this->render('ident/create', [
-                    'errors' => $validator->errors(),
-                    'filters' => $filters,
-                    'roles' => $roles,
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'filters'       => $filters,
+                    'roles'         => $roles,
                 ]);
             }
             $filters['passwd'] = password_hash($_POST['passwd'], PASSWORD_DEFAULT);
@@ -81,7 +82,12 @@ class IdentController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('ident/create', [ 'errors' => [], 'roles' => $roles, 'filters' => $filters ]);
+        $this->render('ident/create', [ 
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'errors'        => [], 
+            'roles'         => $roles, 
+            'filters'       => $filters 
+        ]);
     }
 
     /**
