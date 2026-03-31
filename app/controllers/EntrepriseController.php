@@ -396,14 +396,14 @@ class EntrepriseController extends Controller
      *
      * @return void
      */
-    protected function redirect($url)
-    {
-        if (defined('PHPUNIT_RUNNING')) {
-            return; // désactivé en test
-        }
-        header("Location: ". $this->url($url));
-        exit;
-    }
+    // public function redirect($url)
+    // {
+    //     if (defined('PHPUNIT_RUNNING')) {
+    //         return; // désactivé en test
+    //     }
+    //     header("Location: ". $this->url($url));
+    //     exit;
+    // }
 
     /**
      * Fournit une instance du modèle Entreprise.
