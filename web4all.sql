@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict JcxCfFov8IUoHOK5uuyS0a2Bt3Ue88zgVgNypt1sGPWERdFcS4TUHcugFo7AtXU
+\restrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
 
 -- Dumped from database version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 
--- Started on 2026-03-27 23:16:15 CET
+-- Started on 2026-03-31 17:09:31 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,9 +28,9 @@ SET row_security = off;
 CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
 
 
-\unrestrict JcxCfFov8IUoHOK5uuyS0a2Bt3Ue88zgVgNypt1sGPWERdFcS4TUHcugFo7AtXU
+\unrestrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
 \connect web4all
-\restrict JcxCfFov8IUoHOK5uuyS0a2Bt3Ue88zgVgNypt1sGPWERdFcS4TUHcugFo7AtXU
+\restrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -327,6 +327,10 @@ COPY public.entreprise (id_entreprise, nom, description, email, telephone, valid
 14	Ccss	this is ccss	e@e.com	+33 607080914	t	\N	\N
 16	CFM	this is CFM	g@g.com	+33 607080916	t	\N	\N
 23	AMSN	This is l AMSN.	l@l.fr	+33 607080925	t	1	2026-03-27 15:52:04
+24	L entreprise du siecle	La plus formidable, mieux que free	free@free.fr	+33 607080925	t	\N	\N
+25	L entreprise du futur	des que j'ai un moment, je la fais	fdsfs@fs.com	+33 607080925	t	\N	\N
+26	L entreprise du futur	des que j'ai un moment j'y pense	fsdgf@sdg.fr	+33 607080925	t	\N	\N
+27	L entreprise du futur	des que je peux, je le fait	dsdfsf@errq.fr	+33 607080925	t	\N	\N
 \.
 
 
@@ -337,7 +341,7 @@ COPY public.entreprise (id_entreprise, nom, description, email, telephone, valid
 --
 
 COPY public.etudiant (id_ident, id_ident_etudiant) FROM stdin;
-2	5
+2	4
 \.
 
 
@@ -355,6 +359,7 @@ COPY public.evaluation (id_entreprise, id_ident, note, date_evaluation, commenta
 23	6	5	2026-03-27 17:06:02	Super societe, je suis ravis d'avoir travaillé pour elle.
 21	3	2	2026-03-27 21:30:40	je suis content, je paye pas l'EDF
 18	3	5	2026-03-27 23:03:38	Le top du top su service administratif
+26	3	5	2026-03-30 13:29:22	La meilleure du monde
 \.
 
 
@@ -369,9 +374,9 @@ COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide
 1	ju@thegoat.com	$2y$10$u0pw8GBrhVDZjhOG/Lh0guyxlHe5VdjUWUV6FycO0n8RSJry6POli	1	Thegoat	ju	t	\N	\N
 3	ju@thestudent.com	$2y$10$JCuSd9690Ucg.ITiiBrvPODIdmjQg/qeNrJGSjfiYsj6psrgitrRa	3	Thestudent	julian	t	1	2026-03-27 14:53:30
 5	ju@etudiant1.com	$2y$10$p1LK5ZBZev8L7FerSJrPduXR8VWoCRAYUqF.LKIS8ZyzerIbTLY/G	3	etudiant1	ju	t	\N	\N
-6	ju@etudiant2.com	$2y$10$4zjx8d5cnEAkRwp9hGkFVut4MTNfQtt2yvSnev18O4R0TSfbIux1q	3	etudiant2	ju	t	\N	\N
 7	ju@etudiant3.com	$2y$10$XuJ4LmFg0aOJoNfuEhhQp.dZNSrqn1UO65w72RC498jgPi4VmlU5u	3	etudiant3	ju	t	\N	\N
 2	ju@thepilote.com	$2y$10$Ma0kJn9X9AjD1USWiUfWGepqYX54d.OX0C8pfaFLzUqm3BLf.vPP.	2	Thepilote	ju	t	\N	\N
+6	ju@etudiant2.com	$2y$10$4zjx8d5cnEAkRwp9hGkFVut4MTNfQtt2yvSnev18O4R0TSfbIux1q	3	etudiant2	ju	t	2	2026-03-30 11:39:56
 \.
 
 
@@ -383,7 +388,12 @@ COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide
 
 COPY public.offre (id_offre, id_entreprise, titre, description, base_remuneration, date_offre, valide, valide_id_ident, valide_lastupdate) FROM stdin;
 2	16	Administrateur réseau	this is the reseau man	1700.00	2026-03-25	t	\N	\N
-1	22	Administrateur Linux	On cherche un admin de la mort	2500.00	2026-03-20	f	2	2026-03-27 18:45:45
+1	22	Administrateur Linux	On cherche un admin de la mort	2500.00	2026-03-20	t	2	2026-03-30 11:40:17
+3	13	Un employé	On recherche un employé de maison	1500.00	2026-03-30	t	\N	\N
+4	12	Developpeur Visual Basic	On recherche un développeur visual basic de plus de 50 ans	2700.00	2026-03-30	t	\N	\N
+5	13	Infirmiere	on recherche une infirmiere	1500.00	2026-03-30	t	\N	\N
+6	13	Medecin des yeux	un ophtalmologue quoi....	4500.00	2026-03-30	t	\N	\N
+7	13	une secrétaire médicale	pour les compte rendus	1600.00	2026-03-30	t	\N	\N
 \.
 
 
@@ -394,10 +404,17 @@ COPY public.offre (id_offre, id_entreprise, titre, description, base_remuneratio
 --
 
 COPY public.offre_has_competence (id_offre, id_competence) FROM stdin;
+2	4
 1	4
 1	2
 1	1
-2	4
+3	1
+3	3
+4	5
+5	1
+6	2
+7	1
+7	2
 \.
 
 
@@ -422,7 +439,6 @@ static_plan_site	Static	Plan	plan_site	97	2
 ident_delete	\N	\N	\N	0	0
 ident_create	Ident	Create	ident/create	2	1
 ident_recherche	Ident	Recherche	ident/recherche	2	0
-ident_modify	Ident	Modify	ident/recherche	2	2
 entreprise_modify	Entreprise	Modify	entreprise/recherche	1	2
 offre_create	Offre	Create	offre/create	3	1
 offre_recherche	Offre	Recherche	offre/recherche	3	0
@@ -436,6 +452,10 @@ static_unauthorized	\N	\N	\N	0	0
 postule_delete	\N	\N	\N	0	0
 evaluation_create	\N	\N	\N	0	0
 evaluation_show	\N	\N	\N	0	0
+ident_modify	Ident	Modify	ident/modify	2	2
+offre_show	\N	\N	\N	0	0
+postule_show	\N	\N	\N	0	0
+statistiques_show	Stats	Show	statistiques/show	4	0
 \.
 
 
@@ -446,118 +466,130 @@ evaluation_show	\N	\N	\N	0	0
 --
 
 COPY public.permission (id_role, permission, allowed) FROM stdin;
-4	ident_create	f
-4	ident_delete	f
-4	ident_modify	f
-4	ident_recherche	t
-1	ident_create	t
-1	wishlist_create	f
-2	admin_permissions	f
-2	auth_login	t
-2	auth_logout	t
-2	offre_create	t
-2	offre_delete	t
-2	entreprise_create	t
-3	auth_login	t
-3	auth_logout	t
-3	entreprise_create	f
-3	entreprise_delete	f
-3	entreprise_modify	f
-3	entreprise_recherche	t
-3	evaluation_create	t
-3	evaluation_show	t
-3	offre_create	f
-3	offre_delete	f
-3	offre_modify	f
+1	offre_delete	t
+1	offre_modify	t
+1	postule_modify	f
+1	postule_show	t
+2	offre_modify	t
 3	offre_recherche	t
+3	offre_show	t
 3	postule_create	t
 3	postule_delete	t
-3	postule_download	t
-3	wishlist_create	t
-4	admin_permissions	f
-4	offre_create	f
-4	offre_delete	f
-4	offre_modify	f
-4	offre_recherche	t
+3	static_mentions_legales	t
+4	entreprise_delete	f
+4	entreprise_modify	f
+4	entreprise_recherche	t
+4	evaluation_create	f
+4	ident_modify	f
+2	ident_create	t
+4	ident_recherche	t
+4	postule_delete	f
+2	ident_delete	f
+1	evaluation_show	t
+1	home_index	t
+1	ident_create	t
 1	ident_delete	t
 1	ident_modify	t
 1	ident_recherche	t
 1	offre_create	t
-1	offre_delete	t
-1	offre_modify	t
 1	offre_recherche	t
-1	postule_create	f
-1	postule_delete	f
-1	postule_download	f
-1	postule_modify	f
+1	offre_show	t
 1	sitemap_index	t
 1	static_contact	t
+1	static_unauthorized	t
+2	ident_modify	t
+2	ident_recherche	t
+2	offre_create	t
+2	postule_modify	t
+2	postule_show	t
+2	sitemap_index	t
+3	evaluation_create	t
+3	evaluation_show	t
+3	static_plan_site	t
+3	static_unauthorized	t
+3	statistiques_show	t
+4	admin_permissions	f
+4	auth_login	t
+4	auth_logout	t
+4	entreprise_create	f
+4	evaluation_show	t
+4	home_index	t
+4	ident_create	f
+2	offre_delete	t
+4	offre_create	f
+4	postule_download	f
+4	postule_modify	f
+4	static_plan_site	t
+4	static_unauthorized	t
+4	statistiques_show	f
+1	auth_login	t
+1	auth_logout	t
+1	entreprise_create	t
+1	postule_create	f
+1	postule_delete	f
 1	static_mentions_legales	t
 1	static_plan_site	t
+1	statistiques_show	t
+1	wishlist_create	f
+2	admin_permissions	f
+2	auth_login	t
+2	auth_logout	t
 2	entreprise_delete	t
 2	entreprise_modify	t
 2	entreprise_recherche	t
-2	evaluation_create	f
-2	evaluation_show	t
-2	home_index	t
-2	offre_modify	t
 2	offre_recherche	t
+2	evaluation_create	f
+2	offre_show	t
 2	postule_create	f
 2	postule_delete	f
-2	postule_download	t
-2	postule_modify	t
-2	sitemap_index	t
 2	static_contact	t
 2	static_mentions_legales	t
 2	static_plan_site	t
 2	static_unauthorized	t
+2	statistiques_show	t
+3	auth_logout	t
+3	entreprise_create	f
+3	entreprise_delete	f
+3	entreprise_modify	f
 3	home_index	t
 3	ident_create	f
-3	ident_delete	f
 3	ident_modify	t
 3	ident_recherche	t
-3	postule_modify	t
-3	sitemap_index	t
-3	static_contact	t
-3	static_mentions_legales	t
-4	auth_login	t
-4	auth_logout	t
-4	entreprise_create	f
-4	entreprise_delete	f
-4	entreprise_modify	f
-4	entreprise_recherche	t
-4	postule_create	f
-4	postule_modify	f
+3	offre_create	f
+3	offre_delete	f
+3	offre_modify	f
+4	ident_delete	f
+4	offre_delete	f
+4	offre_modify	f
+3	postule_download	t
 4	sitemap_index	t
 4	static_contact	t
-4	static_mentions_legales	t
-4	static_plan_site	t
-4	static_unauthorized	t
+3	postule_modify	t
+3	entreprise_recherche	t
+4	offre_recherche	t
+2	wishlist_create	f
 4	wishlist_create	f
-1	admin_permissions	t
-1	auth_login	t
-1	auth_logout	t
-1	entreprise_create	t
 1	entreprise_delete	t
+2	evaluation_show	t
 1	entreprise_modify	t
+2	home_index	t
+3	admin_permissions	f
+3	postule_show	t
+4	offre_show	f
+1	admin_permissions	t
 1	entreprise_recherche	t
 1	evaluation_create	f
-2	ident_create	t
-2	ident_delete	f
-4	evaluation_create	f
-1	evaluation_show	t
-2	ident_modify	t
-1	home_index	t
-4	evaluation_show	t
-4	home_index	t
-2	ident_recherche	t
-2	wishlist_create	f
-3	static_plan_site	t
-4	postule_delete	f
-1	static_unauthorized	t
-3	admin_permissions	f
-3	static_unauthorized	t
-4	postule_download	f
+3	ident_delete	f
+3	sitemap_index	t
+4	postule_create	f
+1	postule_download	f
+2	postule_download	t
+3	static_contact	t
+4	postule_show	f
+2	entreprise_create	t
+3	auth_login	t
+3	wishlist_create	t
+4	static_mentions_legales	t
 \.
 
 
@@ -570,8 +602,15 @@ COPY public.permission (id_role, permission, allowed) FROM stdin;
 COPY public.postule (id_ident, id_offre, cv, lettre_motivation, date_postule, file_lm, file_cv, valide, valide_id_ident, valide_lastupdate) FROM stdin;
 4	1	simply4you_Droit de retractation.pdf	Next_Droit de retractation.pdf	2026-03-27 10:25:01	/uploads/4/07941b17b29f157fc116c7a7c9a8a5f8.pdf	/uploads/4/55a2e1def2c6bff236df9369dbd101e8.pdf	t	4	2026-03-27 10:25:01
 6	2	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-27 17:28:58	/uploads/6/0761f4c8518c623db588d2940e82675c.pdf	/uploads/6/64955e5f50c44a3927c34aad39c35f8b.pdf	t	6	2026-03-27 17:28:58
-3	1	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-27 17:41:57	/uploads/3/fff23613d92b7518fbf734eed24f6971.pdf	/uploads/3/af4f7397e85331f9ec3bb5086e9decba.pdf	t	3	2026-03-27 17:41:57
-3	2	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-27 14:45:17	/uploads/3/731255dfa12dfa8622aa2ec1af6049e0.pdf	/uploads/3/c9bab84df9fa96870d5ac68aebfa1c4d.pdf	f	3	2026-03-27 17:42:12
+3	2	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-30 11:17:03	/uploads/3/36331315703d1a654bda955a6a13b4fe.pdf	/uploads/3/b521c22001d9f41971f55b424ad4a0df.pdf	t	3	2026-03-30 11:17:03
+3	1	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-27 17:41:57	/uploads/3/fff23613d92b7518fbf734eed24f6971.pdf	/uploads/3/af4f7397e85331f9ec3bb5086e9decba.pdf	t	3	2026-03-30 13:30:09
+7	5	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 14:35:07	/uploads/7/e2e5bb3968e9f571a6d45cd253c22c31.pdf	/uploads/7/d8be6380b29846223147147770db325f.pdf	t	7	2026-03-31 14:35:07
+7	6	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 14:35:28	/uploads/7/a93f7149328652f84630f9ad175e7279.pdf	/uploads/7/ac00e8faa1046d8b366aef26c25d5311.pdf	t	7	2026-03-31 14:35:28
+7	3	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 14:35:49	/uploads/7/7df20515585240b73b8b78af28b8f96d.pdf	/uploads/7/9bc1e09e217be3753aea5638a762cc44.pdf	t	7	2026-03-31 14:35:49
+7	7	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 14:37:07	/uploads/7/19cd1ce0eef50e184366e4174b285f11.pdf	/uploads/7/14db220af8d65b4a86d596a6003b5b36.pdf	t	7	2026-03-31 14:37:07
+6	5	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 15:17:39	/uploads/6/fdc9b95a4ce34a3b5b4876081d4e96b0.pdf	/uploads/6/2ed1981bf23fce5eec4ee2278064b216.pdf	t	6	2026-03-31 15:17:39
+5	5	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 15:18:26	/uploads/5/ac19932efdf60a44ffd4a3328f6adfb3.pdf	/uploads/5/523cde054e36df6a96a1708b004bc919.pdf	t	5	2026-03-31 15:18:26
+3	5	Next_Droit de retractation.pdf	simply4you_Droit de retractation.pdf	2026-03-31 15:19:00	/uploads/3/864583d287b2ad49ffb2b39dce39b00f.pdf	/uploads/3/0e88efeb30d3e8de70c4952ae43dbac8.pdf	t	3	2026-03-31 15:19:00
 \.
 
 
@@ -596,6 +635,14 @@ COPY public.role (id_role, role) FROM stdin;
 --
 
 COPY public.wishlist (id_ident, id_offre, date_wishlist) FROM stdin;
+3	4	2026-03-31 16:03:06
+3	6	2026-03-31 16:03:09
+3	3	2026-03-31 16:03:10
+3	7	2026-03-31 16:03:13
+6	1	2026-03-31 16:03:35
+6	4	2026-03-31 16:03:37
+7	1	2026-03-31 16:04:08
+7	2	2026-03-31 16:04:11
 \.
 
 
@@ -614,7 +661,7 @@ SELECT pg_catalog.setval('public.competence_id_competence_seq', 5, true);
 -- Name: entreprise_id_entreprise_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.entreprise_id_entreprise_seq', 23, true);
+SELECT pg_catalog.setval('public.entreprise_id_entreprise_seq', 27, true);
 
 
 --
@@ -632,7 +679,7 @@ SELECT pg_catalog.setval('public.ident_id_ident_seq', 7, true);
 -- Name: offre_id_offre_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.offre_id_offre_seq', 2, true);
+SELECT pg_catalog.setval('public.offre_id_offre_seq', 7, true);
 
 
 --
@@ -878,11 +925,11 @@ ALTER TABLE ONLY public.wishlist
     ADD CONSTRAINT wishlist_id_offre_fkey FOREIGN KEY (id_offre) REFERENCES public.offre(id_offre) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
--- Completed on 2026-03-27 23:16:15 CET
+-- Completed on 2026-03-31 17:09:31 CEST
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict JcxCfFov8IUoHOK5uuyS0a2Bt3Ue88zgVgNypt1sGPWERdFcS4TUHcugFo7AtXU
+\unrestrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
 

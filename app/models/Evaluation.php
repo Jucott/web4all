@@ -14,7 +14,7 @@ class Evaluation extends Model
     protected string $primaryKey = '';
 
 
-    public function evaluate(int $id_entreprise, int $evaluation, string $commentaire): bool
+    public function evaluate(int $id_entreprise, int $evaluation, string $commentaire = ''): bool
     {
         // D'abord on supprime toutes les compétences requises pour cette offre si elles existaient
         $evaluationModel = $this->getEvaluationModel();

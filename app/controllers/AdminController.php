@@ -52,9 +52,10 @@ class AdminController extends Controller
 
         // Rendu de la vue avec les données nécessaires
         $this->render('admin/permissions', [
-            'roles' => $roles,
-            'permissions' => $permissions,
-            'matrix' => $matrix
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'roles'         => $roles,
+            'permissions'   => $permissions,
+            'matrix'        => $matrix
         ]);
     }
 

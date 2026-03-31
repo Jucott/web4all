@@ -37,7 +37,7 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | ID    | Catégorie       | Fonctionnalité                        | Description courte                                | Données principales                                                              | Statut |
 | ----- | --------------- | ------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------- | ------ |
 | SFx1  | Gestion d'accès | Authentification & gestion des accès  | Connexion / Déconnexion + gestion des rôles       | email, mot de passe, rôle                                                        | ✅      |
-| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + **offres liées** | nom, description, contact, **nb candidatures**, moyenne évaluations              | 🟡      |
+| SFx2  | Entreprises     | Rechercher & afficher entreprise      | Recherche multicritères + avis + offres liées     | nom, description, contact, nb candidatures, moyenne évaluations                  | ✅      |
 | SFx3  | Entreprises     | Créer entreprise                      | Création fiche entreprise                         | nom, description, contact                                                        | ✅      |
 | SFx4  | Entreprises     | Modifier entreprise                   | Modification fiche entreprise                     | nom, description, contact                                                        | ✅      |
 | SFx5  | Entreprises     | Évaluer entreprise                    | Notation entreprise                               | évaluation                                                                       | ✅      |
@@ -46,12 +46,12 @@ Par ailleurs il va sans dire que vous veillerez à la conformité légale de vot
 | SFx8  | Offres          | Créer offre                           | Création offre                                    | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
 | SFx9  | Offres          | Modifier offre                        | Modification offre                                | compétences, titre, description, entreprise, rémunération, date                  | ✅      |
 | SFx10 | Offres          | Supprimer offre                       | Suppression offre                                 | -                                                                                | ✅      |
-| SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                        | répartition durée, top wishlist, total offres, moyenne candidatures              | ⬜      |
+| SFx11 | Offres          | Statistiques offres                   | Carrousel indicateurs clés                        | répartition durée, top wishlist, total offres, moyenne candidatures              | ✅      |
 | SFx12 | Pilotes         | Rechercher & afficher pilote          | Recherche compte pilote                           | nom, prénom                                                                      | ✅      |
 | SFx13 | Pilotes         | Créer pilote                          | Création compte pilote                            | nom, prénom                                                                      | ✅      |
 | SFx14 | Pilotes         | Modifier pilote                       | Modification compte pilote                        | nom, prénom                                                                      | ✅      |
 | SFx15 | Pilotes         | Supprimer pilote                      | Suppression compte pilote                         | -                                                                                | ✅      |
-| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + **état recherche stage**              | nom, prénom, email                                                               | 🟡      |
+| SFx16 | Étudiants       | Rechercher & afficher étudiant        | Recherche + état recherche stage                  | nom, prénom, email                                                               | ✅      |
 | SFx17 | Étudiants       | Créer étudiant                        | Création compte étudiant                          | nom, prénom, email                                                               | ✅      |
 | SFx18 | Étudiants       | Modifier étudiant                     | Modification compte étudiant                      | nom, prénom, email                                                               | ✅      |
 | SFx19 | Étudiants       | Supprimer étudiant                    | Suppression compte étudiant                       | -                                                                                | ✅      |
@@ -533,7 +533,7 @@ php-cs-fixer fix
 
 Pour qu'à chaque sauvegarde dans Vscode, les modifications respectant la conformité PSR-12 soit respectées, il faut installer l'extension : "php cs fixer"
 
-## PHPUnit et Twig
+## PHPUnit, Twig et carousel
 
 Depuis la racine du projet, installer ces deux modules ainsi :
 
@@ -543,6 +543,7 @@ composer require --dev phpunit/phpunit:^12
 sudo apt install php-xml php-mbstring php-curl php-zip
 sudo systemctl restart apache2
 composer require twig/twig
+composer require julienlinard/php-carousel
 ```
 
 Pour tester le code de test sur la class Entreprise

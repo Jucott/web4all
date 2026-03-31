@@ -32,6 +32,12 @@ class ComposerStaticInit704c1c8223af0d1629e19f98ebd935aa
         array (
             'PhpParser\\' => 10,
         ),
+        'J' => 
+        array (
+            'JulienLinard\\Carousel\\Twig\\' => 27,
+            'JulienLinard\\Carousel\\Blade\\' => 28,
+            'JulienLinard\\Carousel\\' => 22,
+        ),
         'D' => 
         array (
             'DeepCopy\\' => 9,
@@ -54,6 +60,18 @@ class ComposerStaticInit704c1c8223af0d1629e19f98ebd935aa
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'JulienLinard\\Carousel\\Twig\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/julienlinard/php-carousel/src/Twig',
+        ),
+        'JulienLinard\\Carousel\\Blade\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/julienlinard/php-carousel/src/Blade',
+        ),
+        'JulienLinard\\Carousel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/julienlinard/php-carousel/src/Carousel',
         ),
         'DeepCopy\\' => 
         array (

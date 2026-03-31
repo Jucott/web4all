@@ -39,7 +39,7 @@ class Controller
      *
      * @return void
      */
-    protected function redirect($url)
+    public function redirect(string $url): void
     {
         if (defined('PHPUNIT_RUNNING')) {
             return; // désactivé en test

@@ -15,8 +15,6 @@ class Wishlist extends Model
 
     public function getWishlist(int $id): array
     {
-        $db = Database::getInstance();
-
         // Requête pour récupérer la wishlist
         $sql = "
             SELECT 
@@ -37,7 +35,7 @@ class Wishlist extends Model
             ORDER BY w.date_wishlist ASC
         ";
 
-        $stmt = $db->prepare($sql);
+        $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $id]);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

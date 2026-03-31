@@ -3,6 +3,7 @@
         "phpunit/phpunit": "^12"
     },
     "require": {
-        "twig/twig": "^3.24"
+        "twig/twig": "^3.24",
+        "julienlinard/php-carousel": "^1.1"
     }
 }

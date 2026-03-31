@@ -58,6 +58,7 @@ class Menu
             if (!isset($menu[$menuName])) {
                 $menu[$menuName] = [];
             }
+
             $addon = '';
             if ((string)($row['menu']) === 'Ident' && (string)($row['label']) === 'Modify') {
                 $addon = $_SESSION['user']['id'];
@@ -65,7 +66,7 @@ class Menu
             $menu[$menuName][] = [
                 'label' => $row['label'],
                 'menu' => $row['menu'],
-                'url' => '/' . ltrim($row['url'], '/'.$addon), // garantit /url absolue
+                'url' => '/' . ltrim($row['url'].'/'.$addon, '/'), // garantit /url absolue
             ];
         }
 

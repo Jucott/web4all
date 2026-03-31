@@ -10,5 +10,8 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'JulienLinard\\Carousel\\Twig\\' => array($vendorDir . '/julienlinard/php-carousel/src/Twig'),
+    'JulienLinard\\Carousel\\Blade\\' => array($vendorDir . '/julienlinard/php-carousel/src/Blade'),
+    'JulienLinard\\Carousel\\' => array($vendorDir . '/julienlinard/php-carousel/src/Carousel'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

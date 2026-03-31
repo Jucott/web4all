@@ -70,8 +70,8 @@ class EntrepriseController extends Controller
             $entreprise = $this->getEntrepriseModel();
             $id_entreprise = $entreprise->create($filters);
 
-            $evaluationModel = $this->getEvaluationModel();
-            $evaluationModel->evaluate($id_entreprise, $_SESSION['user']['id'], null);
+            // $evaluationModel = new Evaluation();
+            // $evaluationModel->evaluate($id_entreprise, null, '');
             // Redirection après succès
             $this->redirect('/entreprise/recherche');
         }
@@ -163,6 +163,8 @@ class EntrepriseController extends Controller
 
             $resultat = [];
             $evaluationModel = new Evaluation();
+            $postuleModel = new PostuleModel();
+            $offreModel = new Offre();
             foreach ($results as $res) {
                 $r = $evaluationModel->moyenne($res['id_entreprise']);
                 $resultat[$res['id_entreprise']] = $res;
@@ -207,13 +209,36 @@ class EntrepriseController extends Controller
                                                 ]
                                             ], false),                 // retourne string
                 ];
+                $candidatures = $postuleModel->getCandidatures([
+                    'attributes'    => [
+                                        'o.id_offre'
+                                    ],
+                    'criteria'      => [
+                                        ['e.id_entreprise', $res['id_entreprise']   , '='],
+                                    ],
+                    'order'         => '',
+                    'limit_offset'  => [],
+                ]);
+                $resultat[$res['id_entreprise']]['candidatures'] = count($candidatures);
 
+                $offres = $offreModel->getOffres([
+                    'attributes'    => [
+                                        'o.id_offre'
+                                    ],
+                    'criteria'      => [
+                                        ['e.id_entreprise', $res['id_entreprise']   , '='],
+                                    ],
+                    'order'         => '',
+                    'limit_offset'  => [],
+                ]);
+                $resultat[$res['id_entreprise']]['offres'] = count($offres);
             }
+
 
             // Rendu des résultats
             return $this->render('entreprise/recherche', [
                 'csrf_token'    => $_SESSION['csrf_token'] ?? '',
-                'errors'        => null,
+                'errors'        => [],
                 'filters'       => $filters,
                 'results'       => $resultat,
                 'page'          => $page,

@@ -36,12 +36,16 @@ class Offre extends Model
             $params[] = ['remuneration', $filters['remuneration'] * 0.9, '>='];
         }
 
-        if (empty($filters['date_offre'])) {
+        if (!empty($filters['date_offre'])) {
             $params[] = ['date_offre', $filters['date_offre'], '>='];
         }
 
+        if (!empty($filters['id_entreprise'])) {
+            $params[] = ['id_entreprise', $filters['id_entreprise'], '='];
+        }
+
         if (is_bool($filters['valide'])) {
-            $params[] = ['valide', $filters['valide'], '='];
+            $params[] = ['valide', (bool)($filters['valide']), '='];
         }
 
         // Compte le nombre de résulat pour la requête selective en cours
@@ -53,33 +57,77 @@ class Offre extends Model
         $limit_offset['offset']   = (int)($offset);
 
         // Requete de recherche
+
         return [
             'results' => $this->findBy($params, 'titre ASC', $limit_offset),
             'total' => $total
         ];
     }
 
-    public function getOffre(int $id): array
+    public function getOffres(array $data): array
     {
-        $db = Database::getInstance();
-
         // Requête pour récupérer la wishlist
+        $attribs = implode(', ', $data['attributes']);
         $sql = "
-            SELECT 
-                o.titre             ,
-                o.description       ,
-                o.base_remuneration ,
-                o.date_offre        ,
-                e.nom
-            FROM offre      o
-            JOIN entreprise e using (id_entreprise)
+            SELECT DISTINCT
+                $attribs
+            FROM offre              o
+            INNER JOIN entreprise   e USING (id_entreprise)
             WHERE o.valide = true
-            AND o.id_offre = :id
             AND e.valide = true
-        ";
+            ";
+        $conditions = [];
+        $params = [];
+        $i = 0;
+        $allowedOperators = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'ILIKE'];
+        foreach ($data['criteria'] as $crit) {
+            // Format attendu : [champ, valeur, opérateur]
+            [$field, $value, $operator] = $crit;
+            $operator = strtoupper(trim($operator));
+            // Sécurité : whitelist des opérateurs
+            if (!in_array($operator, $allowedOperators)) {
+                throw new InvalidArgumentException("Opérateur non autorisé : $operator");
+            }
+            // Paramètre unique (évite collision si même champ plusieurs fois)
+            $paramName = $field . '_' . $i++;
+            $paramName = str_replace('.', '_', $paramName);
+            $conditions[] = "$field $operator :$paramName";
+            $params[$paramName] = $value;
+        }
+        if (!empty($conditions)) {
+            $sql .= " AND " . implode(' AND ', $conditions);
+        }
+        // ORDER BY (⚠️ ne pas binder → whitelist conseillé)
+        if (!empty($data['order'])) {
+            $sql .= " ORDER BY ".$data['order'];
+        }
+        // limit / offset
+        if (!empty($data['limit_offset'])) {
+            if (isset($data['limit_offset']['limit'])) {
+                $sql .= " LIMIT :limit";
+                $params['limit'] = (int)$data['limit_offset']['limit'];
+            }
+            if (isset($data['limit_offset']['offset'])) {
+                $sql .= " OFFSET :offset";
+                $params['offset'] = (int)$data['limit_offset']['offset'];
+            }
+        }
 
-        $stmt = $db->prepare($sql);
-        $stmt->execute(['id' => $id]);
+        $stmt = $this->db->prepare($sql);
+        // Binding typé
+        foreach ($params as $key => $value) {
+            if (is_bool($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_BOOL);
+            } elseif (is_int($value)) {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_INT);
+            } elseif (is_null($value)) {
+                $stmt->bindValue(":$key", null, PDO::PARAM_NULL);
+            } else {
+                $stmt->bindValue(":$key", $value, PDO::PARAM_STR);
+            }
+        }
+
+        $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

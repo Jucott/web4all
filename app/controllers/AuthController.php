@@ -28,22 +28,22 @@ class AuthController extends Controller
                 die("CSRF token invalide");
             }
 
-
             // Validation
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
-                'password' => ['required', 'alpha'],
-                'email' => ['required', 'email'],
+                'password'  => ['required', 'alpha'],
+                'email'     => ['required', 'email'],
 
             ]);
 
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('auth/login', [
-                    'error' => $validator->errors(),
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => $validator->errors(),
+                    'result'        => ['email' => $_POST['email']]
                 ]);
             }
-
 
             // Récupération des données du formulaire
             $email = $_POST['email'] ?? null;
@@ -56,7 +56,9 @@ class AuthController extends Controller
             // Si l'authentification échoue
             if (!$user) {
                 return $this->render('auth/login', [
-                    'errors' => 'Identifiants invalides'
+                    'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                    'errors'        => [ ['Identifiants invalides'] ],
+                    'result'        => [ 'email' => $_POST['email'] ],
                 ]);
 
             }
@@ -81,7 +83,11 @@ class AuthController extends Controller
         }
 
         // Affichage du formulaire de connexion (GET)
-        $this->render('auth/login');
+        $this->render('auth/login', [
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+            'errors'        => [],
+            'result'        => [ 'email' => null ],
+        ]);
     }
 
 

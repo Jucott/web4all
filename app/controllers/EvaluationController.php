@@ -42,10 +42,10 @@ class EvaluationController extends Controller
      */
     public function create($id)
     {
-        $entrepriseModel = new Entreprise();
+        $entrepriseModel = $this->getEntrepriseModel();
         $old_entreprise = $entrepriseModel->findById($id);
 
-        $evaluationModel = new Evaluation();
+        $evaluationModel = $this->getEvaluationModel();
         $evaluation = $evaluationModel->findBy([ ['id_entreprise', $id, '='], ['id_ident', $_SESSION['user']['id'], '='] ], "", [ 'limit' => 1 ]);
         $old_entreprise['evaluation']       = $evaluation[0]['note'] ?? '';
         $old_entreprise['commentaire']      = $evaluation[0]['commentaire'] ?? '';
@@ -89,7 +89,7 @@ class EvaluationController extends Controller
             }
 
             // Redirection après succès
-            $this->redirect('/entreprise/recherche');
+            $this->doRedirect('/entreprise/recherche');
         }
 
         // Affichage formulaire (GET)
@@ -127,7 +127,7 @@ class EvaluationController extends Controller
         $perPage = ITEM_PER_PAGES;
 
         // Exécution de la recherche
-        $evaluationModel = new Evaluation();
+        $evaluationModel = $this->getEvaluationModel();
         $r = $evaluationModel->moyenne($id);
         $note = [];
         $note['eval_moyenne']    = $r['moyenne'];
@@ -154,4 +154,18 @@ class EvaluationController extends Controller
     }
 
 
+    protected function getEntrepriseModel()
+    {
+        return new Entreprise();
+    }
+
+    protected function getEvaluationModel()
+    {
+        return new Evaluation();
+    }
+
+    protected function doRedirect(string $url): void
+    {
+        $this->redirect($url);
+    }
 }

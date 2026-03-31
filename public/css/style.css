@@ -8,6 +8,10 @@
 
 /* MOBILE FIRST */
 
+.carousel-card-content {
+    white-space: pre-line;
+}
+
 /* HEADER */
 .header {
     display: flex;

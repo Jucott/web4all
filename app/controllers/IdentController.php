@@ -149,6 +149,7 @@ class IdentController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('ident/recherche', [
+                    'csrf_token' => $_SESSION['csrf_token'] ?? '',
                     'errors'    => $validator->errors(),
                     'filters'   => $filters,
                     'roles'     => $roles,
@@ -179,12 +180,35 @@ class IdentController extends Controller
                 } else {
                     $item['not_me'] = 0;
                 }
+
+                $item['buttons'] = [
+                    'edit'     => View::button([
+                                                'permission' => 'ident_modify',
+                                                'url'        => '/ident/modify/'.$item['id_ident'],
+                                                'class'      => 'edit',
+                                                'icon'       => '✏',
+                                                'title'      => 'Modifier',
+                                            ], false),                  // retourne string
+                    'delete'   => View::button([
+                                                'permission' => 'ident_delete',
+                                                'url'        => '/ident/delete/'.$item['id_ident'],
+                                                'class'      => 'delete',
+                                                'icon'       => '🗑',
+                                                'title'      => 'Supprimer',
+                                                'attributes' => [
+                                                    'onclick' => "return confirm('Confirmer la suppression ?');"
+                                                ]
+                                            ], false),                 // retourne string
+                ];
+
+
             }
             unset($item); // important
 
             // Rendu des résultats
             return $this->render('ident/recherche', [
-                'errors'    => null,
+                'csrf_token' => $_SESSION['csrf_token'] ?? '',
+                'errors'    => [],
                 'filters'   => $filters,
                 'roles'     => $roles,
                 'results'   => $results,
@@ -196,6 +220,7 @@ class IdentController extends Controller
 
         // Affichage initial (GET)
         $this->render('ident/recherche', [
+            'csrf_token' => $_SESSION['csrf_token'] ?? '',
             'errors'    => [],
             'filters'   => $filters,
             'roles'     => $roles,
@@ -246,7 +271,48 @@ class IdentController extends Controller
         $wishlist = $wishlistModel->getWishlist($id);
 
         $postuleModel = new PostuleModel();
-        $postule = $postuleModel->getPostuleData($id);
+        $postule = $postuleModel->getCandidatures([
+            'attributes'    => [
+                                'p.*'                 ,
+                                'o.titre'             ,
+                                'o.description'       ,
+                                'o.base_remuneration' ,
+                                'o.date_offre'        ,
+                                'e.nom'
+                            ],
+            'criteria'      => [
+                                ['p.id_ident', Auth::user()['id']   , '='],
+                            ],
+            'order'         => 'p.date_postule ASC',
+            'limit_offset'  => [],
+        ]);
+
+
+        foreach ($postule as &$post) {
+            $id_offre = $post['id_offre'];
+            $post['buttons'] = [
+                'edit'     => View::button([
+                                            'permission' => 'postule_modify',
+                                            'url'        => '/postule/modify/'.$id_offre,
+                                            'class'      => 'edit',
+                                            'icon'       => '✏',
+                                            'title'      => 'Modifier',
+                                        ], false),                  // retourne string
+                'delete'   => View::button([
+                                            'permission' => 'postule_delete',
+                                            'url'        => '/postule/delete/'.$id_offre,
+                                            'class'      => 'delete',
+                                            'icon'       => '🗑',
+                                            'title'      => 'Supprimer',
+                                            'attributes' => [
+                                                'onclick' => "return confirm('Confirmer la suppression ?');"
+                                            ]
+                                        ], false),                 // retourne string
+            ];
+
+        }
+        unset($post);
+
 
         $roleModel = new Role();
         $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
@@ -290,13 +356,14 @@ class IdentController extends Controller
                     // Retour avec erreurs
                     if (!$valid) {
                         return $this->render('ident/modify', [
-                            'errors'       => $validator->errors(),
-                            'ident'        => $ident,
-                            'roles'        => $roles,
-                            'wishlist'     => $wishlist,
-                            'postule'      => $postule,
-                            'etudiants'    => $etudiants,
-                            'etu_selected' => $etudiantsSelectionnes,
+                            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                            'errors'        => $validator->errors(),
+                            'ident'         => $ident,
+                            'roles'         => $roles,
+                            'wishlist'      => $wishlist,
+                            'postule'       => $postule,
+                            'etudiants'     => $etudiants,
+                            'etu_selected'  => $etudiantsSelectionnes,
                         ]);
                     }
 
@@ -327,7 +394,8 @@ class IdentController extends Controller
                         // Je suis un pilote -> gestion des étudiants à gérer... (cf tableau $_POST['etudiants'])
                         if (! $validator->containsIntGreaterThan0($_POST['etudiants'])) {
                             return $this->render('ident/modify', [
-                                'errors'        => ['id_etudiant invalide'],
+                                'csrf_token'    => $_SESSION['csrf_token'] ?? '',
+                                'errors'        => [ ['id_etudiant invalide' ] ],
                                 'ident'         => $ident,
                                 'roles'         => $roles,
                                 'wishlist'      => $wishlist,
@@ -358,6 +426,7 @@ class IdentController extends Controller
                     // Retour avec erreurs
                     if (!$valid) {
                         return $this->render('ident/modify', [
+                            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
                             'errors'        => $validator->errors(),
                             'ident'         => $ident,
                             'roles'         => $roles,
@@ -395,7 +464,7 @@ class IdentController extends Controller
 
         // Affichage formulaire (GET)
         $this->render('ident/modify', [
-
+            'csrf_token'    => $_SESSION['csrf_token'] ?? '',
             'ident'         => $old_ident,
             'errors'        => [],
             'roles'         => $roles,

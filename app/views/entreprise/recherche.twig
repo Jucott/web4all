@@ -49,8 +49,17 @@
                     <p>{{ entreprise.description }}</p>
                     <p><u>Email</u>: {{ entreprise.email }}</p>
                     <p><u>Téléphone</u>: {{ entreprise.telephone }}</p>
+                    </p>
                 </div>
-
+                <div class="card-left">
+                    {% if entreprise.offres > 0 %}
+                        <p><u>Offres</u>: (<a class="btn-icon"
+                                    href="{{ CDN ~ PREFIX }}/offre/show/{{ entreprise.id_entreprise }}">
+                                    {{ entreprise.offres }}
+                                </a>)
+                        </p>
+                    {% endif %}
+                </div>
                 <div class="card-right">
                     <div class="stars-rating"
                         data-value="{{ entreprise.eval_stars }}"

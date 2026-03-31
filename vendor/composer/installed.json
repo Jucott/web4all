@@ -1,6 +1,74 @@
 {
     "packages": [
         {
+            "name": "julienlinard/php-carousel",
+            "version": "1.1.1",
+            "version_normalized": "1.1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/julien-lin/php-carousel.git",
+                "reference": "61cf6a9b0c473c8177febb8c768527220ec2cd12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/julien-lin/php-carousel/zipball/61cf6a9b0c473c8177febb8c768527220ec2cd12",
+                "reference": "61cf6a9b0c473c8177febb8c768527220ec2cd12",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "illuminate/support": "^12.0",
+                "phpunit/phpunit": "^12.5.8",
+                "twig/twig": "^3.0"
+            },
+            "suggest": {
+                "illuminate/support": "Required if you want to use Blade integration (src/Blade/)",
+                "psr/log": "For optional PSR-3 logging (e.g. FileAnalytics::setLogger)",
+                "twig/twig": "Required if you want to use Twig integration (src/Twig/)"
+            },
+            "time": "2026-02-07T20:15:48+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "JulienLinard\\Carousel\\": "src/Carousel/",
+                    "JulienLinard\\Carousel\\Twig\\": "src/Twig/",
+                    "JulienLinard\\Carousel\\Blade\\": "src/Blade/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Julien Linard",
+                    "email": "julien.linard.dev@gmail.com",
+                    "homepage": "https://github.com/julien-lin"
+                }
+            ],
+            "description": "A modern and performant carousel library for PHP with beautiful designs, no external dependencies. Pure CSS/JS native implementation.",
+            "homepage": "https://github.com/julien-lin/php-carousel",
+            "keywords": [
+                "carousel",
+                "design",
+                "gallery",
+                "php",
+                "php8",
+                "responsive",
+                "slider",
+                "ui",
+                "ux"
+            ],
+            "support": {
+                "issues": "https://github.com/julien-lin/php-carousel/issues",
+                "source": "https://github.com/julien-lin/php-carousel"
+            },
+            "install-path": "../julienlinard/php-carousel"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.13.4",
             "version_normalized": "1.13.4.0",

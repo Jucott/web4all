@@ -26,6 +26,11 @@ class View
         self::$twig->addGlobal('PREFIX', PREFIX);
         self::$twig->addGlobal('STATIQUE', STATIQUE);
 
+        self::$twig->addGlobal('PILOTE', PILOTE);
+        self::$twig->addGlobal('POSTULE', POSTULE);
+        self::$twig->addGlobal('ETUDIANT', ETUDIANT);
+
+
         // 🔥 MENU + AUTH
         self::$twig->addGlobal('menus', Menu::get());
         self::$twig->addGlobal('isLogged', Auth::check());
