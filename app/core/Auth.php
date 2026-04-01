@@ -55,8 +55,8 @@ class Auth
 
         // 1. Cas utilisateur connecté → session
         if (isset($_SESSION['permissions'])) {
-            if (isset($_SESSION['permissions'][$permission])) {
-                return (bool) $_SESSION['permissions'][$permission];
+            if (array_key_exists($permission, $_SESSION['permissions'])) {
+                return true;
             } else {
                 return false;
             }
@@ -66,7 +66,7 @@ class Auth
         $db = Database::getInstance();
 
         $stmt = $db->prepare("
-            SELECT 1
+            SELECT count(*)
             FROM permission
             WHERE id_role = :role
             AND permission = :perm

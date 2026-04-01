@@ -13,9 +13,10 @@ class Statistiques extends Model
     public static function getAllPostulants()
     {
         $postuleModel = new PostuleModel();
-        return $postuleModel->getCandidatures([
+        return $postuleModel->getCandidatures( [
             'attributes'    => [
                                 'o.id_offre'            ,
+                                'i.id_ident'            ,
                                 'o.titre'               ,
                                 'o.description'         ,
                                 'o.date_offre'          ,
@@ -31,7 +32,7 @@ class Statistiques extends Model
     public static function getAllOffres()
     {
         $offreModel = new Offre();
-        return $offreModel->getOffres([
+        return $offreModel->getOffres( [
             'attributes'    => [
                                 'o.id_offre'            ,
                                 'o.titre'               ,
@@ -42,7 +43,7 @@ class Statistiques extends Model
                             ],
             'criteria'      => [],
             'order'         => 'date_offre ASC',
-            'limit_offset'  => $limit_offset,
+            'limit_offset'  => [],
         ]);
     }
 

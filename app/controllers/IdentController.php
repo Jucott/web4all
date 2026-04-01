@@ -102,6 +102,11 @@ class IdentController extends Controller
     {
         $roleModel = new Role();
         $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
+        $allroles = $roleModel->findBy([], '', []);
+        $rols = [];
+        foreach ($allroles as $rol){
+            $rols[$rol['id_role']] = $rol['role'];
+        }
         $filters = [
             'nom'       => null,
             'prenom'    => null,
@@ -149,7 +154,7 @@ class IdentController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('ident/recherche', [
-                    'csrf_token' => $_SESSION['csrf_token'] ?? '',
+                    'csrf_token'=> $_SESSION['csrf_token'] ?? '',
                     'errors'    => $validator->errors(),
                     'filters'   => $filters,
                     'roles'     => $roles,
@@ -170,6 +175,8 @@ class IdentController extends Controller
             // Calcul du nombre total de pages
             $totalPages = ceil($total / $perPage);
 
+            $wishlistModel = new Wishlist();
+            $postuleModel = new PostuleModel();
             // Dans le cas ou un role est identique à celui qui consulte
             // Alors possibilite de modifier/supprimer que sa propre fiche
             foreach ($results as &$item) {
@@ -180,7 +187,7 @@ class IdentController extends Controller
                 } else {
                     $item['not_me'] = 0;
                 }
-
+                $item['nom_role'] = $rols[$item['id_role']];
                 $item['buttons'] = [
                     'edit'     => View::button([
                                                 'permission' => 'ident_modify',
@@ -200,14 +207,32 @@ class IdentController extends Controller
                                                 ]
                                             ], false),                 // retourne string
                 ];
-
-
+                
+                $wishlist = $wishlistModel->getWishlist($item['id_ident']);
+                $item['wishlist_nb'] = count($wishlist);
+                
+                $postule = $postuleModel->getCandidatures( [
+                    'attributes'    => [
+                                        'p.*'                 ,
+                                        'o.titre'             ,
+                                        'o.description'       ,
+                                        'o.base_remuneration' ,
+                                        'o.date_offre'        ,
+                                        'e.nom'
+                                    ],
+                    'criteria'      => [
+                                        ['p.id_ident', $item['id_ident']   , '='],
+                                    ],
+                    'order'         => 'p.date_postule ASC',
+                    'limit_offset'  => [],
+                ]);
+                $item['postule_nb'] = count($postule);
             }
             unset($item); // important
 
             // Rendu des résultats
             return $this->render('ident/recherche', [
-                'csrf_token' => $_SESSION['csrf_token'] ?? '',
+                'csrf_token'=> $_SESSION['csrf_token'] ?? '',
                 'errors'    => [],
                 'filters'   => $filters,
                 'roles'     => $roles,
@@ -220,7 +245,7 @@ class IdentController extends Controller
 
         // Affichage initial (GET)
         $this->render('ident/recherche', [
-            'csrf_token' => $_SESSION['csrf_token'] ?? '',
+            'csrf_token'=> $_SESSION['csrf_token'] ?? '',
             'errors'    => [],
             'filters'   => $filters,
             'roles'     => $roles,
@@ -271,7 +296,7 @@ class IdentController extends Controller
         $wishlist = $wishlistModel->getWishlist($id);
 
         $postuleModel = new PostuleModel();
-        $postule = $postuleModel->getCandidatures([
+        $postule = $postuleModel->getCandidatures( [
             'attributes'    => [
                                 'p.*'                 ,
                                 'o.titre'             ,
@@ -281,14 +306,14 @@ class IdentController extends Controller
                                 'e.nom'
                             ],
             'criteria'      => [
-                                ['p.id_ident', Auth::user()['id']   , '='],
+                                ['p.id_ident', $id   , '='],
                             ],
             'order'         => 'p.date_postule ASC',
             'limit_offset'  => [],
         ]);
+        
 
-
-        foreach ($postule as &$post) {
+        foreach ($postule as &$post){
             $id_offre = $post['id_offre'];
             $post['buttons'] = [
                 'edit'     => View::button([

@@ -2,12 +2,12 @@
 -- PostgreSQL database dump
 --
 
-\restrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
+\restrict lLgfxPpxC9v2PAo7RpDOGD4aOiOTEcYHHTiytPWhYRaumDECYxHl1aZyadwhBGX
 
 -- Dumped from database version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 -- Dumped by pg_dump version 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1)
 
--- Started on 2026-03-31 17:09:31 CEST
+-- Started on 2026-04-01 17:30:13 CEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,9 +28,9 @@ SET row_security = off;
 CREATE DATABASE web4all WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'fr_FR.UTF-8';
 
 
-\unrestrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
+\unrestrict lLgfxPpxC9v2PAo7RpDOGD4aOiOTEcYHHTiytPWhYRaumDECYxHl1aZyadwhBGX
 \connect web4all
-\restrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
+\restrict lLgfxPpxC9v2PAo7RpDOGD4aOiOTEcYHHTiytPWhYRaumDECYxHl1aZyadwhBGX
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -313,24 +313,24 @@ COPY public.competence (id_competence, competence) FROM stdin;
 --
 
 COPY public.entreprise (id_entreprise, nom, description, email, telephone, valide, valide_id_ident, valide_lastupdate) FROM stdin;
-5	Monaco Telecom	ceci est Monaco Telecom de  la mort de mort	foo@bar.baz	+33 611920698	t	\N	\N
-11	SBM	this is sbm	b@b.com	+33 607080911	t	\N	\N
-12	Mairie	this is mairie	c@c.com	+33 607080912	t	\N	\N
-13	CHPG	this is chpg	d@d.com	+33 607080913	t	\N	\N
-15	SBM Offshore	this is sbm offshore	f@f.com	+33 607080915	t	\N	\N
-18	DSI	This is la DSI	h@h.com	+33 607080920	t	\N	\N
-19	Monaco Parkings	This is MP	i@i.com	+33 607080921	t	\N	\N
-20	Tribunal de Monaco	This is the tribunal	j@j.com	+33 607080922	t	\N	\N
-21	Education Nationale	This is the education nationale	k@k.com	+33 607080923	t	\N	\N
-22	Monaco Digital	This is Monaco digital	l@l.com	+33 607080924	t	\N	\N
-10	Telis	this is Telis	a@a.com	+33 607080910	t	\N	\N
-14	Ccss	this is ccss	e@e.com	+33 607080914	t	\N	\N
-16	CFM	this is CFM	g@g.com	+33 607080916	t	\N	\N
-23	AMSN	This is l AMSN.	l@l.fr	+33 607080925	t	1	2026-03-27 15:52:04
-24	L entreprise du siecle	La plus formidable, mieux que free	free@free.fr	+33 607080925	t	\N	\N
-25	L entreprise du futur	des que j'ai un moment, je la fais	fdsfs@fs.com	+33 607080925	t	\N	\N
-26	L entreprise du futur	des que j'ai un moment j'y pense	fsdgf@sdg.fr	+33 607080925	t	\N	\N
-27	L entreprise du futur	des que je peux, je le fait	dsdfsf@errq.fr	+33 607080925	t	\N	\N
+24	Crédit Mutuel	La banque a qui parler.	free@free.fr	+33 607080925	t	\N	\N
+25	Centre Scientifique	La science a Monaco, c est nous	fdsfs@fs.com	+33 607080925	t	\N	\N
+26	Monaco Parkings	Pour vous garer, c est chez nous.	fsdgf@sdg.fr	+33 607080925	t	\N	\N
+27	BNP Paribas	Le meilleure banque des startups.	dsdfsf@errq.fr	+33 607080925	t	\N	\N
+5	Monaco Telecom	L operateur unique de la Principauté	foo@bar.baz	+33 611920698	t	\N	\N
+19	Pompiers de Monaco	Pour éteindre le feu ...	i@i.com	+33 607080921	t	\N	\N
+11	SBM	Société des Bains de Mer	b@b.com	+33 607080911	t	\N	\N
+12	Mairie	Pour vos démarches en ligne	c@c.com	+33 607080912	t	\N	\N
+13	CHPG	Centre Hospitalier Princesse Grace	d@d.com	+33 607080913	t	\N	\N
+15	SBM Offshore	Les specialistes du forage en mer	f@f.com	+33 607080915	t	\N	\N
+18	DSI	Direction des Systèmes d'Information	h@h.com	+33 607080920	t	\N	\N
+20	Tribunal de Monaco	Attention à vous ...	j@j.com	+33 607080922	t	\N	\N
+21	Education Nationale	Les enfants... c'est chez nous.	k@k.com	+33 607080923	t	\N	\N
+22	Monaco Digital	La meilleure SSII de la Principauté	l@l.com	+33 607080924	t	\N	\N
+10	Telis	Monaco Datacenter	a@a.com	+33 607080910	t	\N	\N
+14	Ccss	Caisses Sociales (Sécurité Sociale)	e@e.com	+33 607080914	t	\N	\N
+16	CFM	Crédit Foncier de Monaco	g@g.com	+33 607080916	t	\N	\N
+23	AMSN	Agence Monégasque de Sécurité Numérique	l@l.fr	+33 607080925	t	1	2026-03-27 15:52:04
 \.
 
 
@@ -370,13 +370,13 @@ COPY public.evaluation (id_entreprise, id_ident, note, date_evaluation, commenta
 --
 
 COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide_id_ident, valide_lastupdate) FROM stdin;
-4	ju@student.fr	$2y$10$7UzH7QEsg/YMfycl543bSelvLY/.ogrghNJBaXLFalk/3X4hIayPa	3	Student	julian	t	\N	\N
-1	ju@thegoat.com	$2y$10$u0pw8GBrhVDZjhOG/Lh0guyxlHe5VdjUWUV6FycO0n8RSJry6POli	1	Thegoat	ju	t	\N	\N
-3	ju@thestudent.com	$2y$10$JCuSd9690Ucg.ITiiBrvPODIdmjQg/qeNrJGSjfiYsj6psrgitrRa	3	Thestudent	julian	t	1	2026-03-27 14:53:30
-5	ju@etudiant1.com	$2y$10$p1LK5ZBZev8L7FerSJrPduXR8VWoCRAYUqF.LKIS8ZyzerIbTLY/G	3	etudiant1	ju	t	\N	\N
-7	ju@etudiant3.com	$2y$10$XuJ4LmFg0aOJoNfuEhhQp.dZNSrqn1UO65w72RC498jgPi4VmlU5u	3	etudiant3	ju	t	\N	\N
-2	ju@thepilote.com	$2y$10$Ma0kJn9X9AjD1USWiUfWGepqYX54d.OX0C8pfaFLzUqm3BLf.vPP.	2	Thepilote	ju	t	\N	\N
-6	ju@etudiant2.com	$2y$10$4zjx8d5cnEAkRwp9hGkFVut4MTNfQtt2yvSnev18O4R0TSfbIux1q	3	etudiant2	ju	t	2	2026-03-30 11:39:56
+3	etudiant2@cesi.school	$2y$10$JCuSd9690Ucg.ITiiBrvPODIdmjQg/qeNrJGSjfiYsj6psrgitrRa	3	Dupont	Elise	t	1	2026-03-27 14:53:30
+5	etudiant3@cesi.school	$2y$10$p1LK5ZBZev8L7FerSJrPduXR8VWoCRAYUqF.LKIS8ZyzerIbTLY/G	3	Martin	Lucas	t	\N	\N
+7	etudiant4@cesi.school	$2y$10$XuJ4LmFg0aOJoNfuEhhQp.dZNSrqn1UO65w72RC498jgPi4VmlU5u	3	Moreau	Sophie	t	\N	\N
+6	etudiant5@cesi.school	$2y$10$4zjx8d5cnEAkRwp9hGkFVut4MTNfQtt2yvSnev18O4R0TSfbIux1q	3	Lefebvre	Julien	t	2	2026-03-30 11:39:56
+4	etudiant1@cesi.school	$2y$10$7UzH7QEsg/YMfycl543bSelvLY/.ogrghNJBaXLFalk/3X4hIayPa	3	Bernard	Camille	t	\N	\N
+1	admin@cesi.school	$2y$10$u0pw8GBrhVDZjhOG/Lh0guyxlHe5VdjUWUV6FycO0n8RSJry6POli	1	Rousseau	Antoine	t	\N	\N
+2	professeur@cesi.school	$2y$10$Ma0kJn9X9AjD1USWiUfWGepqYX54d.OX0C8pfaFLzUqm3BLf.vPP.	2	Lepot	Fabien	t	\N	\N
 \.
 
 
@@ -387,13 +387,13 @@ COPY public.ident (id_ident, email, passwd, id_role, nom, prenom, valide, valide
 --
 
 COPY public.offre (id_offre, id_entreprise, titre, description, base_remuneration, date_offre, valide, valide_id_ident, valide_lastupdate) FROM stdin;
-2	16	Administrateur réseau	this is the reseau man	1700.00	2026-03-25	t	\N	\N
 1	22	Administrateur Linux	On cherche un admin de la mort	2500.00	2026-03-20	t	2	2026-03-30 11:40:17
-3	13	Un employé	On recherche un employé de maison	1500.00	2026-03-30	t	\N	\N
 4	12	Developpeur Visual Basic	On recherche un développeur visual basic de plus de 50 ans	2700.00	2026-03-30	t	\N	\N
 5	13	Infirmiere	on recherche une infirmiere	1500.00	2026-03-30	t	\N	\N
 6	13	Medecin des yeux	un ophtalmologue quoi....	4500.00	2026-03-30	t	\N	\N
-7	13	une secrétaire médicale	pour les compte rendus	1600.00	2026-03-30	t	\N	\N
+3	13	Employé de maison	On recherche un employé de maison	1500.00	2026-03-30	t	\N	\N
+2	16	Administrateur réseau	On cherche un administrateur réseau spécialisé CISCO	1700.00	2026-03-25	t	\N	\N
+7	13	Secrétaire Médicale	On cherche un(e) secrétaire médicale pour seconde Mme la professeure	1600.00	2026-03-30	t	\N	\N
 \.
 
 
@@ -466,130 +466,130 @@ statistiques_show	Stats	Show	statistiques/show	4	0
 --
 
 COPY public.permission (id_role, permission, allowed) FROM stdin;
-1	offre_delete	t
-1	offre_modify	t
 1	postule_modify	f
-1	postule_show	t
-2	offre_modify	t
-3	offre_recherche	t
-3	offre_show	t
-3	postule_create	t
-3	postule_delete	t
-3	static_mentions_legales	t
-4	entreprise_delete	f
-4	entreprise_modify	f
+1	statistiques_show	t
+2	entreprise_modify	t
+2	entreprise_recherche	t
+2	static_mentions_legales	t
+3	wishlist_create	t
+4	admin_permissions	f
 4	entreprise_recherche	t
 4	evaluation_create	f
-4	ident_modify	f
-2	ident_create	t
-4	ident_recherche	t
+4	evaluation_show	t
+4	ident_recherche	f
+4	offre_create	f
 4	postule_delete	f
+4	postule_download	f
+4	postule_modify	f
+2	postule_create	f
+4	static_plan_site	t
+4	static_unauthorized	t
+2	postule_delete	f
+1	offre_delete	t
+1	offre_modify	t
+1	postule_show	t
+1	wishlist_create	f
+2	evaluation_create	f
+2	evaluation_show	t
+2	home_index	t
+2	ident_create	t
 2	ident_delete	f
 1	evaluation_show	t
-1	home_index	t
-1	ident_create	t
-1	ident_delete	t
-1	ident_modify	t
-1	ident_recherche	t
-1	offre_create	t
-1	offre_recherche	t
-1	offre_show	t
-1	sitemap_index	t
-1	static_contact	t
-1	static_unauthorized	t
 2	ident_modify	t
 2	ident_recherche	t
 2	offre_create	t
-2	postule_modify	t
-2	postule_show	t
-2	sitemap_index	t
-3	evaluation_create	t
-3	evaluation_show	t
-3	static_plan_site	t
-3	static_unauthorized	t
-3	statistiques_show	t
-4	admin_permissions	f
-4	auth_login	t
-4	auth_logout	t
-4	entreprise_create	f
-4	evaluation_show	t
-4	home_index	t
-4	ident_create	f
-2	offre_delete	t
-4	offre_create	f
-4	postule_download	f
-4	postule_modify	f
-4	static_plan_site	t
-4	static_unauthorized	t
-4	statistiques_show	f
-1	auth_login	t
-1	auth_logout	t
-1	entreprise_create	t
-1	postule_create	f
-1	postule_delete	f
-1	static_mentions_legales	t
-1	static_plan_site	t
-1	statistiques_show	t
-1	wishlist_create	f
-2	admin_permissions	f
-2	auth_login	t
-2	auth_logout	t
-2	entreprise_delete	t
-2	entreprise_modify	t
-2	entreprise_recherche	t
-2	offre_recherche	t
-2	evaluation_create	f
-2	offre_show	t
-2	postule_create	f
-2	postule_delete	f
-2	static_contact	t
-2	static_mentions_legales	t
 2	static_plan_site	t
-2	static_unauthorized	t
-2	statistiques_show	t
 3	auth_logout	t
 3	entreprise_create	f
 3	entreprise_delete	f
 3	entreprise_modify	f
+1	home_index	t
 3	home_index	t
+3	offre_modify	f
+3	offre_recherche	t
+4	offre_delete	f
+4	offre_modify	f
+4	postule_show	f
+4	statistiques_show	t
+4	wishlist_create	f
 3	ident_create	f
+1	auth_login	t
+1	offre_recherche	t
+1	auth_logout	t
+1	entreprise_create	t
+1	offre_show	t
+1	sitemap_index	t
+1	static_contact	t
+2	admin_permissions	f
+2	offre_delete	t
+2	offre_modify	t
+2	offre_recherche	t
+2	offre_show	t
+2	postule_download	t
+2	postule_modify	t
+2	postule_show	t
+2	sitemap_index	t
+2	static_unauthorized	t
+2	statistiques_show	t
+2	wishlist_create	f
+3	ident_delete	f
+3	entreprise_recherche	t
 3	ident_modify	t
 3	ident_recherche	t
 3	offre_create	f
 3	offre_delete	f
-3	offre_modify	f
-4	ident_delete	f
-4	offre_delete	f
-4	offre_modify	f
+3	offre_show	t
+3	postule_create	t
+3	postule_delete	t
 3	postule_download	t
-4	sitemap_index	t
-4	static_contact	t
-3	postule_modify	t
-3	entreprise_recherche	t
-4	offre_recherche	t
-2	wishlist_create	f
-4	wishlist_create	f
-1	entreprise_delete	t
-2	evaluation_show	t
-1	entreprise_modify	t
-2	home_index	t
-3	admin_permissions	f
 3	postule_show	t
-4	offre_show	f
-1	admin_permissions	t
-1	entreprise_recherche	t
-1	evaluation_create	f
-3	ident_delete	f
 3	sitemap_index	t
-4	postule_create	f
-1	postule_download	f
-2	postule_download	t
 3	static_contact	t
-4	postule_show	f
+3	static_mentions_legales	t
+4	auth_login	t
+4	auth_logout	t
+4	entreprise_create	f
+4	entreprise_delete	f
+4	home_index	t
+4	ident_create	f
+1	admin_permissions	t
+1	entreprise_delete	t
+1	entreprise_modify	t
+4	offre_recherche	t
+1	ident_create	t
+1	ident_delete	t
+4	offre_show	t
+4	entreprise_modify	f
+1	entreprise_recherche	t
+3	postule_modify	t
+1	postule_create	f
+2	auth_login	t
+3	evaluation_create	t
+1	postule_delete	f
+2	auth_logout	t
+3	evaluation_show	t
+3	static_plan_site	t
+4	postule_create	f
+1	static_mentions_legales	t
+1	evaluation_create	f
+1	postule_download	f
+1	static_plan_site	t
 2	entreprise_create	t
-3	auth_login	t
-3	wishlist_create	t
+2	entreprise_delete	t
+4	ident_delete	f
+4	sitemap_index	t
+1	ident_modify	t
+2	static_contact	t
+3	static_unauthorized	t
+4	static_contact	t
+1	ident_recherche	t
+3	admin_permissions	f
+3	statistiques_show	t
 4	static_mentions_legales	t
+1	offre_create	t
+1	static_unauthorized	t
+3	auth_login	t
+4	ident_modify	f
 \.
 
 
@@ -637,12 +637,12 @@ COPY public.role (id_role, role) FROM stdin;
 COPY public.wishlist (id_ident, id_offre, date_wishlist) FROM stdin;
 3	4	2026-03-31 16:03:06
 3	6	2026-03-31 16:03:09
-3	3	2026-03-31 16:03:10
 3	7	2026-03-31 16:03:13
 6	1	2026-03-31 16:03:35
 6	4	2026-03-31 16:03:37
 7	1	2026-03-31 16:04:08
 7	2	2026-03-31 16:04:11
+3	3	2026-04-01 16:26:47
 \.
 
 
@@ -925,11 +925,11 @@ ALTER TABLE ONLY public.wishlist
     ADD CONSTRAINT wishlist_id_offre_fkey FOREIGN KEY (id_offre) REFERENCES public.offre(id_offre) ON UPDATE RESTRICT ON DELETE RESTRICT;
 
 
--- Completed on 2026-03-31 17:09:31 CEST
+-- Completed on 2026-04-01 17:30:13 CEST
 
 --
 -- PostgreSQL database dump complete
 --
 
-\unrestrict v2ciVLdlSuypvJAAdURfEa10xfYhJzwpnjQygseqjpQbZ0ekTcis7ic1UvdgDmL
+\unrestrict lLgfxPpxC9v2PAo7RpDOGD4aOiOTEcYHHTiytPWhYRaumDECYxHl1aZyadwhBGX
 

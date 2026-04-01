@@ -12,21 +12,22 @@ use JulienLinard\Carousel\CarouselItem;
  */
 class StatistiquesController extends Controller
 {
+    
     public function show()
     {
-
+        
         $statsModel = new Statistiques();
         $topWishlist = $statsModel->getTopWishlist();
         $topCandidatures = $statsModel->getTopCandidatures();
         $nbOffres = count($statsModel->getAllOffres());
         $nbCandidatures = count($statsModel->getAllPostulants());
-
-        $txtWish = '';
-        $txtCand = '';
-        foreach ($topWishlist as $elem) {
+        
+        $txtWish='';
+        $txtCand='';
+        foreach ($topWishlist as $elem){
             $txtWish .= $elem['nom'].' '.$elem['prenom'].' : '.$elem['nb']."\n";
         }
-        foreach ($topCandidatures as $elem) {
+        foreach ($topCandidatures as $elem){
             $txtCand .= $elem['nom'].' '.$elem['prenom'].' : '.$elem['nb']."\n";
         }
         $testimonials = [
@@ -55,7 +56,7 @@ class StatistiquesController extends Controller
                 'image'     => 'https://static.web4all.local/app-icons/icon-192.png',
             ],
         ];
-
+        
 
 
 
@@ -73,7 +74,7 @@ class StatistiquesController extends Controller
             id: 'item1',
             title: "Nombre d'Offres",
             content: (string)($nbOffres),
-            image: 'https://static.web4all.local/app-icons/icon-192.png',
+            image: STATIQUE . PREFIX . '/app-icons/icon-192.png',
             link: '',
             attributes: ['class' => 'kpi-multiline']
         ));
@@ -81,7 +82,7 @@ class StatistiquesController extends Controller
             id: 'item2',
             title: "Nombre de Candidatures",
             content: (string)($nbCandidatures),
-            image: 'https://static.web4all.local/app-icons/icon-192.png',
+            image: STATIQUE . PREFIX . '/app-icons/icon-192.png',
             link: '',
             attributes: ['class' => 'kpi-multiline']
         ));
@@ -89,7 +90,7 @@ class StatistiquesController extends Controller
             id: 'item3',
             title: 'Top Wish-list',
             content: (string)($txtWish),
-            image: 'https://static.web4all.local/app-icons/icon-192.png',
+            image: STATIQUE . PREFIX . '/app-icons/icon-192.png',
             link: '',
             attributes: ['class' => 'kpi-multiline']
         ));
@@ -97,7 +98,7 @@ class StatistiquesController extends Controller
             id: 'item4',
             title: 'Top Candidatures',
             content: (string)($txtCand),
-            image: 'https://static.web4all.local/app-icons/icon-192.png',
+            image: STATIQUE . PREFIX . '/app-icons/icon-192.png',
             link: '',
             attributes: ['class' => 'kpi-multiline']
         ));
@@ -106,7 +107,7 @@ class StatistiquesController extends Controller
         return $this->render('statistiques/show', [
             'testimonials'      => $carousel->render(),
         ]);
-
+        
     }
 
 

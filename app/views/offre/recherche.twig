@@ -54,7 +54,13 @@
                     </div>
 
                     <div class="card-left">
-                        <p><u>Nbre de candidats</u>: {{ offre.nb_candidatures }}</p>
+                        {% if offre.nb_candidatures > 0 %}
+                            <p><u>Nbre de candidats</u>: (<a class="btn-icon"
+                                        href="{{ CDN ~ PREFIX }}/postule/show/{{ offre.id_offre }}">
+                                        {{ offre.nb_candidatures }}
+                                    </a>)
+                            </p>
+                        {% endif %}
                     </div>
 
                     <div class="card-right">

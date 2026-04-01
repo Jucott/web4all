@@ -17,7 +17,7 @@ class PostuleModel extends Model
     // {
     //     // Requête pour récupérer la liste des offre postulées
     //     $sql = "
-    //         SELECT
+    //         SELECT 
     //             p.id_ident          ,
     //             p.id_offre          ,
     //             p.date_postule      ,
@@ -50,7 +50,7 @@ class PostuleModel extends Model
     // {
     //     // Requête pour récupérer la liste des offre postulées
     //     $sql = "
-    //         SELECT
+    //         SELECT 
     //             p.*                 ,
     //             o.titre             ,
     //             o.description       ,
@@ -74,7 +74,7 @@ class PostuleModel extends Model
     //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
     // }
 
-    public function getCandidatures(array $data): array
+    public function getCandidatures(array $data ): array
     {
         // Requête pour récupérer la wishlist
         $attribs = implode(', ', $data['attributes']);
@@ -126,7 +126,7 @@ class PostuleModel extends Model
                 $params['offset'] = (int)$data['limit_offset']['offset'];
             }
         }
-
+        
         $stmt = $this->db->prepare($sql);
         // Binding typé
         foreach ($params as $key => $value) {

@@ -29,7 +29,7 @@ class PostuleController extends Controller
     public function create(int $id)
     {
         $offreModel = new Offre();
-        $offre = $offreModel->getOffres([
+        $offre = $offreModel->getOffres( [
             'attributes'    => [
                                 'o.titre'             ,
                                 'o.description'       ,
@@ -145,11 +145,11 @@ class PostuleController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('postule/create', [
+        $this->render('postule/create', [ 
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
-            'errors'        => [],
-            'offre'         => $offre[0],
-            'filters'       => $filters
+            'errors'        => [], 
+            'offre'         => $offre[0], 
+            'filters'       => $filters 
         ]);
     }
 
@@ -291,7 +291,7 @@ class PostuleController extends Controller
     public function modify($id)
     {
         $offreModel = new Offre();
-        $offre = $offreModel->getOffres([
+        $offre = $offreModel->getOffres( [
             'attributes'    => [
                                 'o.titre'             ,
                                 'o.description'       ,
@@ -306,7 +306,7 @@ class PostuleController extends Controller
             'limit_offset'  => [],
         ]);
         $postuleModel = new PostuleModel();
-        $filters = $postuleModel->getCandidatures([
+        $filters = $postuleModel->getCandidatures( [
             'attributes'    => [
                                 'p.*'                 ,
                                 'o.titre'             ,
@@ -388,11 +388,11 @@ class PostuleController extends Controller
         $filters[0]['file_cv'] = basename($filters[0]['file_cv']);
         $filters[0]['file_lm'] = basename($filters[0]['file_lm']);
         // Affichage formulaire (GET)
-        $this->render('postule/modify', [
+        $this->render('postule/modify', [ 
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
-            'errors'        => [],
-            'offre'         => $offre[0],
-            'filters'       => $filters[0]
+            'errors'        => [], 
+            'offre'         => $offre[0], 
+            'filters'       => $filters[0] 
         ]);
     }
 
@@ -472,7 +472,7 @@ class PostuleController extends Controller
         $limit_offset['offset']   = (int)($offset);
         // Exécution de la recherche
         $postuleModel = new PostuleModel();
-        $candidatures = $postuleModel->getCandidatures([
+        $candidatures = $postuleModel->getCandidatures( [
             'attributes'    => [
                                 'i.id_ident'
                             ],
@@ -484,7 +484,7 @@ class PostuleController extends Controller
         ]);
         $total = count($candidatures);
 
-        $results = $postuleModel->getCandidatures([
+        $results = $postuleModel->getCandidatures( [
             'attributes'    => [
                                 'o.id_offre'                                        ,
                                 'i.id_ident'                                        ,
@@ -507,7 +507,7 @@ class PostuleController extends Controller
             'order'         => 'p.date_postule ASC',
             'limit_offset'  => $limit_offset,
         ]);
-        foreach ($results as &$item) {
+        foreach ($results as &$item){
             $go = true;
             if ($item['id_role'] > Auth::roleId()) {
                 // Possibilité de modifoer des fiche dont le role est > à moi (subalternes)
@@ -517,7 +517,7 @@ class PostuleController extends Controller
                     $go = false;
                 }
             }
-            if ($go) {
+            if ($go){
                 $item['buttons'] = [
                     'edit'     => View::button([
                         'permission' => 'ident_modify',
@@ -534,7 +534,8 @@ class PostuleController extends Controller
                         'title'      => 'Modifier',
                     ], false),                  // retourne string
                 ];
-            } else {
+            }
+            else {
                 $item['buttons'] = [ 'edit' => '' ];
             }
         }

@@ -103,7 +103,6 @@ class Router
     public function checkAccess(string $permission): bool
     {
         $roleId = Auth::roleId();
-
         if (!Auth::can($permission, $roleId)) {
 
             if (!Auth::check()) {

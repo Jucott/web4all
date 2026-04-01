@@ -53,17 +53,8 @@ View::init();
 
 // Initialisation permissions guest si non définies
 if (!isset($_SESSION['permissions'])) {
-
-    $db = Database::getInstance();
-
-    $stmt = $db->prepare("
-        SELECT permission
-        FROM permission
-        WHERE id_role = 4 AND allowed = true
-    ");
-    $stmt->execute();
-
-    $_SESSION['permissions'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    $authModel = new AuthModel();
+    $_SESSION['permissions'] = $authModel->getPermissions(GUEST);
 }
 
 

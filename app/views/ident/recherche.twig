@@ -44,14 +44,16 @@
                     <div class="card-left">
                         <h3>{{ ident.nom ~ ' ' ~ ident.prenom }}</h3>
                     </div>
-
-                    <div class="card-right">
+                    <div class="card-left">
                         <p><u>Email</u>: {{ ident.email }}</p>
                     </div>
-
+                    <div class="card-left">
+                        <p><u>Profil</u>: {{ ident.nom_role }}</p>
+                    </div>
+                    <div class="card-left">
+                        <p><u>Wishlist</u>: {{ ident.wishlist_nb }} / <u>Candidature</u>: {{ ident.postule_nb }}</p>
+                    </div>
                     <div class="card-right">
-
-                        
                         {% if ident.not_me == 0 %}
 
                             {# ✏️ Edit #}

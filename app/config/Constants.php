@@ -15,6 +15,7 @@ if ($_ENV['APP_ENV'] == 'dev') {
     define('PREFIX', '/web4all');
 }
 define('ITEM_PER_PAGES', 3);
+define('GUEST', 4);
 define('ETUDIANT', 3);
 define('POSTULE', [ 3 ]);
 define('PILOTE', [ 2 ]);
