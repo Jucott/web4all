@@ -104,7 +104,7 @@ class IdentController extends Controller
         $roles = $roleModel->findBy([['id_role', Auth::roleId(), '>=' ]], '', []);
         $allroles = $roleModel->findBy([], '', []);
         $rols = [];
-        foreach ($allroles as $rol){
+        foreach ($allroles as $rol) {
             $rols[$rol['id_role']] = $rol['role'];
         }
         $filters = [
@@ -154,7 +154,7 @@ class IdentController extends Controller
             // Retour avec erreurs
             if (!$valid) {
                 return $this->render('ident/recherche', [
-                    'csrf_token'=> $_SESSION['csrf_token'] ?? '',
+                    'csrf_token' => $_SESSION['csrf_token'] ?? '',
                     'errors'    => $validator->errors(),
                     'filters'   => $filters,
                     'roles'     => $roles,
@@ -207,11 +207,11 @@ class IdentController extends Controller
                                                 ]
                                             ], false),                 // retourne string
                 ];
-                
+
                 $wishlist = $wishlistModel->getWishlist($item['id_ident']);
                 $item['wishlist_nb'] = count($wishlist);
-                
-                $postule = $postuleModel->getCandidatures( [
+
+                $postule = $postuleModel->getCandidatures([
                     'attributes'    => [
                                         'p.*'                 ,
                                         'o.titre'             ,
@@ -232,7 +232,7 @@ class IdentController extends Controller
 
             // Rendu des résultats
             return $this->render('ident/recherche', [
-                'csrf_token'=> $_SESSION['csrf_token'] ?? '',
+                'csrf_token' => $_SESSION['csrf_token'] ?? '',
                 'errors'    => [],
                 'filters'   => $filters,
                 'roles'     => $roles,
@@ -245,7 +245,7 @@ class IdentController extends Controller
 
         // Affichage initial (GET)
         $this->render('ident/recherche', [
-            'csrf_token'=> $_SESSION['csrf_token'] ?? '',
+            'csrf_token' => $_SESSION['csrf_token'] ?? '',
             'errors'    => [],
             'filters'   => $filters,
             'roles'     => $roles,
@@ -296,7 +296,7 @@ class IdentController extends Controller
         $wishlist = $wishlistModel->getWishlist($id);
 
         $postuleModel = new PostuleModel();
-        $postule = $postuleModel->getCandidatures( [
+        $postule = $postuleModel->getCandidatures([
             'attributes'    => [
                                 'p.*'                 ,
                                 'o.titre'             ,
@@ -311,9 +311,9 @@ class IdentController extends Controller
             'order'         => 'p.date_postule ASC',
             'limit_offset'  => [],
         ]);
-        
 
-        foreach ($postule as &$post){
+
+        foreach ($postule as &$post) {
             $id_offre = $post['id_offre'];
             $post['buttons'] = [
                 'edit'     => View::button([

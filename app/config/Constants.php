@@ -2,7 +2,7 @@
 
 
 define('ENV', 'dev'); // dev | prod
-define('APP_NAME', 'StageFinder');
+define('APP_NAME', 'CESI1STAGE');
 if ($_ENV['APP_ENV'] == 'dev') {
     define('BASE_URL', '');
     define('CDN', 'https://web4all.local');

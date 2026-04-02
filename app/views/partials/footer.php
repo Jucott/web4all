@@ -1,6 +1,0 @@
-<footer class="footer">
-    <a href="<?= CDN . PREFIX ?>/plan_site">Plan du site</a>
-    <a href="<?= CDN . PREFIX ?>/mentions_legales">Mention légale</a>
-    <a href="<?= CDN . PREFIX ?>/contact">Contact</a>
-</footer>
-

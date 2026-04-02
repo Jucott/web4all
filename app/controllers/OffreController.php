@@ -99,11 +99,11 @@ class OffreController extends Controller
         }
 
         // Affichage formulaire (GET)
-        $this->render('offre/create', [ 
+        $this->render('offre/create', [
             'csrf_token'    => $_SESSION['csrf_token'] ?? '',
             'errors'        => [],
             'filters'       => $filters,
-            'entreprises'   => $entreprises, 
+            'entreprises'   => $entreprises,
             'competences'   => $competences, 'filters' => $filters ]);
     }
 
@@ -185,7 +185,7 @@ class OffreController extends Controller
                     'pagination'    => [],
                 ]);
             }
-            
+
             // Exécution de la recherche
             $offre = $this->getOffre();
             $data = $offre->search($filters, $page, $perPage);
@@ -263,12 +263,12 @@ class OffreController extends Controller
                                                     'onclick' => "return confirm('Confirmer la suppression ?');"
                                                 ]
                                             ], false),                 // retourne string
-                    
+
                 ];
-                
+
             }
             unset($item); // important
-            
+
             // Rendu des résultats
             return $this->render('offre/recherche', [
                 'csrf_token'    => $_SESSION['csrf_token'] ?? '',
@@ -482,7 +482,7 @@ class OffreController extends Controller
         $limit_offset['offset']   = (int)($offset);
         // Exécution de la recherche
         $offreModel = new Offre();
-        $offres = $offreModel->getOffres( [
+        $offres = $offreModel->getOffres([
             'attributes'    => [
                                 'o.id_offre'
                             ],
@@ -494,7 +494,7 @@ class OffreController extends Controller
         ]);
         $total = count($offres);
 
-        $results = $offreModel->getOffres( [
+        $results = $offreModel->getOffres([
             'attributes'    => [
                                 'o.id_offre'            ,
                                 'o.titre'               ,
@@ -510,8 +510,8 @@ class OffreController extends Controller
             'limit_offset'  => $limit_offset,
         ]);
         $postuleModel = new PostuleModel();
-        foreach ($results as &$item){
-            $candidatures = $postuleModel->getCandidatures( [
+        foreach ($results as &$item) {
+            $candidatures = $postuleModel->getCandidatures([
                 'attributes'    => [
                                     'i.id_ident'
                                 ],

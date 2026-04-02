@@ -50,21 +50,21 @@ class Offre extends Model
 
         // Compte le nombre de résulat pour la requête selective en cours
         $total = $this->count($params);
-        
+
         // Pagination
         $offset = ($page - 1) * $perPage;
         $limit_offset['limit']    = (int)($perPage);
         $limit_offset['offset']   = (int)($offset);
 
         // Requete de recherche
-        
+
         return [
             'results' => $this->findBy($params, 'titre ASC', $limit_offset),
             'total' => $total
         ];
     }
 
-    public function getOffres(array $data ): array
+    public function getOffres(array $data): array
     {
         // Requête pour récupérer la wishlist
         $attribs = implode(', ', $data['attributes']);

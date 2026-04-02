@@ -34,14 +34,14 @@ function loadEnv($path)
 }
 
 loadEnv(__DIR__ . '/../.env');
-// session_set_cookie_params([
-//     'lifetime' => 0,
-//     'path' => '/',
-//     'domain' => 'web4all.local',    // ton domaine
-//     'secure' => false,              // mettre true -> HTTPS obligatoire
-//     'httponly' => true,             // impossible d’y accéder via JS
-//     'samesite' => 'Strict'          // ou Lax selon besoin
-// ]);
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/',
+    'domain' => 'web4all.local',    // ton domaine
+    'secure' => true,              // mettre true -> HTTPS obligatoire
+    'httponly' => true,             // impossible d’y accéder via JS
+    'samesite' => 'Strict'          // ou Lax selon besoin
+]);
 
 require_once __DIR__ . '/../app/config/Constants.php';
 

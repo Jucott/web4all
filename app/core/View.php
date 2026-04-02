@@ -3,7 +3,6 @@
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-
 /**
  * Gestionnaire de rendu des vues.
  *

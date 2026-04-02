@@ -12,22 +12,21 @@ use JulienLinard\Carousel\CarouselItem;
  */
 class StatistiquesController extends Controller
 {
-    
     public function show()
     {
-        
+
         $statsModel = new Statistiques();
         $topWishlist = $statsModel->getTopWishlist();
         $topCandidatures = $statsModel->getTopCandidatures();
         $nbOffres = count($statsModel->getAllOffres());
         $nbCandidatures = count($statsModel->getAllPostulants());
-        
-        $txtWish='';
-        $txtCand='';
-        foreach ($topWishlist as $elem){
+
+        $txtWish = '';
+        $txtCand = '';
+        foreach ($topWishlist as $elem) {
             $txtWish .= $elem['nom'].' '.$elem['prenom'].' : '.$elem['nb']."\n";
         }
-        foreach ($topCandidatures as $elem){
+        foreach ($topCandidatures as $elem) {
             $txtCand .= $elem['nom'].' '.$elem['prenom'].' : '.$elem['nb']."\n";
         }
         $testimonials = [
@@ -56,7 +55,7 @@ class StatistiquesController extends Controller
                 'image'     => 'https://static.web4all.local/app-icons/icon-192.png',
             ],
         ];
-        
+
 
 
 
@@ -107,7 +106,7 @@ class StatistiquesController extends Controller
         return $this->render('statistiques/show', [
             'testimonials'      => $carousel->render(),
         ]);
-        
+
     }
 
 

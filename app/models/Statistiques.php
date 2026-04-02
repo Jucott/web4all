@@ -13,7 +13,7 @@ class Statistiques extends Model
     public static function getAllPostulants()
     {
         $postuleModel = new PostuleModel();
-        return $postuleModel->getCandidatures( [
+        return $postuleModel->getCandidatures([
             'attributes'    => [
                                 'o.id_offre'            ,
                                 'i.id_ident'            ,
@@ -32,7 +32,7 @@ class Statistiques extends Model
     public static function getAllOffres()
     {
         $offreModel = new Offre();
-        return $offreModel->getOffres( [
+        return $offreModel->getOffres([
             'attributes'    => [
                                 'o.id_offre'            ,
                                 'o.titre'               ,

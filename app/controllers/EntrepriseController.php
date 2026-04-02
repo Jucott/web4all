@@ -51,7 +51,7 @@ class EntrepriseController extends Controller
             // Validation des données
             $validator = new Validator();
             $valid = $validator->validate($_POST, [
-                'nom'           => ['required', 'alpha'],
+                'nom'           => ['required', 'alpha_prime'],
                 'description'   => ['required', 'txt'],
                 'telephone'     => ['required', 'phone'],
                 'email'         => ['required', 'email']
@@ -209,9 +209,9 @@ class EntrepriseController extends Controller
                                                 ]
                                             ], false),                 // retourne string
                 ];
-                $candidatures = $postuleModel->getCandidatures( [
+                $candidatures = $postuleModel->getCandidatures([
                     'attributes'    => [
-                                        'o.id_offre' 
+                                        'o.id_offre'
                                     ],
                     'criteria'      => [
                                         ['e.id_entreprise', $res['id_entreprise']   , '='],
@@ -220,10 +220,10 @@ class EntrepriseController extends Controller
                     'limit_offset'  => [],
                 ]);
                 $resultat[$res['id_entreprise']]['candidatures'] = count($candidatures);
-                
-                $offres = $offreModel->getOffres( [
+
+                $offres = $offreModel->getOffres([
                     'attributes'    => [
-                                        'o.id_offre' 
+                                        'o.id_offre'
                                     ],
                     'criteria'      => [
                                         ['e.id_entreprise', $res['id_entreprise']   , '='],
@@ -233,7 +233,7 @@ class EntrepriseController extends Controller
                 ]);
                 $resultat[$res['id_entreprise']]['offres'] = count($offres);
             }
-            
+
 
             // Rendu des résultats
             return $this->render('entreprise/recherche', [
